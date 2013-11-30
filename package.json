@@ -1,0 +1,40 @@
+{
+  "name": "node-pre-gyp",
+  "description": "Node.js native addon binary install tool",
+  "keywords": [
+    "native",
+    "addon",
+    "module",
+    "c",
+    "c++",
+    "bindings",
+    "binary"
+  ],
+  "version": "0.1.0",
+  "author": "Dane Springmeyer <dane@mapbox.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/springmeyer/node-pre-gyp.git"
+  },
+  "preferGlobal": true,
+  "bin": "./bin/node-pre-gyp.js",
+  "main": "./lib/node-pre-gyp.js",
+  "dependencies": {
+    "glob": "3",
+    "graceful-fs": "2",
+    "fstream": "0",
+    "minimatch": "0",
+    "mkdirp": "0",
+    "nopt": "2",
+    "npmlog": "0",
+    "osenv": "0",
+    "request": "2",
+    "rimraf": "2",
+    "semver": "~2.1",
+    "tar": "0",
+    "which": "1"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}

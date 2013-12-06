@@ -77,21 +77,7 @@ function run () {
       log.error('not ok')
       return process.exit(1)
     }
-    /*
-    if (command.name == 'list') {
-      var versions = arguments[1]
-      if (versions.length > 0) {
-        versions.forEach(function (version) {
-          console.log(version)
-        })
-      } else {
-        console.log('No node development files installed. Use `' + process.title + ' install` to install a version.')
-      }
-    } else if (arguments.length >= 2) {
-    */
-      console.log.apply(console, [].slice.call(arguments, 1))
-    /*}*/
-
+    console.log.apply(console, [].slice.call(arguments, 1))
     // now run the next command in the queue
     process.nextTick(run)
   })

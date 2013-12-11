@@ -1,6 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
+  "version": "0.1.1",
   "keywords": [
     "native",
     "addon",
@@ -10,7 +11,6 @@
     "bindings",
     "binary"
   ],
-  "version": "0.1.0",
   "author": "Dane Springmeyer <dane@mapbox.com>",
   "repository": {
     "type": "git",

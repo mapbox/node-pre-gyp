@@ -24,7 +24,8 @@
     "npmlog": "0",
     "request": "2",
     "semver": "~2.1",
-    "tar": "0"
+    "tar": "0",
+    "tar-pack":"*"
   },
   "engines": {
     "node": ">= 0.8.0"

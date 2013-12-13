@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# put npm's copy of node-gyp on the PATH
+export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin/:$PATH
+
 cd test/app1
 
 # test normal install

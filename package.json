@@ -25,7 +25,8 @@
     "request": "2",
     "semver": "~2.1",
     "tar": "0",
-    "tar-pack":"*"
+    "tar-pack":"*",
+    "mkdirp":"*"
   },
   "engines": {
     "node": ">= 0.8.0"

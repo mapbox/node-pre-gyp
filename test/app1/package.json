@@ -1,0 +1,12 @@
+{
+    "name": "node-pre-gyp-test-app1",
+    "author": "Dane Springmeyer <springmeyer>",
+    "version": "0.1.0",
+    "main": "./index.js",
+    "binary": {
+        "module_name": "app1",
+        "module_path": "./build/Release",
+        "remote_uri": "http://node-pre-gyp-tests.s3.amazonaws.com",
+        "template": "{module_name}-v{major}.{minor}.{patch}-{node_abi}-{platform}-{arch}.tar.gz"
+    }
+}

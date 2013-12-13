@@ -32,8 +32,7 @@ And example from `node-osmium` looks like:
 Then to package a binary you do:
 
 ```js
-mkdir stage
-node-pre-gyp publish
+node-pre-gyp package
 ```
 
 Then post the resulting tarball (in the `stage/` directory) to your remote location.

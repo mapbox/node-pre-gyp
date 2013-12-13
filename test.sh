@@ -14,8 +14,8 @@ node index.js
 
 # test packaging
 rm -rf build
-../../bin/node-pre-gyp.js publish
+../../bin/node-pre-gyp.js package
 rm -rf build
-mkdir build/Release
+mkdir -p build/Release
 tar xf stage/app1-v0.1.0-node-v11-darwin-x64.tar.gz -O > build/Release/app1.node
 node index.js

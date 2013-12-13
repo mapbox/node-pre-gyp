@@ -1,0 +1,18 @@
+language: node_js
+
+node_js:
+ - "0.10"
+ - "0.8"
+ - "0.6"
+
+before_install:
+ - npm install
+
+install:
+ - ./test.sh
+
+before_script:
+ - true
+
+script:
+ - true

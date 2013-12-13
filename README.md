@@ -9,6 +9,8 @@ Node.js native add-on binary install tool.
 
 EXPERIMENTAL - not ready for widespread use.
 
+[![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
+
 # Design
 
 You add a `binary` property to your `package.json` which lists:

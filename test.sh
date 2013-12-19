@@ -34,7 +34,7 @@ function build_app {
     rm -rf build
     rm -rf stage
     mark 5 $1
-    ../../bin/node-pre-gyp.js package $2
+    ../../bin/node-pre-gyp.js package $2 --verbose
     rm -rf build
     rm -rf $3/$1.node
     mkdir -p $3

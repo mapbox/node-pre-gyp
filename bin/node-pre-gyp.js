@@ -77,7 +77,10 @@ function run () {
       log.error('not ok')
       return process.exit(1)
     }
-    console.log.apply(console, [].slice.call(arguments, 1))
+    var args_array = [].slice.call(arguments, 1)
+    if (args_array.length) {
+      console.log.apply(console, args_array)
+    }
     // now run the next command in the queue
     process.nextTick(run)
   })

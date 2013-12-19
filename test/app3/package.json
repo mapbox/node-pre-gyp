@@ -10,7 +10,6 @@
         "template": "{module_name}-v{major}.{minor}.{patch}-{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
-        "preinstall":"git clone https://github.com/springmeyer/hello-gyp.git",
         "install":"node-pre-gyp rebuild"
     }
 }

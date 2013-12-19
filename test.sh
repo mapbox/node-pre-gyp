@@ -9,7 +9,11 @@ export PATH=`pwd`/bin:$PATH
 ROOTDIR=`pwd`/test
 
 function setup {
-    true
+    if [ ! -d ${ROOTDIR}/app3/hello-gyp ]; then
+        cd ${ROOTDIR}/app3/
+        git clone https://github.com/springmeyer/hello-gyp.git
+    fi
+    cd ${ROOTDIR}
 }
 
 function teardown {

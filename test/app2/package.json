@@ -10,6 +10,6 @@
         "template": "{module_name}-v{major}.{minor}.{patch}-{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
-        "install":"node-pre-gyp.js rebuild"
+        "install":"node-pre-gyp rebuild"
     }
 }

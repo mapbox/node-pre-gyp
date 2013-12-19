@@ -1,15 +1,13 @@
 #!/bin/bash -x -e -u
 
 # put npm's copy of node-gyp on the PATH
-export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin/:$PATH
+export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
+export PATH=`pwd`/bin:$PATH
 
 ROOTDIR=`pwd`/test
 
 function setup {
-    if [ ! -d ${ROOTDIR}/app3/hello-gyp ]; then
-        cd ${ROOTDIR}/app3
-        git clone https://github.com/springmeyer/hello-gyp.git
-    fi
+    true
 }
 
 function teardown {
@@ -29,7 +27,7 @@ function build_app {
     # test normal install
     rm -rf build
     mark 1 $1
-    ../../bin/node-pre-gyp.js rebuild $2
+    node-pre-gyp rebuild $2
     mark 2 $1
     npm install rebuild $2
     node index.js
@@ -37,7 +35,7 @@ function build_app {
     # test source build
     rm -rf build
     mark 3 $1
-    ../../bin/node-pre-gyp.js rebuild $2 --build-from-source
+    node-pre-gyp rebuild $2 --build-from-source
     mark 4 $1
     npm install rebuild $2 --build-from-source
     node index.js
@@ -46,7 +44,7 @@ function build_app {
     rm -rf build
     rm -rf stage
     mark 5 $1
-    ../../bin/node-pre-gyp.js package $2 --verbose
+    node-pre-gyp package $2 --verbose
     rm -rf build
     rm -rf $3/$1.node
     mkdir -p $3

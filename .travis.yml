@@ -8,7 +8,7 @@ before_install:
  - npm install
 
 install:
- - ./test.sh
+ - npm test
 
 before_script:
  - true

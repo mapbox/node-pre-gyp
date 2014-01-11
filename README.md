@@ -43,11 +43,45 @@ Finally you add a custom `install` script:
 
 ```js
     "scripts": {
-        "install": "node-pre-gyp install",
+        "install": "node-pre-gyp install --fallback-to-build",
     }
 ```
 
-Then users installing your module will get your binary, if available, instead of a source compile.
+Then users installing your module will get your binary, if available. The `--fallback-to-build` option is recommended and means that if no binary is available for a given users platform then a source compile(`node-pre-gyp rebuild`) will be attempted.
+
+Simply pass `node-pre-gyp install` if you don't want users to be able to install your module unless binaries are available (disables source compile build fallback).
+
+### Command details
+
+#### Clean install and build artifacts
+
+    node-pre-gyp clean
+
+#### Clean and install
+
+    node-pre-gyp reinstall
+
+#### Build the module from source instead of installing from pre-built binary:
+
+    node-pre-gyp install --build-from-source
+
+This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` displatches to if you don't override (like recommended above) the `scripts/install` target in `package.json`.
+
+### Options
+
+Options include:
+
+ - `--build-from-source`
+ - `--fallback-to-build`
+
+Both of these options can be passed as they are or can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
+
+For example: `npm install --build-from-source=myapp`. This is useful if:
+
+ - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
+ - The larger app also depends on other modules installed with `node-pre-gyp`
+ - You only want to trigger a source compile for `myapp` and the other modules.
+
 
 ## Using S3 for hosting binaries
 

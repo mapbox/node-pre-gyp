@@ -32,7 +32,7 @@ function mark {
 function build_app {
     cd $ROOTDIR/$1
     # test normal install
-    rm -rf build
+    node-pre-gyp clean
     mark 1 $1
     node-pre-gyp rebuild $2
     mark 2 $1
@@ -40,7 +40,7 @@ function build_app {
     npm test
 
     # test source build
-    rm -rf build
+    node-pre-gyp clean
     mark 3 $1
     node-pre-gyp rebuild $2 --build-from-source
     mark 4 $1
@@ -48,19 +48,20 @@ function build_app {
     npm test
 
     # test packaging
-    rm -rf build
-    rm -rf stage
+    node-pre-gyp clean
     mark 5 $1
     node-pre-gyp rebuild package $2
-    rm -rf build
+    # pluck staged tarball out
+    cp build/stage/*.tar.gz .
+    node-pre-gyp clean
     rm -rf $3/$1.node
     mkdir -p $3
-    tar xf stage/*.tar.gz -O > $3/$1.node
+    tar xf ./*.tar.gz -O > $3/$1.node
     mark 6 $1
     npm test
 
     # cleanup
-    rm -rf {build,stage,node_modules}
+    rm -rf {build,node_modules}
     rm -rf lib/*node
     cd ${ROOTDIR}
 }

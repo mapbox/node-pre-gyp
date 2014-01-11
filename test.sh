@@ -12,7 +12,7 @@ ROOTDIR=`pwd`/test
 function setup {
     if [ ! -d ${ROOTDIR}/app3/hello-gyp ]; then
         cd ${ROOTDIR}/app3/
-        git clone https://github.com/springmeyer/hello-gyp.git
+        git clone --depth=0 https://github.com/springmeyer/hello-gyp.git
     fi
     cd ${ROOTDIR}
 }
@@ -23,7 +23,7 @@ function teardown {
     fi
 }
 
-function mark {
+function MARK {
     echo
     echo "*** $1 ($2) ***"
     echo
@@ -31,36 +31,57 @@ function mark {
 
 function build_app {
     cd $ROOTDIR/$1
-    # test normal install
+
+    MARK 1 $1
+    # test install from binary with fallback
+    # run directly against node-pre-gyp
     node-pre-gyp clean
-    mark 1 $1
-    node-pre-gyp rebuild $2
-    mark 2 $1
-    npm install rebuild $2
+    node-pre-gyp install --fallback-to-build $2
     npm test
 
+    MARK 2 $1
+    # it works, so now publish
+    node-pre-gyp package publish $2
+    node-pre-gyp clean
+
+    MARK 3 $1
+    # now test installing via remote binary without fallback
+    node-pre-gyp install $2
+    npm test
+
+    MARK 4 $1
+    # it works, so now try doing again, but via npm
+    node-pre-gyp clean
+    npm install $2
+    npm test
+
+    # TODO - unpublish
+
+    MARK 5 $1
     # test source build
     node-pre-gyp clean
-    mark 3 $1
-    node-pre-gyp rebuild $2 --build-from-source
-    mark 4 $1
-    npm install rebuild $2 --build-from-source
+    node-pre-gyp build $2
     npm test
 
+    MARK 6 $1
+    # test source build via npm
+    npm install $2 --build-from-source
+    npm test
+
+    MARK 7 $1
     # test packaging
-    node-pre-gyp clean
-    mark 5 $1
-    node-pre-gyp rebuild package $2
+    node-pre-gyp package $2
     # pluck staged tarball out
     cp build/stage/*.tar.gz .
     node-pre-gyp clean
     rm -rf $3/$1.node
     mkdir -p $3
+    # put tarball back in place
     tar xf ./*.tar.gz -O > $3/$1.node
-    mark 6 $1
     npm test
 
     # cleanup
+    rm ./*.tar.gz
     rm -rf {build,node_modules}
     rm -rf lib/*node
     cd ${ROOTDIR}

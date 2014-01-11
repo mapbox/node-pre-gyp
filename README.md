@@ -43,7 +43,7 @@ Finally you add a custom `install` script:
 
 ```js
     "scripts": {
-        "install": "node-pre-gyp rebuild",
+        "install": "node-pre-gyp install",
     }
 ```
 
@@ -61,10 +61,15 @@ First, get setup locally and test the workflow:
 
     npm install node-pre-gyp -g
 
-3. Package and publish your build for a given platform
+3. Create an `~/.node-pre-gyprc` file with `accessKeyId` and `secretAccessKey` values.
+
+Or provide those options in any way compatible with [RC](https://github.com/dominictarr/rc#standards). You may also need to specify the `region` if it is not explicit in the `remote_uri` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `remote_uri` value.
+
+4. Package and publish your build for a given platform
 
     node-pre-gyp package publish
 
+Note: if you hit the error `Hostname/IP doesn't match certificate's altnames` it likely means that you need to provide the `region` option in your config.
 
 # Modules using `node-pre-gyp`:
 

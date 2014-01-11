@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -x -e -u
+set -e -u
+# set -x
 
 # put npm's copy of node-gyp on the PATH
 export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
@@ -36,7 +37,7 @@ function build_app {
     node-pre-gyp rebuild $2
     mark 2 $1
     npm install rebuild $2
-    node index.js
+    npm test
 
     # test source build
     rm -rf build
@@ -44,19 +45,19 @@ function build_app {
     node-pre-gyp rebuild $2 --build-from-source
     mark 4 $1
     npm install rebuild $2 --build-from-source
-    node index.js
+    npm test
 
     # test packaging
     rm -rf build
     rm -rf stage
     mark 5 $1
-    node-pre-gyp rebuild package $2 --verbose
+    node-pre-gyp rebuild package $2
     rm -rf build
     rm -rf $3/$1.node
     mkdir -p $3
     tar xf stage/*.tar.gz -O > $3/$1.node
     mark 6 $1
-    node index.js
+    npm test
 
     # cleanup
     rm -rf {build,stage,node_modules}

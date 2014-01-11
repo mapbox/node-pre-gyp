@@ -26,7 +26,8 @@
     "semver": "~2.1",
     "tar": "0",
     "tar-pack":"*",
-    "mkdirp":"*"
+    "mkdirp":"*",
+    "aws-sdk": "~2.0.0-rc3"
   },
   "engines": {
     "node": ">= 0.8.0"

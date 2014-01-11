@@ -49,6 +49,22 @@ Finally you add a custom `install` script:
 
 Then users installing your module will get your binary, if available, instead of a source compile.
 
+## Using S3 for hosting binaries
+
+The usage examples above and in the tests use Amazon S3 for hosting binaries. You can host wherever you choose but S3 is easy and can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
+
+First, get setup locally and test the workflow:
+
+1. Create an S3 bucket and have your key and secret key ready
+
+2. Install node-pre-gyp globally
+
+    npm install node-pre-gyp -g
+
+3. Package and publish your build for a given platform
+
+    node-pre-gyp package publish
+
 
 # Modules using `node-pre-gyp`:
 

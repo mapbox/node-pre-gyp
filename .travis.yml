@@ -10,12 +10,14 @@ env:
 
 before_install:
  - echo $NODE_VERSION
- - nvm install $NODE_VERSION
- - nvm use $NODE_VERSION
+ - nvm install "$NODE_VERSION"
+ - nvm use "$NODE_VERSION"
+ - export GREP_OPTIONS=''
+ - nvm use "$NODE_VERSION"
  - node --version
  - npm --version
  - git clone https://github.com/creationix/nvm.git ./.nvm
- - source ./nvm.sh
+ - source ./.nvm/nvm.sh
  - nvm install $NODE_VERSION
  - nvm use $NODE_VERSION
  - node --version

@@ -15,8 +15,7 @@ install:
  - npm test
 
 before_script:
- - IS_TAG2=$(git describe --exact-match --tags HEAD || true)
- - IS_TAG=$(git describe --exact-match --tags HEAD)
+ - IS_TAG=$(git describe --exact-match --tags HEAD || true)
  - echo $IS_TAG
  - echo $TRAVIS_BRANCH
 

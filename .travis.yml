@@ -10,12 +10,7 @@ env:
 
 before_install:
  - echo $NODE_VERSION
- - nvm install "$NODE_VERSION"
- - nvm use "$NODE_VERSION"
- - export GREP_OPTIONS=''
- - nvm use "$NODE_VERSION"
- - node --version
- - npm --version
+ # manually setup and use nvm to avoid error on travis: nvm: install N/A failed!
  - git clone https://github.com/creationix/nvm.git ./.nvm
  - source ./.nvm/nvm.sh
  - nvm install $NODE_VERSION

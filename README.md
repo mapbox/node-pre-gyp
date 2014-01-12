@@ -6,8 +6,6 @@ Node.js is a native add-on install tool. It makes packaging your C++ node module
 
 Developers can use `node-pre-gyp` to build, package, and publish the binary `.node` C++ module for their package.
 
-Users can use `node-pre-gyp` to easy install Node.js add-on without needing a source compile.
-
 ## Why use node-pre-gyp?
 
 Successful deployment of your module using `node-pre-gyp` will mean:
@@ -23,6 +21,8 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-sqlite3](https://github.com/mapbox/node-sqlite3)
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
+
+For more examples see also the sample apps in `test/`.
 
 ## Usage
 
@@ -71,7 +71,14 @@ Then users installing your module will get your binary, if available, instead of
 
 **5) You're done!**
 
-Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary.
+Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary. What will happen is this:
+
+1. `npm install <your package>` will pull from the npm registry
+2. npm will run the `install` script which will call out to `node-pre-gyp`
+3. `node-pre-gyp` will fetch the binary `.node` module and place it in the right place
+4. Assuming that all worked, you are done
+
+If a failure occurred and `--fallback-to-build` was used then a source compile fallback will be made calling out to `node-gyp rebuild`.
 
 ## S3 Hosting
 

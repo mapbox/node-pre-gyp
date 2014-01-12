@@ -4,19 +4,28 @@
 
 `node-pre-gyp` is a Node.js native add-on install tool.
 
-Developers can use `node-pre-gyp` to build, package, and publish the binary `.node` C++ module for their package.
+## Does this replace npm or node-gyp?
 
-Users can then install your module without a C++ compiler.
+No: it plays nicely with them.
+
+ - You still publish your package to the npm repository
+ - You still create a `binding.gyp` to compile your module with `node-gyp`
+
+What node-pre-gyp does is stand between `npm` and `node-gyp`.
+
+## Who uses node-pre-gyp?
+
+You: the developers of a C++ module. You use `node-pre-gyp` to package and and publish the binary `.node` right before you `npm publish` a new version.
+
+Your users: Once your package uses `node-pre-gyp` then users can `npm install` your module without a C++ compiler and `node-pre-gyp` handles the complexity behind the scenes.
 
 ## Why use node-pre-gyp?
 
 Successful deployment of your module using `node-pre-gyp` will mean:
 
- - Users can be blissfully unaware that your module is written in C++: `npm install` will just work (with no source compile).
+ - Users can be blissfully unaware that your module is written in C++
  - During development you will run `node-pre-gyp build` instead of `npm install`
  - You will take on the responsibility for providing binaries to your users
- - Luckily most Node.js users run OS X or Linux, and it is very easy to automate builds for these systems, so after some up-front effort maintaining binaries will be easy.
- - And node-pre-gyp will work just fine with no binaries, gracefully falling back to node-gyp.
 
 ## Modules using `node-pre-gyp`:
 
@@ -24,7 +33,7 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
 
-For more examples see also the sample apps in https://github.com/springmeyer/node-pre-gyp/tree/master/test.
+For more examples see also the [test apps https://github.com/springmeyer/node-pre-gyp/tree/master/test].
 
 ## Usage
 
@@ -50,7 +59,7 @@ And example from `node-osmium` looks like:
 
 **2) Build and package your app**
 
-```js
+```sh
 node-pre-gyp build package
 ```
 
@@ -59,7 +68,7 @@ node-pre-gyp build package
 Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri`.
 
  - Learn how to [host on S3](https://github.com/springmeyer/node-pre-gyp#s3-hosting).
- - See [Travis Packaging](https://github.com/springmeyer/node-pre-gyp#s3-hosting#travis-packaging) for recipes for automating publishing builds.
+ - See [Travis Packaging](https://github.com/springmeyer/node-pre-gyp#s3-hosting#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
 
 **4) Add a custom `install` script**
 
@@ -69,48 +78,62 @@ Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri
     }
 ```
 
-Then users installing your module will get your binary, if available, instead of the default behavior of `npm` calling `node-gyp rebuild` right away. The `--fallback-to-build` option is recommended and means that if no binary is available for a given users platform then a source compile(`node-pre-gyp rebuild`) will be attempted.
+Then users installing your module will get your binary, if available, instead of the default behavior of `npm` calling `node-gyp rebuild` right away. The `--fallback-to-build` option is recommended: if no binary is available for a given users platform then a source compile (`node-pre-gyp rebuild`) will be attempted.
 
 **5) You're done!**
 
-Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary. What will happen is this:
+Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary. 
+
+What will happen is this:
 
 1. `npm install <your package>` will pull from the npm registry
 2. npm will run the `install` script which will call out to `node-pre-gyp`
 3. `node-pre-gyp` will fetch the binary `.node` module and place it in the right place
 4. Assuming that all worked, you are done
 
-If a failure occurred and `--fallback-to-build` was used then a source compile fallback will be made calling out to `node-gyp rebuild`.
+If a failure occurred and `--fallback-to-build` was used then `node-gyp rebuild` will be called.
 
 ## S3 Hosting
 
-The usage examples above and in the tests use Amazon S3 for hosting binaries. You can host wherever you choose but S3 is easy and can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
+The usage examples above and in the tests use Amazon S3 for hosting binaries. You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects it, and S3 can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
 
 First, get setup locally and test the workflow:
 
 **1) Create an S3 bucket and have your key and secret key ready**
 
-**2) Install node-pre-gyp globally**
+**2) Install node-pre-gyp**
+
+Either install it globally:
 
     npm install node-pre-gyp -g
 
+Or put the local version on your PATH
+
+    export PATH=`pwd`/node_modules/.bin/:$PATH
+
 **3) Create an `~/.node_pre_gyprc`**
 
-This file must be json or ini and provide:
+Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
 
- - `accessKeyId`
- - `secretAccessKey`
+`~/.node_pre_gyprc` looks like:
 
-These values can also be found in any way compatible with [RC](https://github.com/dominictarr/rc#standards). Another way that works well with travis is to set the variables in the environment like:
+```js
+{
+    "accessKeyId": "xxx",
+    "secretAccessKey": "xxx"
+}
+```
 
-    export node_pre_gyp_accessKeyId=<key>
-    export node_pre_gyp_secretAccessKey=<key>
+Another way is to use your environment:
+
+    export node_pre_gyp_accessKeyId=xxx
+    export node_pre_gyp_secretAccessKey=xxx
 
 You may also need to specify the `region` if it is not explicit in the `remote_uri` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `remote_uri` value.
 
 **4) Package and publish your build**
 
-Do this for every platform you wish to support:
+Do this for every platform and node version you wish to support:
 
     node-pre-gyp package publish
 
@@ -118,13 +141,20 @@ Note: if you hit the error `Hostname/IP doesn't match certificate's altnames` it
 
 ## Travis Packaging
 
-Travis can push to S3 after a successful build and supports both ubuntu precise and OS X, enabling you to cheaply build binaries for you module every commit or each tag.
+Travis can push to S3 after a successful build and supports both:
+
+ - Ubuntu precise and OS X
+ - multiple Node.js versions
+
+This enables you to cheaply auto-build and auto-publish binaries for (likely) the majority of users.
 
 **1) Install the travis gem**
 
     gem install travis
 
 **2) Create secure `global` variables**
+
+Make sure you run this command from within the directory of your module.
 
 Use `travis-encrypt` like:
 
@@ -154,15 +184,40 @@ language: objective-c
 
 Perhaps keep that change in a different git branch and sync that when you want binaries published.
 
+Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
+
+You can replace:
+
+```yml
+node_js:
+  - "0.8"
+  - "0.10"
+```
+
+With:
+
+```yml
+env:
+  matrix:
+    - export NODE_VERSION="0.8"
+    - export NODE_VERSION="0.10"
+
+before_install:
+ - git clone https://github.com/creationix/nvm.git ./.nvm
+ - source ./.nvm/nvm.sh
+ - nvm install $NODE_VERSION
+ - nvm use $NODE_VERSION
+```
+
 **4) Publish when you want**
 
 You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
 
-    if echo $TRAVIS_COMMIT | grep -q "publish"; then
+    if echo $TRAVIS_COMMIT | grep -q "[publish]"; then
        node-pre-gyp publish
     fi
 
-Or you could automatically detect if the git branch is a tag and publish:
+Or you could automatically detect if the git branch is a tag:
 
     IS_TAG=$(git describe --exact-match --tags HEAD || true)
     if [ $IS_TAG ];
@@ -182,13 +237,13 @@ binary module here and not your entire npm package. To automate the publishing o
 
 #### Clean and install
 
-    node-pre-gyp reinstall
+    node-pre-gyp reinstall # runs "clean" and "install"
 
 #### Build the module from source instead of installing from pre-built binary:
 
     node-pre-gyp install --build-from-source
 
-This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` displatches to if you don't override (like recommended above) the `scripts/install` target in `package.json`.
+This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` call if you don't override (like recommended above) the `scripts/install` target in `package.json`.
 
 ### Options
 

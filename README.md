@@ -1,24 +1,46 @@
 # node-pre-gyp
 
+[![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
+
 Node.js native add-on binary install tool.
 
  - Stands in front of node-gyp
  - Installs your module from a pre-compiled binary (which you are responsible for hosting)
  - If successfull avoids needing node-gyp to be invoked.
- - Falls back to calling `node-gyp rebuild` if binaries are not available
+ - Allows opt-in falls back to source compile if binaries are not available
 
-EXPERIMENTAL - not ready for widespread use.
+## Target Audience
 
-[![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
+`node-pre-gyp` is designed to be used and configured by developers of a Node C++ addons.
 
-# Design
+If you are a user of a module that uses node-pre-gyp and landed here seeking help with a failed build please post [an issue](https://github.com/springmeyer/node-pre-gyp/issues) and we will try to help you debug the problem.
 
-You add a `binary` property to your `package.json` which lists:
+## Why use node-pre-gyp?
+
+Successful deployment of your module using `node-pre-gyp` will mean:
+
+ - Users of your module to be blissfully unaware that your module is written in C++: `npm install` will just work (with no source compile).
+ - During development you will run `node-pre-gyp build` instead of `npm install`
+ - You will take on the responsibility for providing binaries to your users
+ - Luckily most Node.js users run OS X or Linux, and it is very easy to automate builds for these systems, so after some up-front effort maintaining binaries will be easy.
+ - And node-pre-gyp will work just fine with no binaries, gracefully falling back to node-gyp.
+
+## Modules using `node-pre-gyp`:
+
+ - [node-sqlite3](https://github.com/mapbox/node-sqlite3)
+ - [node-mapnik](https://github.com/mapnik/node-mapnik)
+ - [node-osmium](https://github.com/osmcode/node-osmium)
+
+## Usage
+
+1. You add a `binary` property to your modules `package.json`.
+
+It must provide these properties:
 
   - `module_name`: The name of your native node module.
   - `module_path`: The location your native module is placed after a build (commonly `build/Release/`)
-  - `remote_uri`: A url to the remote location where tarball binaries are available
-  - `template`: A versioning string which describes the tarball versioning scheme for your binaries
+  - `remote_uri`: A url to the remote location where you've published tarball binaries
+  - `template`: A string describing the tarball versioning scheme for your binaries
 
 And example from `node-osmium` looks like:
 
@@ -31,15 +53,20 @@ And example from `node-osmium` looks like:
     },
 ```
 
-Then to package a binary you do:
+2. Build and package your app:
 
 ```js
-node-pre-gyp package
+node-pre-gyp build package
 ```
 
-Then post the resulting tarball (in the `stage/` directory) to your remote location.
+3. Publish the tarball
 
-Finally you add a custom `install` script:
+Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri`.
+
+ - Learn how to [host on S3](https://github.com/springmeyer/node-pre-gyp#s3-hosting).
+ - See [Travis Packaging](https://github.com/springmeyer/node-pre-gyp#s3-hosting#travis-packaging) for recipes for automating publishing builds.
+
+4. Add a custom `install` script:
 
 ```js
     "scripts": {
@@ -47,43 +74,13 @@ Finally you add a custom `install` script:
     }
 ```
 
-Then users installing your module will get your binary, if available. The `--fallback-to-build` option is recommended and means that if no binary is available for a given users platform then a source compile(`node-pre-gyp rebuild`) will be attempted.
+Then users installing your module will get your binary, if available, instead of the default behavior of `npm` calling `node-gyp rebuild` right away. The `--fallback-to-build` option is recommended and means that if no binary is available for a given users platform then a source compile(`node-pre-gyp rebuild`) will be attempted.
 
-Simply pass `node-pre-gyp install` if you don't want users to be able to install your module unless binaries are available (disables source compile build fallback).
+5. You're done!
 
-### Command details
+Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary.
 
-#### Clean install and build artifacts
-
-    node-pre-gyp clean
-
-#### Clean and install
-
-    node-pre-gyp reinstall
-
-#### Build the module from source instead of installing from pre-built binary:
-
-    node-pre-gyp install --build-from-source
-
-This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` displatches to if you don't override (like recommended above) the `scripts/install` target in `package.json`.
-
-### Options
-
-Options include:
-
- - `--build-from-source`
- - `--fallback-to-build`
-
-Both of these options can be passed as they are or can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
-
-For example: `npm install --build-from-source=myapp`. This is useful if:
-
- - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
- - The larger app also depends on other modules installed with `node-pre-gyp`
- - You only want to trigger a source compile for `myapp` and the other modules.
-
-
-## Using S3 for hosting binaries
+## S3 Hosting
 
 The usage examples above and in the tests use Amazon S3 for hosting binaries. You can host wherever you choose but S3 is easy and can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
 
@@ -110,7 +107,7 @@ You may also need to specify the `region` if it is not explicit in the `remote_u
 
 Note: if you hit the error `Hostname/IP doesn't match certificate's altnames` it likely means that you need to provide the `region` option in your config.
 
-## Using Travis for automatically building your bindings
+## Travis Packaging
 
 Travis can push to S3 after a successful build and supports both ubuntu precise and OS X, enabling you to cheaply build binaries for you module every commit or each tag.
 
@@ -166,7 +163,35 @@ Or you could automatically detect if the git branch is a tag and publish:
 Remember this publishing is not the same as `npm publish`. We're just talking about the
 binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
 
-# Modules using `node-pre-gyp`:
+### Commands
 
- - [node-osmium](https://github.com/osmcode/node-osmium)
- - [node-sqlite3](https://github.com/mapbox/node-sqlite3)
+`node-pre-gyp` supports many of the same commands as `node-gyp` with some critical differences
+
+#### Clean install and build artifacts
+
+    node-pre-gyp clean
+
+#### Clean and install
+
+    node-pre-gyp reinstall
+
+#### Build the module from source instead of installing from pre-built binary:
+
+    node-pre-gyp install --build-from-source
+
+This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` displatches to if you don't override (like recommended above) the `scripts/install` target in `package.json`.
+
+### Options
+
+Options include:
+
+ - `--build-from-source`
+ - `--fallback-to-build`
+
+Both of these options can be passed as they are or can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
+
+For example: `npm install --build-from-source=myapp`. This is useful if:
+
+ - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
+ - The larger app also depends on other modules installed with `node-pre-gyp`
+ - You only want to trigger a source compile for `myapp` and the other modules.

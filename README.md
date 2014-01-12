@@ -24,7 +24,7 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
 
-For more examples see also the sample apps in `test/`.
+For more examples see also the sample apps in https://github.com/springmeyer/node-pre-gyp/tree/master/test.
 
 ## Usage
 

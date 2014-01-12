@@ -2,9 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
 
-Node.js is a native add-on install tool. It makes packaging your C++ node modules easy.
+`node-pre-gyp` is a Node.js native add-on install tool.
 
 Developers can use `node-pre-gyp` to build, package, and publish the binary `.node` C++ module for their package.
+
+Users can then install your module without a C++ compiler.
 
 ## Why use node-pre-gyp?
 

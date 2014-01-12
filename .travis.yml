@@ -2,24 +2,24 @@ language: cpp
 
 env:
   matrix:
-    - nvm use 0.8
-    - nvm use 0.10
+    - export NODE_VERSION="0.8"
+    - export NODE_VERSION="0.10"
   global:
     - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
     - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
 
 before_install:
- - npm install
+ - nvm use $NODE_VERSION
 
 install:
- - npm test
+ - npm install
 
 before_script:
+ - npm test
+
+script:
  - IS_TAG=$(git describe --exact-match --tags HEAD || true)
  - echo $IS_TAG
  - echo $TRAVIS_BRANCH
  - if [ $IS_TAG ]; then echo 'yestag'; else echo 'notag'; fi
  - if [ $IS_TAG ] && [ $IS_TAG == $TRAVIS_BRANCH ]; then echo 'yestagtravis'; else echo 'notagtravis'; fi
-
-script:
- - true

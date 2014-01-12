@@ -9,9 +9,13 @@ env:
     - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
 
 before_install:
- - git clone https://github.com/creationix/nvm.git ~/.nvm
- - source ~/.nvm/nvm.sh
  - echo $NODE_VERSION
+ - nvm install $NODE_VERSION
+ - nvm use $NODE_VERSION
+ - node --version
+ - npm --version
+ - git clone https://github.com/creationix/nvm.git ./.nvm
+ - source ./nvm.sh
  - nvm install $NODE_VERSION
  - nvm use $NODE_VERSION
  - node --version

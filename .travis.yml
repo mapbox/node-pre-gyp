@@ -18,6 +18,8 @@ before_script:
  - IS_TAG=$(git describe --exact-match --tags HEAD || true)
  - echo $IS_TAG
  - echo $TRAVIS_BRANCH
+ - if [ $IS_TAG ]; then echo 'yestag'; else echo 'notag'; fi
+ - if [ $IS_TAG ] && [ $IS_TAG == $TRAVIS_BRANCH ]; then echo 'yestagtravis'; else echo 'notagtravis'; fi
 
 script:
  - true

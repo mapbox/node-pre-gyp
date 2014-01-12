@@ -118,7 +118,7 @@ Travis can push to S3 after a successful build and supports both ubuntu precise 
 
     gem install travis
 
-1. Create secure `global` variables.
+2. Create secure `global` variables.
 
 Use `travis-encrypt` like:
 
@@ -133,6 +133,38 @@ env:
     - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
     - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
 ```
+
+More details on travis encryption at http://about.travis-ci.org/docs/user/encryption-keys/.
+
+3. Hook up publishing
+
+Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
+
+If you want binaries for OS X change your `.travis.yml` to use:
+
+```yml
+language: objective-c
+```
+
+Perhaps keep that change in a different git branch and sync that when you want binaries published.
+
+4. Publish just when you want
+
+You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
+
+    if echo $TRAVIS_COMMIT | grep -q "publish"; then
+       node-pre-gyp publish
+    fi
+
+Or you could automatically detect if the git branch is a tag and publish:
+
+    IS_TAG=$(git describe --exact-match --tags HEAD || true)
+    if [ $IS_TAG ];
+       node-pre-gyp publish
+    fi
+
+Remember this publishing is not the same as `npm publish`. We're just talking about the
+binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
 
 # Modules using `node-pre-gyp`:
 

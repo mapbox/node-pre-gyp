@@ -95,15 +95,44 @@ First, get setup locally and test the workflow:
 
     npm install node-pre-gyp -g
 
-3. Create an `~/.node-pre-gyprc` file with `accessKeyId` and `secretAccessKey` values.
+3. Create an `~/.node_pre_gyprc` file with `accessKeyId` and `secretAccessKey` values.
 
-Or provide those options in any way compatible with [RC](https://github.com/dominictarr/rc#standards). You may also need to specify the `region` if it is not explicit in the `remote_uri` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `remote_uri` value.
+Or provide those options in any way compatible with [RC](https://github.com/dominictarr/rc#standards). Another way that works well with travis is to set the variables in the environment like:
+
+    export node_pre_gyp_accessKeyId=<key>
+    export node_pre_gyp_secretAccessKey=<key>
+
+You may also need to specify the `region` if it is not explicit in the `remote_uri` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `remote_uri` value.
 
 4. Package and publish your build for a given platform
 
     node-pre-gyp package publish
 
 Note: if you hit the error `Hostname/IP doesn't match certificate's altnames` it likely means that you need to provide the `region` option in your config.
+
+## Using Travis for automatically building your bindings
+
+Travis can push to S3 after a successful build and supports both ubuntu precise and OS X, enabling you to cheaply build binaries for you module every commit or each tag.
+
+1. Install the travis gem:
+
+    gem install travis
+
+1. Create secure `global` variables.
+
+Use `travis-encrypt` like:
+
+    travis encrypt node_pre_gyp_accessKeyId=<key>
+    travis encrypt node_pre_gyp_secretAccessKey=<key>
+
+Then put those values in your `.travis.yml` like:
+
+```yaml
+env:
+  global:
+    - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
+    - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
+```
 
 # Modules using `node-pre-gyp`:
 

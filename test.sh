@@ -10,17 +10,12 @@ export PATH=`pwd`/bin:$PATH
 ROOTDIR=`pwd`/test
 
 function setup {
-    if [ ! -d ${ROOTDIR}/app3/hello-gyp ]; then
-        cd ${ROOTDIR}/app3/
-        git clone --depth=0 https://github.com/springmeyer/hello-gyp.git
-    fi
     cd ${ROOTDIR}
 }
 
 function teardown {
-    if [ -d ${ROOTDIR}/app3/hello-gyp ]; then
-        rm -rf ${ROOTDIR}/app3/hello-gyp
-    fi
+    # nothing yet
+    true
 }
 
 function MARK {
@@ -40,6 +35,7 @@ function build_app {
     # run directly against node-pre-gyp
     node-pre-gyp clean
     node-pre-gyp install --fallback-to-build $2
+    echo `ls`
     npm test
 
     if [[ $TRAVIS_PULL_REQUEST == true ]] ; then

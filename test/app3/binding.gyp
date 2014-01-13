@@ -8,7 +8,7 @@
       "target_name": "<(module_name)",
       "sources": [ "app3.cc" ],
       "dependencies": [
-        "hello-gyp/mylib.gyp:mylib"
+        "deps/mylib.gyp:mylib"
       ]
     },
     {

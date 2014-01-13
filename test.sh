@@ -29,6 +29,9 @@ function MARK {
     echo
 }
 
+# set variable if unset
+TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST:-false};
+
 function build_app {
     cd $ROOTDIR/$1
 
@@ -39,15 +42,22 @@ function build_app {
     node-pre-gyp install --fallback-to-build $2
     npm test
 
-    MARK 2 $1
-    # it works, so now publish
-    node-pre-gyp package publish $2
-    node-pre-gyp clean
+    if [[ $TRAVIS_PULL_REQUEST == true ]] ; then
+        MARK 2 $1
+        echo "skipping publish"
+        MARK 3 $1
+        echo "skipping install from published binary"
+    else
+        MARK 2 $1
+        # it works, so now publish
+        node-pre-gyp package publish $2
+        node-pre-gyp clean
 
-    MARK 3 $1
-    # now test installing via remote binary without fallback
-    node-pre-gyp install $2
-    npm test
+        MARK 3 $1
+        # now test installing via remote binary without fallback
+        node-pre-gyp install $2
+        npm test
+    fi
 
     MARK 4 $1
     # it works, so now try doing again, but via npm

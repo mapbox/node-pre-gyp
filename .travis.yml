@@ -14,6 +14,7 @@ deploy:
     secure: Iv0vgsIyf2086WTyhhQ6vgPdIgoH8nOxHafo+Xk8Jh1dknljA6pE8d48dJ1CiX2koI9K3SHYUEd6FSllkc9nQ0/jU7fvuPBMLu/JdIrRngCWWrtjCDsEq4RcGo8/6ZZhWU0ZgtwnF87UQGst0V0neAbudwkJ50Dv1aiAIrYqcwI=
   on:
     tags: true
+    node: "0.10"
 
 before_install:
 - echo $NODE_VERSION

@@ -2,27 +2,33 @@ language: cpp
 
 env:
   matrix:
-    - export NODE_VERSION="0.8"
-    - export NODE_VERSION="0.10"
+  - export NODE_VERSION="0.8"
+  - export NODE_VERSION="0.10"
   global:
-    - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
-    - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
+  - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
+  - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
+
+deploy:
+  provider: npm
+  api_key:
+    secure: Iv0vgsIyf2086WTyhhQ6vgPdIgoH8nOxHafo+Xk8Jh1dknljA6pE8d48dJ1CiX2koI9K3SHYUEd6FSllkc9nQ0/jU7fvuPBMLu/JdIrRngCWWrtjCDsEq4RcGo8/6ZZhWU0ZgtwnF87UQGst0V0neAbudwkJ50Dv1aiAIrYqcwI=
+  on:
+    tags: true
 
 before_install:
- - echo $NODE_VERSION
- # manually setup and use nvm to avoid error on travis: nvm: install N/A failed!
- - git clone https://github.com/creationix/nvm.git ./.nvm
- - source ./.nvm/nvm.sh
- - nvm install $NODE_VERSION
- - nvm use $NODE_VERSION
- - node --version
- - npm --version
+- echo $NODE_VERSION
+- git clone https://github.com/creationix/nvm.git ./.nvm
+- source ./.nvm/nvm.sh
+- nvm install $NODE_VERSION
+- nvm use $NODE_VERSION
+- node --version
+- npm --version
 
 install:
- - npm install
+- npm install
 
 before_script:
- - npm test
+- npm test
 
 script:
- - true
+- true

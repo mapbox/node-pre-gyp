@@ -33,7 +33,7 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
 
-For more examples see also the [test apps https://github.com/springmeyer/node-pre-gyp/tree/master/test].
+For more examples see also the [test apps](test/).
 
 ## Usage
 
@@ -67,8 +67,8 @@ node-pre-gyp build package
 
 Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri`.
 
- - Learn how to [host on S3](https://github.com/springmeyer/node-pre-gyp#s3-hosting).
- - See [Travis Packaging](https://github.com/springmeyer/node-pre-gyp#s3-hosting#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
+ - Learn how to [host on S3](#s3-hosting).
+ - See [Travis Packaging](#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
 
 **4) Add a custom `install` script**
 

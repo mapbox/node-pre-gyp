@@ -6,13 +6,13 @@
        "type" : "git",
        "url"  : "git://github.com/springmeyer/node-pre-gyp.git"
     },
-    "version": "0.1.0",
+    "version": "0.1.0-dev.4",
     "main": "./index.js",
     "binary": {
         "module_name": "app3",
         "module_path": "./lib",
         "remote_uri": "http://node-pre-gyp-tests.s3-us-west-1.amazonaws.com",
-        "template": "{module_name}-v{major}.{minor}.{patch}-{node_abi}-{platform}-{arch}.tar.gz"
+        "template": "{module_name}-v{major}.{minor}.{patch}-{prerelease}-{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
         "install":"node-pre-gyp install",

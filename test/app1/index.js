@@ -2,6 +2,10 @@ var path = require('path');
 var pkg = require('./package.json');
 var assert = require('assert');
 var binding = path.join(pkg.binary.module_path,pkg.binary.module_name + '.node');
+console.log('binding1: ' + binding);
+binding = './' + path.join(pkg.binary.module_path,pkg.binary.module_name + '.node');
+console.log('binding2: ' + binding);
+
 var app = require(binding);
 
 assert.ok(app);

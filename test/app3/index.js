@@ -1,3 +1,8 @@
+var path = require('path');
+var pkg = require('./package.json');
 var assert = require('assert');
-var app3 = require('./lib/app3.node');
-assert.equal(app3.hello(),"hello");
+var binding = path.join(pkg.binary.module_path,pkg.binary.module_name + '.node');
+var app = require(binding);
+
+assert.ok(app);
+assert.equal(app.hello(),"hello");

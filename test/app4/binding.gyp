@@ -22,7 +22,7 @@
         },
         {
           "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
-          "destination": "<(module_path)"
+          "destination": "<(module_path)/lib.target/"
         }
       ]
     }

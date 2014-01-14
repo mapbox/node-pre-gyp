@@ -14,7 +14,7 @@
               'include_dirs': [ 'include/' ],
             },
             'xcode_settings': {
-              'DYLIB_INSTALL_NAME_BASE': '@loader_path'
+              'DYLIB_INSTALL_NAME_BASE': '@loader_path/lib.target/'
             }
         }
     ]

@@ -35,9 +35,6 @@ function build_app {
     # run directly against node-pre-gyp
     node-pre-gyp clean
     node-pre-gyp install --fallback-to-build $2
-    ls
-    ls -l build/
-    ls -l build/Release/
     npm test
 
     if [[ $TRAVIS_PULL_REQUEST == true ]] ; then

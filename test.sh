@@ -57,36 +57,10 @@ function build_app {
     MARK 4 $1
     # it works, so now try doing again, but via npm
     node-pre-gyp clean
-    npm install $2
-    npm test
-
-    # TODO - unpublish
-
-    MARK 5 $1
-    # test source build
-    node-pre-gyp clean
-    node-pre-gyp build $2
-    npm test
-
-    MARK 6 $1
-    # test source build via npm
-    npm install $2 --build-from-source
-    npm test
-
-    MARK 7 $1
-    # test packaging
-    node-pre-gyp package $2
-    # pluck staged tarball out
-    cp build/stage/*.tar.gz .
-    node-pre-gyp clean
-    rm -rf $3/$1.node
-    mkdir -p $3
-    # put tarball back in place
-    tar xf ./*.tar.gz -O > $3/$1.node
+    npm install --build-from-source $2
     npm test
 
     # cleanup
-    rm ./*.tar.gz
     rm -rf {build,node_modules}
     rm -rf lib/*node
     cd ${ROOTDIR}
@@ -94,9 +68,11 @@ function build_app {
 
 setup
 # simpliest, least config node c++ addon possible
-build_app "app1" "" "build/Release"
+build_app "app1" ""
 # app with more custom organization and needing a variable passed for custom include path
-build_app "app2" "--custom_include_path=`pwd`/app2/include" "lib"
-# app that depends on an external library that provides a .gyp itself
-build_app "app3" "" "lib"
+build_app "app2" "--custom_include_path=`pwd`/app2/include"
+# app that depends on an external static library
+build_app "app3" ""
+# app that depends on an external shared library
+build_app "app4" ""
 teardown

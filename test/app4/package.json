@@ -1,0 +1,21 @@
+{
+    "name": "node-pre-gyp-test-app3",
+    "author": "Dane Springmeyer <springmeyer>",
+    "description":"node-pre-gyp test",
+    "repository"   :  {
+       "type" : "git",
+       "url"  : "git://github.com/springmeyer/node-pre-gyp.git"
+    },
+    "version": "0.1.0-dev.4",
+    "main": "./index.js",
+    "binary": {
+        "module_name": "app4",
+        "module_path": "./lib/binding/",
+        "remote_uri": "http://node-pre-gyp-tests.s3-us-west-1.amazonaws.com",
+        "template": "{module_name}-v{major}.{minor}.{patch}-{prerelease}-{node_abi}-{platform}-{arch}.tar.gz"
+    },
+    "scripts": {
+        "install":"node-pre-gyp install",
+        "test":"node index.js"
+    }
+}

@@ -74,8 +74,9 @@ function build_app {
     npm test
 
     # cleanup
+    node-pre-gyp clean
     rm -rf {build,node_modules}
-    rm -rf lib/*node
+    rm -rf lib/
     cd ${ROOTDIR}
 }
 

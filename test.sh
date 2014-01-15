@@ -55,17 +55,11 @@ function build_app {
         MARK 3 $1
         # now test installing via remote binary without fallback
         node-pre-gyp clean
-        node-pre-gyp install $2
+        npm install --fallback-to-build=false $2
         npm test
     fi
 
     MARK 4 $1
-    # it works, so now try doing again, but via npm
-    node-pre-gyp clean
-    npm install --build-from-source $2
-    npm test
-
-    MARK 5 $1
     # sabotage binaries and make sure they are rebuilt
     for i in $(find . -name '*.node') ; do
         echo 'bogus' > $i;

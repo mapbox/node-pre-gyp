@@ -15,7 +15,7 @@
         "template": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
-        "install":"node-pre-gyp install",
+        "install":"node-pre-gyp install --fallback-to-build",
         "test":"node index.js"
     }
 }

@@ -60,6 +60,14 @@ function build_app {
     npm install --build-from-source $2
     npm test
 
+    MARK 5 $1
+    # sabotage binaries and make sure they are rebuilt
+    for i in $(find . -name '*.node') ; do
+        echo 'bogus' > $i;
+    done
+    npm install $2
+    npm test
+
     # cleanup
     rm -rf {build,node_modules}
     rm -rf lib/*node

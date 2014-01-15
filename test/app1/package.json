@@ -10,7 +10,7 @@
     "main": "./index.js",
     "binary": {
         "module_name": "app1",
-        "module_path": "./build/Release",
+        "module_path": "./lib/binding/",
         "remote_uri": "http://node-pre-gyp-tests.s3-us-west-1.amazonaws.com",
         "template": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
     },

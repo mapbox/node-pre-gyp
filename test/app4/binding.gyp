@@ -6,7 +6,7 @@
   "targets": [
     {
       "target_name": "<(module_name)",
-      "sources": [ "app4.cpp" ],
+      "sources": [ "<(module_name).cpp" ],
       "dependencies": [
         "deps/mylib.gyp:mylib"
       ]

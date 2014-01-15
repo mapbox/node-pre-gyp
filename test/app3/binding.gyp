@@ -1,12 +1,12 @@
 {
   'variables': {
-      "module_name":"app3",
-      "module_path":"./lib/"
+      "module_name":"<!(node -e \"console.log(require('./package.json').binary.module_name)\")",
+      "module_path":"<!(node -e \"console.log(require('./package.json').binary.module_path)\")",
   },
   "targets": [
     {
       "target_name": "<(module_name)",
-      "sources": [ "app3.cc" ],
+      "sources": [ "<(module_name).cc" ],
       "dependencies": [
         "deps/mylib.gyp:mylib"
       ]

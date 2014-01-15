@@ -30,6 +30,10 @@ TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST:-false};
 function build_app {
     cd $ROOTDIR/$1
 
+    rm -rf ./lib/binding/*
+    rm -rf ./build/*
+
+
     MARK 1 $1
     # test install from binary with fallback
     # run directly against node-pre-gyp
@@ -46,10 +50,11 @@ function build_app {
         MARK 2 $1
         # it works, so now publish
         node-pre-gyp package publish $2
-        node-pre-gyp clean
+        node-pre-gyp testpackage --overwrite
 
         MARK 3 $1
         # now test installing via remote binary without fallback
+        node-pre-gyp clean
         node-pre-gyp install $2
         npm test
     fi

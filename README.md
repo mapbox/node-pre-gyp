@@ -15,7 +15,7 @@ What node-pre-gyp does is stand between `npm` and `node-gyp`.
 
 ## Who uses node-pre-gyp?
 
-**Developers** of C++ modules can use `node-pre-gyp` to package and and publish the binary `.node` before publishing their entire module with npm.
+**Developers** of C++ modules can use `node-pre-gyp` to package and publish the binary `.node` before running `npm publish`.
 
 **Users** will then be able to `npm install` your module from a binary with no compile.
 
@@ -32,6 +32,7 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-sqlite3](https://github.com/mapbox/node-sqlite3)
  - [node-mapnik](https://github.com/mapnik/node-mapnik)
  - [node-osmium](https://github.com/osmcode/node-osmium)
+ - [node-osrm](https://github.com/DennisOSRM/node-OSRM)
 
 For more examples see also the [test apps](test/).
 
@@ -51,7 +52,7 @@ For more examples see also the [test apps](test/).
 It must provide these properties:
 
   - `module_name`: The name of your native node module.
-  - `module_path`: The location your native module is placed after a build (commonly `build/Release/`)
+  - `module_path`: The location your native module is placed after a build. This should be an empty directory without other javascript files.
   - `remote_uri`: A url to the remote location where you've published tarball binaries
   - `template`: A string describing the tarball versioning scheme for your binaries
 
@@ -80,20 +81,19 @@ node-pre-gyp publish
 
 Currently the `publish` command pushes your binary to S3. This requires:
 
- - You have created a bucket already
- - The `remote-uri` points to this S3 http or https endpoint.
- - You have configured node-pre-gyp to read your S3 credentials
+ - You have created a bucket already.
+ - The `remote-uri` points to an S3 http or https endpoint.
+ - You have configured node-pre-gyp to read your S3 credentials (see [S3 hosting](#s3-hosting) for details).
 
-For more details see [S3 hosting](#s3-hosting).
+You can also host your binaries elsewhere. To do this requires:
 
-But you can also host your binaries elsewhere and not on S3. To do this requires:
-
- - You manually publish the binary created by the `package` command
- - The package is available as a tarball in the `build/stage/` directory
+ - You manually publish the binary created by the `package` command.
+ - The package is available as a tarball in the `build/stage/` directory.
+ - You provide a remote location and point the `remote_uri` value to it.
 
 **5) Automating builds**
 
-Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Packaging](#travis-packaging) for how to auto-publish builds on OS X and Linux.
+Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Packaging](#travis-packaging) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries.
 
 **6) You're done!**
 
@@ -103,18 +103,20 @@ What will happen is this:
 
 1. `npm install <your package>` will pull from the npm registry
 2. npm will run the `install` script which will call out to `node-pre-gyp`
-3. `node-pre-gyp` will fetch the binary `.node` module and place it in the right place
+3. `node-pre-gyp` will fetch the binary `.node` module and unpack in the right place
 4. Assuming that all worked, you are done
 
 If a failure occurred and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
 
 ## S3 Hosting
 
-The usage examples above and in the tests use Amazon S3 for hosting binaries. You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects it, and S3 can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
+You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects it, and S3 can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
 
 First, get setup locally and test the workflow:
 
-**1) Create an S3 bucket and have your key and secret key ready**
+**1) Create an S3 bucket
+
+And have your key and secret key ready for writing to the bucket.
 
 **2) Install node-pre-gyp**
 
@@ -130,7 +132,7 @@ Or put the local version on your PATH
 
 Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
 
-`~/.node_pre_gyprc` looks like:
+A `~/.node_pre_gyprc` looks like:
 
 ```js
 {

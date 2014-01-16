@@ -93,7 +93,7 @@ You can also host your binaries elsewhere. To do this requires:
 
 **5) Automating builds**
 
-Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Packaging](#travis-packaging) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries.
+Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries.
 
 **6) You're done!**
 
@@ -150,20 +150,18 @@ You may also need to specify the `region` if it is not explicit in the `remote_u
 
 **4) Package and publish your build**
 
-Do this for every platform and node version you wish to support:
-
     node-pre-gyp package publish
 
-Note: if you hit the error `Hostname/IP doesn't match certificate's altnames` it likely means that you need to provide the `region` option in your config.
+Note: if you hit an error like `Hostname/IP doesn't match certificate's altnames` it may mean that you need to provide the `region` option in your config.
 
-## Travis Packaging
+## Travis Automation
 
 Travis can push to S3 after a successful build and supports both:
 
- - Ubuntu precise and OS X
- - multiple Node.js versions
+ - Ubuntu Precise and OS X
+ - Multiple Node.js versions
 
-This enables you to cheaply auto-build and auto-publish binaries for (likely) the majority of users.
+This enables you to cheaply auto-build and auto-publish binaries for (likely) the majority of your users.
 
 **1) Install the travis gem**
 
@@ -203,7 +201,7 @@ Perhaps keep that change in a different git branch and sync that when you want b
 
 Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
 
-You can replace:
+But you can replicate the lost behavior by replacing:
 
 ```yml
 node_js:
@@ -255,12 +253,6 @@ binary module here and not your entire npm package. To automate the publishing o
 
     node-pre-gyp reinstall # runs "clean" and "install"
 
-#### Build the module from source instead of installing from pre-built binary:
-
-    node-pre-gyp install --build-from-source
-
-This is basically the equivalent to calling `node-gyp rebuild` which is what `npm install` call if you don't override (like recommended above) the `scripts/install` target in `package.json`.
-
 ### Options
 
 Options include:
@@ -268,7 +260,7 @@ Options include:
  - `--build-from-source`
  - `--fallback-to-build`
 
-Both of these options can be passed as they are or can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
+Both of these options can be passed alone or they can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 
 For example: `npm install --build-from-source=myapp`. This is useful if:
 

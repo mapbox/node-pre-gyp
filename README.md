@@ -15,9 +15,9 @@ What node-pre-gyp does is stand between `npm` and `node-gyp`.
 
 ## Who uses node-pre-gyp?
 
-You: the developers of a C++ module. You use `node-pre-gyp` to package and and publish the binary `.node` right before you `npm publish` a new version.
+**Developers** of C++ modules can use `node-pre-gyp` to package and and publish the binary `.node` before publishing their entire module with npm.
 
-Your users: Once your package uses `node-pre-gyp` then users can `npm install` your module without a C++ compiler and `node-pre-gyp` handles the complexity behind the scenes.
+**Users** will then be able to `npm install` your module from a binary with no compile.
 
 ## Why use node-pre-gyp?
 
@@ -37,7 +37,16 @@ For more examples see also the [test apps](test/).
 
 ## Usage
 
-**1) You add a `binary` property to your modules `package.json`**
+**1) Add a custom `install` script to `package.json`**
+
+```js
+    "scripts": {
+        "install": "node-pre-gyp install --fallback-to-build",
+    }
+```
+
+
+**2) Add a `binary` property to `package.json`**
 
 It must provide these properties:
 
@@ -46,43 +55,49 @@ It must provide these properties:
   - `remote_uri`: A url to the remote location where you've published tarball binaries
   - `template`: A string describing the tarball versioning scheme for your binaries
 
-And example from `node-osmium` looks like:
+And example from `node-sqlite3` looks like:
 
 ```js
     "binary": {
-        "module_name": "osmium",
-        "module_path": "./lib",
-        "remote_uri": "http://node-osmium.s3.amazonaws.com",
-        "template": "{module_name}-v{major}.{minor}.{patch}-{node_abi}-{platform}-{arch}.tar.gz"
+        "module_name": "node_sqlite3",
+        "module_path": "./lib/binding/",
+        "remote_uri": "http://node-sqlite3.s3.amazonaws.com",
+        "template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
     },
 ```
 
-**2) Build and package your app**
+**3) Build and package your app**
 
 ```sh
 node-pre-gyp build package
 ```
 
-**3) Publish the tarball**
+**4) Publish the tarball**
 
-Post the resulting tarball (in the `build/stage/` directory) to your `remote-uri`.
-
- - Learn how to [host on S3](#s3-hosting).
- - See [Travis Packaging](#travis-packaging) for recipes for automating publishing builds on OS X and Linux.
-
-**4) Add a custom `install` script**
-
-```js
-    "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build",
-    }
+```sh
+node-pre-gyp publish
 ```
 
-Then users installing your module will get your binary, if available, instead of the default behavior of `npm` calling `node-gyp rebuild` right away. The `--fallback-to-build` option is recommended: if no binary is available for a given users platform then a source compile (`node-pre-gyp rebuild`) will be attempted.
+Currently the `publish` command pushes your binary to S3. This requires:
 
-**5) You're done!**
+ - You have created a bucket already
+ - The `remote-uri` points to this S3 http or https endpoint.
+ - You have configured node-pre-gyp to read your S3 credentials
 
-Now you are done. Publish your package to the npm registry. Users will now be able to install your module from a binary. 
+For more details see [S3 hosting](#s3-hosting).
+
+But you can also host your binaries elsewhere and not on S3. To do this requires:
+
+ - You manually publish the binary created by the `package` command
+ - The package is available as a tarball in the `build/stage/` directory
+
+**5) Automating builds**
+
+Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Packaging](#travis-packaging) for how to auto-publish builds on OS X and Linux.
+
+**6) You're done!**
+
+Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
 
 What will happen is this:
 
@@ -91,7 +106,7 @@ What will happen is this:
 3. `node-pre-gyp` will fetch the binary `.node` module and place it in the right place
 4. Assuming that all worked, you are done
 
-If a failure occurred and `--fallback-to-build` was used then `node-gyp rebuild` will be called.
+If a failure occurred and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
 
 ## S3 Hosting
 

@@ -6,7 +6,6 @@ set -e -u
 # put npm's copy of node-gyp on the PATH
 export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
 export PATH=`pwd`/bin:$PATH
-
 ROOTDIR=`pwd`/test
 
 function setup {
@@ -34,7 +33,7 @@ function build_app {
     rm -rf ./build/*
 
 
-    MARK 1 $1
+    MARK "A" $1
     # test install from binary with fallback
     # run directly against node-pre-gyp
     node-pre-gyp clean
@@ -42,24 +41,24 @@ function build_app {
     npm test
 
     if [[ $TRAVIS_PULL_REQUEST == true ]] ; then
-        MARK 2 $1
+        MARK "B" $1
         echo "skipping publish"
-        MARK 3 $1
+        MARK "C" $1
         echo "skipping install from published binary"
     else
-        MARK 2 $1
+        MARK "D" $1
         # it works, so now publish
         node-pre-gyp package publish $2
         node-pre-gyp testpackage --overwrite
 
-        MARK 3 $1
+        MARK "E" $1
         # now test installing via remote binary without fallback
         node-pre-gyp clean
         npm install --fallback-to-build=false $2
         npm test
     fi
 
-    MARK 4 $1
+    MARK "F" $1
     # sabotage binaries and make sure they are rebuilt
     for i in $(find . -name '*.node') ; do
         echo 'bogus' > $i;
@@ -70,7 +69,7 @@ function build_app {
     # cleanup
     node-pre-gyp clean
     rm -rf {build,node_modules}
-    rm -rf lib/
+    rm -rf lib/binding/
     cd ${ROOTDIR}
 }
 

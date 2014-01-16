@@ -7,7 +7,7 @@
        "url"  : "git://github.com/springmeyer/node-pre-gyp.git"
     },
     "version": "0.1.0",
-    "main": "./index.js",
+    "main": "./lib/index.js",
     "binary": {
         "module_name": "app2",
         "module_path": "./lib/binding/",
@@ -16,6 +16,6 @@
     },
     "scripts": {
         "install":"node-pre-gyp install --fallback-to-build",
-        "test":"node index.js"
+        "test":"node ./lib/index.js"
     }
 }

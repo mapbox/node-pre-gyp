@@ -11,21 +11,13 @@ No: it plays nicely with them.
  - You still publish your package to the npm repository
  - You still create a `binding.gyp` to compile your module with `node-gyp`
 
-What node-pre-gyp does is stand between `npm` and `node-gyp`.
+What `node-pre-gyp` does is stand between `npm` and `node-gyp`.
 
 ## Who uses node-pre-gyp?
 
 **Developers** of C++ modules can use `node-pre-gyp` to package and publish the binary `.node` before running `npm publish`.
 
-**Users** will then be able to `npm install` your module from a binary with no compile.
-
-## Why use node-pre-gyp?
-
-Successful deployment of your module using `node-pre-gyp` will mean:
-
- - Users can be blissfully unaware that your module is written in C++
- - During development you will run `node-pre-gyp build` instead of `npm install`
- - You will take on the responsibility for providing binaries to your users
+**Users** can then `npm install` your module from a binary and `node-pre-gyp` does the work to make this seamless.
 
 ## Modules using `node-pre-gyp`:
 
@@ -34,9 +26,10 @@ Successful deployment of your module using `node-pre-gyp` will mean:
  - [node-osmium](https://github.com/osmcode/node-osmium)
  - [node-osrm](https://github.com/DennisOSRM/node-OSRM)
 
-For more examples see also the [test apps](test/).
+For more examples see the [test apps](test/).
 
 ## Usage
+
 
 **1) Add a custom `install` script to `package.json`**
 
@@ -114,7 +107,7 @@ You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects
 
 First, get setup locally and test the workflow:
 
-**1) Create an S3 bucket
+**1) Create an S3 bucket**
 
 And have your key and secret key ready for writing to the bucket.
 

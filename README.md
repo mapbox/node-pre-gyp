@@ -233,7 +233,13 @@ binary module here and not your entire npm package. To automate the publishing o
 
 ### Commands
 
-`node-pre-gyp` supports many of the same commands as `node-gyp` with some critical differences
+View all possible commands:
+
+    node-pre-gyp --help
+
+#### Unpublish binaries
+
+    node-pre-gyp unpublish
 
 #### Clean install and build artifacts
 

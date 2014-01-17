@@ -1,7 +1,7 @@
 # node-pre-gyp changelog
 
 ## Future
-
+ - Added `unpublish` command
  - Fixed module path construction in tests
  - Added ability to disable falling back to build behavior via `npm install --fallback-to-buil=false` which overrides setting in a depedencies package.json `install` target.
 

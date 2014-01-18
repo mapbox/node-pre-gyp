@@ -222,7 +222,7 @@ before_install:
 You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
 
     COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
-    if test "${COMMIT_MESSAGE#*[publish]}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
+    if test "${COMMIT_MESSAGE#*'[publish]'}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
 
 Or you could automatically detect if the git branch is a tag:
 

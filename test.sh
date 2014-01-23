@@ -6,10 +6,11 @@ set -e -u
 # put npm's copy of node-gyp on the PATH
 export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
 export PATH=`pwd`/bin:$PATH
-ROOTDIR=`pwd`/test
+BASE=`pwd`
 
 function setup {
-    cd ${ROOTDIR}
+    # nothing yet
+    true
 }
 
 function teardown {
@@ -27,22 +28,22 @@ function MARK {
 TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST:-false};
 
 function build_app {
-    cd $ROOTDIR/$1
+    WD=$BASE/test/$1
 
-    rm -rf ./lib/binding/*
-    rm -rf ./build/*
-
+    rm -rf ${WD}/lib/binding/*
+    rm -rf ${WD}/build/*
 
     MARK "A" $1
     # test install from binary with fallback
     # run directly against node-pre-gyp
-    node-pre-gyp clean
+    node-pre-gyp clean -C $WD
     if [[ $1  == "app2" ]]; then
-        node-pre-gyp install --fallback-to-build --custom_include_path=`pwd`/include
+        node-pre-gyp -C $WD install --fallback-to-build --custom_include_path=`pwd`/include
     else
-        node-pre-gyp install --fallback-to-build
+        node-pre-gyp -C $WD install --fallback-to-build
     fi
-    npm test
+    # run npm commands from correct directory
+    cd $WD && npm test && cd $BASE
 
     if [[ $TRAVIS_PULL_REQUEST == true ]] ; then
         MARK "B" $1
@@ -52,14 +53,17 @@ function build_app {
     else
         MARK "D" $1
         # it works, so now publish
-        node-pre-gyp package publish
-        node-pre-gyp testpackage --overwrite
-        node-pre-gyp unpublish
-        node-pre-gyp publish
+        node-pre-gyp -C $WD package publish
+        node-pre-gyp -C $WD testpackage --overwrite
+        node-pre-gyp -C $WD unpublish
+        node-pre-gyp -C $WD publish
 
         MARK "E" $1
+        # actually move into correct working
+        # directory now so we don't need -C
+        cd $WD
         # now test installing via remote binary without fallback
-        node-pre-gyp clean
+        node-pre-gyp -C $WD clean
         npm install --fallback-to-build=false
         npm test
     fi
@@ -78,9 +82,9 @@ function build_app {
 
     # cleanup
     node-pre-gyp clean
-    rm -rf {build,node_modules}
-    rm -rf lib/binding/
-    cd ${ROOTDIR}
+    rm -rf $WD/{build,node_modules}
+    rm -rf $WD/lib/binding/
+    cd ${BASE}
 }
 
 setup

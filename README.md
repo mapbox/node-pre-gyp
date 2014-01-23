@@ -253,10 +253,11 @@ View all possible commands:
 
 Options include:
 
- - `--build-from-source`
- - `--fallback-to-build`
+ - `-C/--directory`: run the command in this directory
+ - `--build-from-source`: build from source instead of using pre-built binary
+ - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
 
-Both of these options can be passed alone or they can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
+Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 
 For example: `npm install --build-from-source=myapp`. This is useful if:
 

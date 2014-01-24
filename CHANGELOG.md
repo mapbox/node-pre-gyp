@@ -1,6 +1,7 @@
 # node-pre-gyp changelog
 
 ## Future
+- Added `node-pre-gyp info` command to display listing of published binaries
 - Added support for changing the directory node-pre-gyp should build in with the `-C/--directory` option.
 - Added support for S3 prefixes.
 

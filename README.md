@@ -237,6 +237,11 @@ View all possible commands:
 
     node-pre-gyp --help
 
+
+#### List published binaries
+
+    node-pre-gyp info
+
 #### Unpublish binaries
 
     node-pre-gyp unpublish
@@ -248,6 +253,10 @@ View all possible commands:
 #### Clean and install
 
     node-pre-gyp reinstall # runs "clean" and "install"
+
+#### Chaining commands
+
+    node-pre-gyp clean build unpublish publish info
 
 ### Options
 

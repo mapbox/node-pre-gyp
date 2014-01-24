@@ -61,7 +61,7 @@ function build_app {
         # now test listing published binaries
         CURRENT_ARCH=$(node -e "console.log(process.arch)")
         CURRENT_PLATFORM=$(node -e "console.log(process.platform)")
-        BINARIES=$(node-pre-gyp -C $WD info ----loglevel warn)
+        BINARIES=$(node-pre-gyp -C $WD info --loglevel warn)
         # now ensure that both the current arch and platform
         # show up in the published listing
         if test "${BINARIES#*$CURRENT_PLATFORM}" == "$BINARIES"; then

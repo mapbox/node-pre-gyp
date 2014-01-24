@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e -u
-# set -x
+#set -x
 
 # put npm's copy of node-gyp on the PATH
 export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
@@ -28,7 +28,7 @@ function MARK {
 TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST:-false};
 
 function build_app {
-    WD=$BASE/test/$1
+    WD=$( cd $BASE/test/$1 && pwd )
 
     rm -rf ${WD}/lib/binding/*
     rm -rf ${WD}/build/*
@@ -38,7 +38,7 @@ function build_app {
     # run directly against node-pre-gyp
     node-pre-gyp clean -C $WD
     if [[ $1  == "app2" ]]; then
-        node-pre-gyp -C $WD install --fallback-to-build --custom_include_path=`pwd`/include
+        node-pre-gyp -C $WD install --fallback-to-build --custom_include_path=$WD/include
     else
         node-pre-gyp -C $WD install --fallback-to-build
     fi
@@ -93,7 +93,7 @@ function build_app {
         echo 'bogus' > $i;
     done
     if [[ $1  == "app2" ]]; then
-        npm install --custom_include_path=`pwd`/include
+        npm install --custom_include_path=$WD/include
     else
         npm install
     fi

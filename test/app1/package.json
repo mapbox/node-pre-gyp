@@ -11,7 +11,7 @@
     "binary": {
         "module_name": "app1",
         "module_path": "./lib/binding/",
-        "remote_uri": "http://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/app1",
+        "remote_uri": "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/app1",
         "template": "v{version}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {

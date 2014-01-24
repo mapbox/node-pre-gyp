@@ -53,7 +53,7 @@ function build_app {
     else
         MARK "D" $1
         # it works, so now publish
-        node-pre-gyp -C $WD package publish
+        node-pre-gyp -C $WD unpublish package publish
         node-pre-gyp -C $WD testpackage --overwrite
         node-pre-gyp -C $WD unpublish
         node-pre-gyp -C $WD publish

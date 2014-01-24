@@ -58,6 +58,25 @@ function build_app {
         node-pre-gyp -C $WD unpublish
         node-pre-gyp -C $WD publish
 
+        # now test listing published binaries
+        CURRENT_ARCH=$(node -e "console.log(process.arch)")
+        CURRENT_PLATFORM=$(node -e "console.log(process.platform)")
+        BINARIES=$(node-pre-gyp -C $WD info ----loglevel warn)
+        # now ensure that both the current arch and platform
+        # show up in the published listing
+        if test "${BINARIES#*$CURRENT_PLATFORM}" == "$BINARIES"; then
+            echo "failed to detect published binary for $CURRENT_PLATFORM"
+            false
+        else
+            echo "detected published $CURRENT_PLATFORM"
+        fi
+        if test "${BINARIES#*$CURRENT_ARCH}" == "$BINARIES"; then
+            echo "failed to detect published binary for $CURRENT_ARCH"
+            false
+        else
+            echo "detected published $CURRENT_ARCH"
+        fi
+
         MARK "E" $1
         # actually move into correct working
         # directory now so we don't need -C

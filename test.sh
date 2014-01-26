@@ -24,9 +24,6 @@ function MARK {
     echo
 }
 
-# set variable if unset
-TRAVIS_PULL_REQUEST=${TRAVIS_PULL_REQUEST:-false};
-
 function build_app {
     WD=$( cd $BASE/test/$1 && pwd )
 
@@ -45,12 +42,7 @@ function build_app {
     # run npm commands from correct directory
     cd $WD && npm test && cd $BASE
 
-    if [[ $TRAVIS_PULL_REQUEST == true ]] ; then
-        MARK "B" $1
-        echo "skipping publish"
-        MARK "C" $1
-        echo "skipping install from published binary"
-    else
+    if [[ $node_pre_gyp_accessKeyId ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
         # it works, so now publish
         node-pre-gyp -C $WD unpublish package publish
@@ -85,6 +77,11 @@ function build_app {
         node-pre-gyp -C $WD clean
         npm install --fallback-to-build=false
         npm test
+    else
+        MARK "B" $1
+        echo "skipping publish"
+        MARK "C" $1
+        echo "skipping install from published binary"
     fi
 
     MARK "F" $1

@@ -29,4 +29,6 @@ script:
 
 after_success:
 # publish to npm if this is a tag
-- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] && [[ $NODE_VERSION == "0.10" ]]; then npm publish --silent --email=dane@dbsgeo.com --_auth=$NPM_AUTH; fi;
+- npm config set email dane@dbsgeo.com
+- npm config set _auth $NPM_AUTH
+- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] && [[ $NODE_VERSION == "0.10" ]]; then npm publish; fi;

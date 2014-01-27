@@ -52,25 +52,38 @@ It must provide these properties:
 And example from `node-sqlite3` looks like:
 
 ```js
-    "binary": {
-        "module_name": "node_sqlite3",
-        "module_path": "./lib/binding/",
-        "remote_uri": "http://node-sqlite3.s3.amazonaws.com",
-        "template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
-    },
+"binary": {
+    "module_name": "node_sqlite3",
+    "module_path": "./lib/binding/",
+    "remote_uri": "http://node-sqlite3.s3.amazonaws.com",
+    "template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
+}
 ```
 
-**3) Build and package your app**
+**3) Add node-pre-gyp as a bundled dependency**
 
-```sh
-node-pre-gyp build package
+```js
+"dependencies"  : {
+  "node-pre-gyp": "~0.4.0",
+},
+"bundledDependencies":["node-pre-gyp"],
 ```
 
-**4) Publish the tarball**
+**4) Build and package your app**
 
-```sh
-node-pre-gyp publish
-```
+Install node-pre-gyp globally:
+
+    npm install node-pre-gyp
+
+Then build and package your app:
+
+    node-pre-gyp build package
+
+**5) Publish the tarball**
+
+Once packaged, now you can publish:
+
+    node-pre-gyp publish
 
 Currently the `publish` command pushes your binary to S3. This requires:
 
@@ -84,11 +97,11 @@ You can also host your binaries elsewhere. To do this requires:
  - The package is available as a tarball in the `build/stage/` directory.
  - You provide a remote location and point the `remote_uri` value to it.
 
-**5) Automating builds**
+**6) Automating builds**
 
 Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries.
 
-**6) You're done!**
+**7) You're done!**
 
 Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
 

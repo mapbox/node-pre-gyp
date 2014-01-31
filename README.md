@@ -73,7 +73,7 @@ And example from `node-sqlite3` looks like:
 
 Install node-pre-gyp globally:
 
-    npm install node-pre-gyp
+    npm install -g node-pre-gyp
 
 Then build and package your app:
 

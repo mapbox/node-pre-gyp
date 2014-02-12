@@ -1,2 +1,6 @@
 .DS_Store
 node_modules
+nwsnapshot
+node-webkit*.zip
+credits.html
+node-webkit.app

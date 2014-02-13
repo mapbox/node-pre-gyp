@@ -3,6 +3,7 @@
 ## 0.4.2
 
  - Added preliminary support for node-webkit
+ - Fixed support for `--target_arch` option being respected in all cases.
 
 ## 0.4.1
 

@@ -55,7 +55,7 @@ And example from `node-sqlite3` looks like:
 "binary": {
     "module_name": "node_sqlite3",
     "module_path": "./lib/binding/",
-    "remote_uri": "http://node-sqlite3.s3.amazonaws.com",
+    "remote_uri": "https://node-sqlite3.s3.amazonaws.com",
     "template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
 }
 ```

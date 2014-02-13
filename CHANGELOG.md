@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.4.2
+
+ - Added preliminary support for node-webkit
+
 ## 0.4.1
 
  - Fixed exception when only stderr is available in binary test (@bendi / #31) 

@@ -2,6 +2,7 @@
 
 set -e -u
 
+# TODO - consider using https://github.com/shama/nodewebkit to install node-webkit
 if [[ `uname -s` == 'Darwin' ]]; then
     if [[ ! -f node-webkit-v0.8.4-osx-ia32.zip ]]; then
         wget https://s3.amazonaws.com/node-webkit/v0.8.4/node-webkit-v0.8.4-osx-ia32.zip

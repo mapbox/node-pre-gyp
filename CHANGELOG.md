@@ -2,6 +2,7 @@
 
 ## 0.4.2
 
+ - Added support for `--target` flag to request cross-compile against a specific node/node-webkit version.
  - Added preliminary support for node-webkit
  - Fixed support for `--target_arch` option being respected in all cases.
 

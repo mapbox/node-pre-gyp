@@ -16,7 +16,6 @@
     "type": "git",
     "url": "git://github.com/springmeyer/node-pre-gyp.git"
   },
-  "preferGlobal": true,
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {

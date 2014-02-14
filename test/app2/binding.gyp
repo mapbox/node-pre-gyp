@@ -1,8 +1,9 @@
 {
   'variables': {
-      'custom_include_path%':'',
+      "custom_include_path%":"",
       "module_name":"<!(node -e \"console.log(require('./package.json').binary.module_name)\")",
       "module_path":"<!(node -e \"console.log(require('./package.json').binary.module_path)\")",
+      "versioning%":""
   },
   "targets": [
     {
@@ -19,7 +20,7 @@
       "copies": [
         {
           "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
-          "destination": "<(module_path)"
+          "destination": "<(module_path)/<(versioning)"
         }
       ]
     }

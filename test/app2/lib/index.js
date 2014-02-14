@@ -1,9 +1,6 @@
-var path = require('path');
-var pkg = require('../package.json');
-var assert = require('assert');
-var module_path = path.join(
-     path.join(__dirname,'../' + pkg.binary.module_path),
-     pkg.binary.module_name + '.node');
-var app = require(module_path);
+var binary = require('node-pre-gyp');
+var path = require('path')
+var binding_path = binary.find(path.resolve(path.join(__dirname,'../package.json')));
+var binding = require(binding_path);
 
-assert.ok(app);
+require('assert').equal(binding.hello(),"hello");

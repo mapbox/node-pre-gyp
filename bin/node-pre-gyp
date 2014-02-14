@@ -10,14 +10,14 @@ process.title = 'node-pre-gyp'
  * Module dependencies.
  */
 
-var binary = require('../')
+var node_pre_gyp = require('../')
 var log = require('npmlog')
 
 /**
  * Process and execute the selected commands.
  */
 
-var prog = binary()
+var prog = new node_pre_gyp.Run()
 var completed = false
 prog.parseArgv(process.argv)
 

@@ -20,6 +20,7 @@ before_install:
 
 install:
 - npm install
+- npm install aws-sdk
 
 before_script:
 - npm test

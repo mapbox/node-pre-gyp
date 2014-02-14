@@ -64,7 +64,7 @@ And example from `node-sqlite3` looks like:
 
 ```js
 "dependencies"  : {
-  "node-pre-gyp": "~0.4.0",
+  "node-pre-gyp": "*",
 },
 "bundledDependencies":["node-pre-gyp"],
 ```
@@ -87,6 +87,7 @@ Once packaged, now you can publish:
 
 Currently the `publish` command pushes your binary to S3. This requires:
 
+ - You have installed `aws-sdk` with `npm install aws-sdk`
  - You have created a bucket already.
  - The `remote-uri` points to an S3 http or https endpoint.
  - You have configured node-pre-gyp to read your S3 credentials (see [S3 hosting](#s3-hosting) for details).

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.0-alpha
+
+ - First pass of support for versioned install path (#18)
+
 ## 0.4.2
 
  - Added support for `--target` flag to request cross-compile against a specific node/node-webkit version.

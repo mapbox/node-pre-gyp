@@ -1,11 +1,11 @@
 # node-pre-gyp
 
+`node-pre-gyp` is a Node.js native add-on install tool.
+
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
 [![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
 [![Dependencies](https://david-dm.org/springmeyer/node-pre-gyp.png)](https://david-dm.org/springmeyer/node-pre-gyp)
-
-`node-pre-gyp` is a Node.js native add-on install tool.
 
 ## Does this replace npm or node-gyp?
 

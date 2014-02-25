@@ -19,7 +19,7 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "nopt": "~2.1.2",
+    "nopt": "~2.2.0",
     "npmlog": "~0.0.6",
     "request": "2",
     "semver": "~2.2.1",

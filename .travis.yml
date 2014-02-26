@@ -26,7 +26,9 @@ before_script:
 - npm test
 
 script:
-- true
+- unset node_pre_gyp_accessKeyId
+- unset node_pre_gyp_secretAccessKey
+- npm test
 
 after_success:
 # publish to npm if this is a tag

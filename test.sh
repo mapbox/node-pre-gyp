@@ -86,6 +86,9 @@ function build_app {
     fi
 
     MARK "F" $1
+    # actually move into correct working
+    # directory now so we don't need -C
+    cd $WD
     # sabotage binaries and make sure they are rebuilt
     for i in $(find . -name '*.node') ; do
         echo 'bogus' > $i;

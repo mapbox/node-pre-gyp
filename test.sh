@@ -3,18 +3,19 @@
 set -e -u
 #set -x
 
+# put npm's copy of node-gyp on the PATH
+export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
+# put local copy of node-pre-gyp on PATH
+export PATH=`pwd`/bin:$PATH
+
 BASE=$(pwd)
 
 function setup {
     cd ${BASE}
-    npm unlink .
-    npm link .
-    npm link node-gyp
 }
 
 function teardown {
     cd ${BASE}
-    npm unlink .
 }
 
 function MARK {

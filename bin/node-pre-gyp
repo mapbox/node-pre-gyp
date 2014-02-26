@@ -116,7 +116,7 @@ function issueMessage () {
   errorMessage()
   log.error('', [ 'This is a bug in `'+process.title+'`.'
                 , 'Try to update '+process.title+' and file an issue if it does not help:'
-                , '    <https://github.com/springmeyer/'+process.title+'/issues>'
+                , '    <https://github.com/mapbox/'+process.title+'/issues>'
                 ].join('\n'))
 }
 

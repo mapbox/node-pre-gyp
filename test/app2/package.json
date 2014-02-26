@@ -4,7 +4,7 @@
     "description":"node-pre-gyp test",
     "repository"   :  {
        "type" : "git",
-       "url"  : "git://github.com/springmeyer/node-pre-gyp.git"
+       "url"  : "git://github.com/mapbox/node-pre-gyp.git"
     },
     "version": "0.1.0",
     "main": "./lib/index.js",

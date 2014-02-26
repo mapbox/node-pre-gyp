@@ -4,8 +4,8 @@
 
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
-[![Build Status](https://secure.travis-ci.org/springmeyer/node-pre-gyp.png)](https://travis-ci.org/springmeyer/node-pre-gyp)
-[![Dependencies](https://david-dm.org/springmeyer/node-pre-gyp.png)](https://david-dm.org/springmeyer/node-pre-gyp)
+[![Build Status](https://secure.travis-ci.org/mapbox/node-pre-gyp.png)](https://travis-ci.org/mapbox/node-pre-gyp)
+[![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.png)](https://david-dm.org/mapbox/node-pre-gyp)
 
 ## Does this replace npm or node-gyp?
 

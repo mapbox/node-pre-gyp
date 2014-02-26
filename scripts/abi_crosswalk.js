@@ -6,7 +6,7 @@ var semver = require('semver');
 
 /*
 
-// https://github.com/springmeyer/node-pre-gyp/wiki/Node-ABI
+// https://github.com/mapbox/node-pre-gyp/wiki/Node-ABI
 node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json
 
 */

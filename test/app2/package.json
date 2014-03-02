@@ -11,7 +11,7 @@
     "binary": {
         "module_name": "app2",
         "module_path": "./lib/binding/{node_abi}-{platform}-{arch}",
-        "remote_path": "./{module_name}/v{version}",
+        "remote_path": "./{module_name}/v{version}/",
         "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
         "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
     },

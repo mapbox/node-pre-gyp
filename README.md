@@ -14,13 +14,16 @@ No: it plays nicely with them.
  - You still publish your package to the npm repository
  - You still create a `binding.gyp` to compile your module with `node-gyp`
 
-What `node-pre-gyp` does is stand between `npm` and `node-gyp`.
+What `node-pre-gyp` does is stand between `npm` and `node-gyp`. It offers two main things:
+
+ - A command line tool called `node-pre-gyp` that can be called directly (or through npm) to install or package your module.
+ - Javascript code that can be required to dynamically find your module: `require('node-pre-gyp').find`
 
 ## Who uses node-pre-gyp?
 
-**Developers** of C++ modules can use `node-pre-gyp` to package and publish the binary `.node` before running `npm publish`.
+**Developers** of C++ modules can use `node-pre-gyp` to package and publish the modules `.node` binary before running `npm publish`.
 
-**Users** can then `npm install` your module from a binary and `node-pre-gyp` does the work to make this seamless.
+**Users** can then `npm install` your module from a binary and `node-pre-gyp` does the work to make this seamless across platforms, node versions, and architectures.
 
 ## Modules using `node-pre-gyp`:
 
@@ -33,8 +36,17 @@ For more examples see the [test apps](test/).
 
 ## Usage
 
+**1) Add node-pre-gyp as a bundled dependency in `package.json`**
 
-**1) Add a custom `install` script to `package.json`**
+```js
+"dependencies"  : {
+  "node-pre-gyp": "0.5.x",
+},
+"bundledDependencies":["node-pre-gyp"],
+```
+
+
+**2) Add a custom `install` script to `package.json`**
 
 ```js
     "scripts": {
@@ -42,64 +54,89 @@ For more examples see the [test apps](test/).
     }
 ```
 
+**3) Add a `binary` property to `package.json`**
 
-**2) Add a `binary` property to `package.json`**
-
-It must provide these properties:
-
-  - `module_name`: The name of your native node module.
-  - `module_path`: The location your native module is placed after a build. This should be an empty directory without other javascript files.
-  - `remote_uri`: A url to the remote location where you've published tarball binaries
-  - `template`: A string describing the tarball versioning scheme for your binaries
-
-And example from `node-sqlite3` looks like:
+A simple example is:
 
 ```js
 "binary": {
     "module_name": "node_sqlite3",
     "module_path": "./lib/binding/",
-    "remote_uri": "https://node-sqlite3.s3.amazonaws.com",
-    "template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
+    "host": "https://node-sqlite3.s3.amazonaws.com",
 }
 ```
 
-**3) Add node-pre-gyp as a bundled dependency**
+Required properties:
+
+  - `module_name`: The name of your native node module. This must match [the name passed to `NODE_MODULE`](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
+  - `module_path`: The location your native module is placed after a build. This should be an empty directory without other javascript files. This is because everything in the directory will be packaged in the binary tarball and when unpack anything inside the directory will be overwritten with the contents of the tarball. **
+  - `host`: A url to the remote location where you've published tarball binaries (must be `https` not `http`)
+
+Optional properties:
+
+  - `remote_path`:  It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`. **
+  - `package_name`:  It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could  could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`. See [Versioning](#versioning for details) about what each variable evaluates to. **
+
+** Properties supporting versioning mean that they will be evaluated against known node-pre-gyp variables. See [Versioning](#versioning for details).
+
+**4) Dynamically require your `.node`
+
+Inside the main js file that requires your addon module you are likely currently doing:
 
 ```js
-"dependencies"  : {
-  "node-pre-gyp": "*",
-},
-"bundledDependencies":["node-pre-gyp"],
+var binding = require('../build/Release/binding.node');
 ```
 
-**4) Build and package your app**
+or:
 
-Install node-pre-gyp globally:
+```js
+var bindings = require('./bindings')
+```
 
-    npm install -g node-pre-gyp
+Change those lines to:
 
-Then build and package your app:
+```js
+var binary = require('node-pre-gyp');
+var path = require('path')
+var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
+var binding = require(binding_path);
+```
 
-    node-pre-gyp build package
+**5) Build and package your app**
 
-**5) Publish the tarball**
+Now build your module from source:
+
+    npm install --build-from-source
+
+The `--build-from-source` tells `node-pre-gyp` to not look for a remote package and instead dispatch to node-gyp to build.
+
+Now `node-pre-gyp` should now also be installed as a local dependency so the command line tool it offers can be found at `./node_modules/.bin/node-pre-gyp`.
+
+**6) Test **
+
+Now `npm test` should work just as it did before.
+
+**7) Publish the tarball**
+
+Then package your app:
+
+    ./node_modules/.bin/node-pre-gyp package
 
 Once packaged, now you can publish:
 
-    node-pre-gyp publish
+    ./node_modules/.bin/node-pre-gyp publish
 
 Currently the `publish` command pushes your binary to S3. This requires:
 
  - You have installed `aws-sdk` with `npm install aws-sdk`
  - You have created a bucket already.
- - The `remote-uri` points to an S3 http or https endpoint.
+ - The `host` points to an S3 http or https endpoint.
  - You have configured node-pre-gyp to read your S3 credentials (see [S3 hosting](#s3-hosting) for details).
 
 You can also host your binaries elsewhere. To do this requires:
 
- - You manually publish the binary created by the `package` command.
- - The package is available as a tarball in the `build/stage/` directory.
- - You provide a remote location and point the `remote_uri` value to it.
+ - You manually publish the binary created by the `package` command to an `https` endpoint
+ - Ensure that the `host` value points to your custom `https` endpoint.
 
 **6) Automating builds**
 
@@ -156,7 +193,7 @@ Another way is to use your environment:
     export node_pre_gyp_accessKeyId=xxx
     export node_pre_gyp_secretAccessKey=xxx
 
-You may also need to specify the `region` if it is not explicit in the `remote_uri` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `remote_uri` value.
+You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
 
 **4) Package and publish your build**
 
@@ -290,3 +327,23 @@ For example: `npm install --build-from-source=myapp`. This is useful if:
  - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
  - The larger app also depends on other modules installed with `node-pre-gyp`
  - You only want to trigger a source compile for `myapp` and the other modules.
+
+# Versioning
+
+The versioning template accepts these variables, which will get evaluated by `node-pre-gyp` depending on your system and any custom build flags you passed.
+
+ - configuration folder - 'Release' or 'Debug'
+ - `module_name` - the `name` attribute from `package.json`
+ - `version` - the semver `version` value for your module
+ - `major`, `minor`, `patch`, and `prelease` match the semver values for these properties
+ - `node_abi`: The node versioning uses the C++ `ABI` number rather node's semver string. This value is available in javascript `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. Currently the `node-sqlite3` build scripts access this value only via `process.versions.modules` so for versions before `v0.10.4` the `v8` `MAJOR.MINOR` is used as a proxy.
+ - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32`
+ - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
+
+Here is an example of usage (this goes in package.json):
+
+```js
+"template": "{configuration}/{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz"
+```
+
+The options are visible in the code here: https://github.com/springmeyer/node-pre-gyp/blob/master/lib/util/versioning.js#L62-L73

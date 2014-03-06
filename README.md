@@ -138,11 +138,11 @@ You can also host your binaries elsewhere. To do this requires:
  - You manually publish the binary created by the `package` command to an `https` endpoint
  - Ensure that the `host` value points to your custom `https` endpoint.
 
-**6) Automating builds**
+**8) Automating builds**
 
-Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries.
+Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries and check out <https://appveyor.com>.
 
-**7) You're done!**
+**9) You're done!**
 
 Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
 
@@ -153,7 +153,7 @@ What will happen is this:
 3. `node-pre-gyp` will fetch the binary `.node` module and unpack in the right place
 4. Assuming that all worked, you are done
 
-If a failure occurred and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
+If a a binary was not available for a given platform and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
 
 ## S3 Hosting
 

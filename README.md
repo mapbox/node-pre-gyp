@@ -1,30 +1,21 @@
 # node-pre-gyp
 
-`node-pre-gyp` is a tool that makes it easy to publish and install Node.js C++ from binaries.
+#### node-pre-gyp makes it easy to publish and install Node.js C++ from binaries
 
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
 [![Build Status](https://secure.travis-ci.org/mapbox/node-pre-gyp.png)](https://travis-ci.org/mapbox/node-pre-gyp)
 [![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.png)](https://david-dm.org/mapbox/node-pre-gyp)
 
-## Overview
+`node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
 
-`node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp). It offers two main things:
+### Features
 
- - A command line tool called `node-pre-gyp` that can install your package from a binary or publish it.
- - Javascript code that can be required to dynamically find your module: `require('node-pre-gyp').find`
+ - A command line tool called `node-pre-gyp` that can install your package's c++ module from a binary.
+ - A variety of developer targeted commands for packaging, testing, and publishing binaries.
+ - A Javascript module that can dynamically require your installed binary: `require('node-pre-gyp').find`
 
-For a hello world example of a Node.js C++ module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example>.
-
-## Modules using `node-pre-gyp`:
-
- - [node-sqlite3](https://github.com/mapbox/node-sqlite3)
- - [node-mapnik](https://github.com/mapnik/node-mapnik)
- - [node-osmium](https://github.com/osmcode/node-osmium)
- - [node-osrm](https://github.com/DennisOSRM/node-OSRM)
- - [node-addon-example](https://github.com/springmeyer/node-addon-example)
-
-For more examples see the [test apps](test/).
+For a hello world example of a module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example> and [the wiki ](https://github.com/mapbox/node-pre-gyp/wiki/Modules-using-node-pre-gyp) for real world examples.
 
 ## Depends
 
@@ -38,7 +29,7 @@ For more examples see the [test apps](test/).
 
 But you can also install it globally:
 
-  npm install node-pre-gyp -g
+    npm install node-pre-gyp -g
 
 ## Usage
 
@@ -63,15 +54,32 @@ You can also chain commands:
 
     node-pre-gyp clean build unpublish publish info
 
-### Configuring your module to use node-pre-gyp
+### Options
 
-**1) Add new entries to your `package.json`**
+Options include:
 
-We need to:
+ - `-C/--directory`: run the command in this directory
+ - `--build-from-source`: build from source instead of using pre-built binary
+ - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
+ - `--target=0.10.25`: Pass the target node or node-webkit version to compile against 
 
- - Add node-pre-gyp as a bundled dependency
+Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
+
+For example: `npm install --build-from-source=myapp`. This is useful if:
+
+ - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
+ - The larger app also depends on other modules installed with `node-pre-gyp`
+ - You only want to trigger a source compile for `myapp` and the other modules.
+
+### Configuring
+
+This is guide to configuring your module to use node-pre-gyp.
+
+#### 1) Add new entries to your `package.json`
+
+ - Add `node-pre-gyp` as a bundled dependency
  - Add a custom `install` script
- - Add a `binary` object
+ - Declare a `binary` object
 
 This looks like:
 
@@ -90,33 +98,33 @@ This looks like:
     }
 ```
 
-#### The `binary` object has three required properties
+##### The `binary` object has three required properties
 
-##### module_name
+###### module_name
 
 The name of your native node module.This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
 
-##### module_path
+###### module_path
 
 The location your native module is placed after a build. This should be an empty directory without other javascript files. This is because everything in the directory will be packaged in the binary tarball and when unpack anything inside the directory will be overwritten with the contents of the tarball. **
 
-##### host
+###### host
 
 A url to the remote location where you've published tarball binaries (must be `https` not `http`)
 
-#### The `binary` object has two optional properties
+##### The `binary` object has two optional properties
 
-##### remote_path
+###### remote_path
 
 It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`. **
 
-##### package_name
+###### package_name
 
 It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could  could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`. See [Versioning](#versioning for details) about what each variable evaluates to. **
 
 ** Properties supporting versioning mean that they will be evaluated against known node-pre-gyp variables. See [Versioning](#versioning for details).
 
-**4) Dynamically require your `.node`
+#### 2) Dynamically require your `.node`
 
 Inside the main js file that requires your addon module you are likely currently doing:
 
@@ -139,7 +147,7 @@ var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json'
 var binding = require(binding_path);
 ```
 
-**5) Build and package your app**
+#### 3) Build and package your app
 
 Now build your module from source:
 
@@ -149,11 +157,11 @@ The `--build-from-source` tells `node-pre-gyp` to not look for a remote package 
 
 Now `node-pre-gyp` should now also be installed as a local dependency so the command line tool it offers can be found at `./node_modules/.bin/node-pre-gyp`.
 
-**6) Test **
+#### 4) Test
 
 Now `npm test` should work just as it did before.
 
-**7) Publish the tarball**
+#### 5) Publish the tarball
 
 Then package your app:
 
@@ -175,11 +183,11 @@ You can also host your binaries elsewhere. To do this requires:
  - You manually publish the binary created by the `package` command to an `https` endpoint
  - Ensure that the `host` value points to your custom `https` endpoint.
 
-**8) Automating builds**
+#### 6) Automate builds
 
 Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries and check out <https://appveyor.com>.
 
-**9) You're done!**
+#### 7) You're done!
 
 Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
 
@@ -321,22 +329,6 @@ Or you could automatically detect if the git branch is a tag:
 
 Remember this publishing is not the same as `npm publish`. We're just talking about the
 binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
-
-### Options
-
-Options include:
-
- - `-C/--directory`: run the command in this directory
- - `--build-from-source`: build from source instead of using pre-built binary
- - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
-
-Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. So, in addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
-
-For example: `npm install --build-from-source=myapp`. This is useful if:
-
- - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
- - The larger app also depends on other modules installed with `node-pre-gyp`
- - You only want to trigger a source compile for `myapp` and the other modules.
 
 # Versioning
 

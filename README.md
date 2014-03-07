@@ -9,14 +9,12 @@
 
 ## Overview
 
-To enable binary installs `node-pre-gyp` you set up `npm` to call `node-pre-gyp` to install a module which overrides the default `npm` behavior of calling `node-gyp` to build from source.
-
-`node-pre-gyp` stands between `npm` and `node-gyp`. It offers two main things:
+`node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp). It offers two main things:
 
  - A command line tool called `node-pre-gyp` that can install your package from a binary or publish it.
  - Javascript code that can be required to dynamically find your module: `require('node-pre-gyp').find`
 
-For a hello world example of a Node.js C++ modules packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example>.
+For a hello world example of a Node.js C++ module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example>.
 
 ## Modules using `node-pre-gyp`:
 
@@ -28,43 +26,75 @@ For a hello world example of a Node.js C++ modules packaged with `node-pre-gyp` 
 
 For more examples see the [test apps](test/).
 
+## Depends
+
+ - Node.js 0.10.x or 0.8.x
+
+## Install
+
+`node-pre-gyp` is designed to be installed as a local dependency of your Node.js C++ addon and accessed like:
+
+    ./node_modules/.bin/node-pre-gyp --help
+
+But you can also install it globally:
+
+  npm install node-pre-gyp -g
+
 ## Usage
 
-**1) Add node-pre-gyp as a bundled dependency in `package.json`**
+### Commands
+
+View all possible commands:
+
+    node-pre-gyp --help
+
+- clean - Removes the entire folder containing the compiled .node module
+- install - Attempts to install pre-built binary for module
+- reinstall - Runs "clean" and "install" at once
+- build - Attempts to compile the module by dispatching to node-gyp or nw-gyp
+- rebuild - Runs "clean" and "build" at once
+- package - Packs binary into tarball
+- testpackage - Tests that the staged package is valid
+- publish - Publishes pre-built binary
+- unpublish - Unpublishes pre-built binary
+- info - Fetches info on published binaries
+
+You can also chain commands:
+
+    node-pre-gyp clean build unpublish publish info
+
+### Configuring your module to use node-pre-gyp
+
+**1) Add new entries to your `package.json`**
+
+We need to:
+
+ - Add node-pre-gyp as a bundled dependency
+ - Add a custom `install` script
+ - Add a `binary` object
+
+This looks like:
 
 ```js
     "dependencies"  : {
       "node-pre-gyp": "0.5.x"
     },
     "bundledDependencies":["node-pre-gyp"],
-```
-
-
-**2) Add a custom `install` script to `package.json`**
-
-```js
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
     }
-```
-
-**3) Add a `binary` property to `package.json`**
-
-A simple example is:
-
-```js
     "binary": {
-        "module_name": "node_sqlite3",
+        "module_name": "your_module",
         "module_path": "./lib/binding/",
-        "host": "https://node-sqlite3.s3.amazonaws.com",
+        "host": "https://your_module.s3-us-west-1.amazonaws.com",
     }
 ```
 
-Required properties:
+#### The `binary` object has three required properties
 
 ##### module_name
 
-The name of your native node module. This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
+The name of your native node module.This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
 
 ##### module_path
 
@@ -74,7 +104,7 @@ The location your native module is placed after a build. This should be an empty
 
 A url to the remote location where you've published tarball binaries (must be `https` not `http`)
 
-Optional properties:
+#### The `binary` object has two optional properties
 
 ##### remote_path
 
@@ -291,33 +321,6 @@ Or you could automatically detect if the git branch is a tag:
 
 Remember this publishing is not the same as `npm publish`. We're just talking about the
 binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
-
-### Commands
-
-View all possible commands:
-
-    node-pre-gyp --help
-
-
-#### List published binaries
-
-    node-pre-gyp info
-
-#### Unpublish binaries
-
-    node-pre-gyp unpublish
-
-#### Clean install and build artifacts
-
-    node-pre-gyp clean
-
-#### Clean and install
-
-    node-pre-gyp reinstall # runs "clean" and "install"
-
-#### Chaining commands
-
-    node-pre-gyp clean build unpublish publish info
 
 ### Options
 

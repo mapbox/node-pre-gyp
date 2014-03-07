@@ -11,16 +11,30 @@
       "target_name": "action_after_build",
       "type": "none",
       "dependencies": [ "<(module_name)" ],
-      "copies": [
+	  "copies": [
         {
           "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
           "destination": "<(module_path)/"
         },
-        {
-          "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
-          "destination": "<(module_path)/lib.target/"
-        }
-      ]
+	  ],
+      'conditions': [
+          ['OS == "win"', {
+	         "copies": [
+               {
+                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
+                "destination": "<(module_path)/"
+               }
+			 ]
+		  }, {
+	         "copies": [
+               {
+                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
+                "destination": "<(module_path)/lib.target/"
+               }
+			 ]
+		  }
+	      ]
+	  ]
     }
   ]
 }

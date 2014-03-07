@@ -105,6 +105,8 @@ This looks like:
     }
 ```
 
+For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/package.json#L11-L22).
+
 ##### The `binary` object has three required properties
 
 ###### module_name
@@ -157,6 +159,8 @@ Add a target like this at the end of your `targets` list:
     }
 ```
 
+For a full example see [node-addon-example's binding.gyp](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/binding.gyp).
+
 #### 3) Dynamically require your `.node`
 
 Inside the main js file that requires your addon module you are likely currently doing:
@@ -179,6 +183,8 @@ var path = require('path')
 var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
 var binding = require(binding_path);
 ```
+
+For a full example see [node-addon-example's index.js](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/index.js#L1-L4)
 
 #### 4) Build and package your app
 
@@ -239,11 +245,11 @@ You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects
 
 First, get setup locally and test the workflow:
 
-**1) Create an S3 bucket**
+#### 1) Create an S3 bucket**
 
 And have your key and secret key ready for writing to the bucket.
 
-**2) Install node-pre-gyp**
+#### 2) Install node-pre-gyp
 
 Either install it globally:
 
@@ -253,7 +259,7 @@ Or put the local version on your PATH
 
     export PATH=`pwd`/node_modules/.bin/:$PATH
 
-**3) Create an `~/.node_pre_gyprc`**
+#### 3) Create an `~/.node_pre_gyprc`
 
 Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
 
@@ -273,7 +279,7 @@ Another way is to use your environment:
 
 You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
 
-**4) Package and publish your build**
+#### 4) Package and publish your build
 
     node-pre-gyp package publish
 
@@ -288,11 +294,15 @@ Travis can push to S3 after a successful build and supports both:
 
 This enables you to cheaply auto-build and auto-publish binaries for (likely) the majority of your users.
 
-**1) Install the travis gem**
+For an example of doing this see [node-add-example's .travis.yml](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/.travis.yml).
+
+Below is a guide to getting set up:
+
+#### 1) Install the travis gem
 
     gem install travis
 
-**2) Create secure `global` variables**
+#### 2) Create secure `global` variables
 
 Make sure you run this command from within the directory of your module.
 
@@ -312,7 +322,7 @@ env:
 
 More details on travis encryption at http://about.travis-ci.org/docs/user/encryption-keys/.
 
-**3) Hook up publishing**
+#### 3) Hook up publishing
 
 Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
@@ -349,7 +359,7 @@ before_install:
  - nvm use $NODE_VERSION
 ```
 
-**4) Publish when you want**
+#### 4) Publish when you want
 
 You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
 

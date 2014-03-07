@@ -21,7 +21,7 @@ For a hello world example of a module packaged with `node-pre-gyp` see <https://
 
  - The module is modeled after [node-gyp](https://github.com/Tootallnate/node-gyp) by [@Tootallnate](https://github.com/Tootallnate)
  - Motivation for initial development came from [@ErisDS](https://github.com/ErisDS) and the [Ghost Project](https://github.com/TryGhost/Ghost).
- - Development is sponsered by [MapBox](https://www.mapbox.com/)
+ - Development is sponsored by [Mapbox](https://www.mapbox.com/)
 
 ## Depends
 
@@ -80,7 +80,7 @@ For example: `npm install --build-from-source=myapp`. This is useful if:
 
 ### Configuring
 
-This is guide to configuring your module to use node-pre-gyp.
+This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
@@ -97,7 +97,7 @@ This looks like:
     "bundledDependencies":["node-pre-gyp"],
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
-    }
+    },
     "binary": {
         "module_name": "your_module",
         "module_path": "./lib/binding/",
@@ -179,7 +179,7 @@ Change those lines to:
 
 ```js
 var binary = require('node-pre-gyp');
-var path = require('path')
+var path = require('path');
 var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
 var binding = require(binding_path);
 ```

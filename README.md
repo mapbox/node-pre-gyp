@@ -17,6 +17,12 @@
 
 For a hello world example of a module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example> and [the wiki ](https://github.com/mapbox/node-pre-gyp/wiki/Modules-using-node-pre-gyp) for real world examples.
 
+## Credits
+
+ - The module is modeled after [node-gyp](https://github.com/Tootallnate/node-gyp) by @Tootallnate
+ - Motivation for initial development came from @ErisDS and the [Ghost Project](https://github.com/TryGhost/Ghost).
+ - Development is sponsered by [MapBox](https://www.mapbox.com/)
+
 ## Depends
 
  - Node.js 0.10.x or 0.8.x

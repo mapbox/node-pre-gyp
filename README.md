@@ -19,8 +19,8 @@ For a hello world example of a module packaged with `node-pre-gyp` see <https://
 
 ## Credits
 
- - The module is modeled after [node-gyp](https://github.com/Tootallnate/node-gyp) by @Tootallnate
- - Motivation for initial development came from @ErisDS and the [Ghost Project](https://github.com/TryGhost/Ghost).
+ - The module is modeled after [node-gyp](https://github.com/Tootallnate/node-gyp) by [@Tootallnate](https://github.com/Tootallnate)
+ - Motivation for initial development came from [@ErisDS](https://github.com/ErisDS) and the [Ghost Project](https://github.com/TryGhost/Ghost).
  - Development is sponsered by [MapBox](https://www.mapbox.com/)
 
 ## Depends

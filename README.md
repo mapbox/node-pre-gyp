@@ -131,11 +131,33 @@ Note: This property supports variables based on [Versioning](#versioning).
 
 ###### package_name
 
-It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could  could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`.
+It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`.
 
 Note: This property supports variables based on [Versioning](#versioning).
 
-#### 2) Dynamically require your `.node`
+#### 2) Add a new target to binding.gyp
+
+`node-pre-gyp` calls out to `node-gyp` to compile the module and passes variables along like [module_name](#module_name) and [module_path](#module_path).
+
+A new target must be added to `binding.gyp` that moves the compiled `.node` module from `./build/Release/module_name.node` into the directory specified by `module_path`.
+
+Add a target like this at the end of your `targets` list:
+
+```js
+    {
+      "target_name": "action_after_build",
+      "type": "none",
+      "dependencies": [ "<(module_name)" ],
+      "copies": [
+        {
+          "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
+          "destination": "<(module_path)"
+        }
+      ]
+    }
+```
+
+#### 3) Dynamically require your `.node`
 
 Inside the main js file that requires your addon module you are likely currently doing:
 
@@ -158,7 +180,7 @@ var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json'
 var binding = require(binding_path);
 ```
 
-#### 3) Build and package your app
+#### 4) Build and package your app
 
 Now build your module from source:
 
@@ -168,11 +190,11 @@ The `--build-from-source` tells `node-pre-gyp` to not look for a remote package 
 
 Now `node-pre-gyp` should now also be installed as a local dependency so the command line tool it offers can be found at `./node_modules/.bin/node-pre-gyp`.
 
-#### 4) Test
+#### 5) Test
 
 Now `npm test` should work just as it did before.
 
-#### 5) Publish the tarball
+#### 6) Publish the tarball
 
 Then package your app:
 
@@ -194,11 +216,11 @@ You can also host your binaries elsewhere. To do this requires:
  - You manually publish the binary created by the `package` command to an `https` endpoint
  - Ensure that the `host` value points to your custom `https` endpoint.
 
-#### 6) Automate builds
+#### 7) Automate builds
 
 Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries and check out <https://appveyor.com>.
 
-#### 7) You're done!
+#### 8) You're done!
 
 Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
 

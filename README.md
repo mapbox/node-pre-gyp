@@ -103,27 +103,31 @@ This looks like:
 
 ###### module_name
 
-The name of your native node module.This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
+The name of your native node module. This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
 
 ###### module_path
 
-The location your native module is placed after a build. This should be an empty directory without other javascript files. This is because everything in the directory will be packaged in the binary tarball and when unpack anything inside the directory will be overwritten with the contents of the tarball. **
+The location your native module is placed after a build. This should be an empty directory without other javascript files. This entire directory will be packaged in the binary tarball. When installing from a remote package this directory will be overwritten with the contents of the tarball.
+
+Note: This property supports variables based on [Versioning](#versioning).
 
 ###### host
 
-A url to the remote location where you've published tarball binaries (must be `https` not `http`)
+A url to the remote location where you've published tarball binaries (must be `https` not `http`).
 
 ##### The `binary` object has two optional properties
 
 ###### remote_path
 
-It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`. **
+It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`.
+
+Note: This property supports variables based on [Versioning](#versioning).
 
 ###### package_name
 
-It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could  could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`. See [Versioning](#versioning for details) about what each variable evaluates to. **
+It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could  could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`.
 
-** Properties supporting versioning mean that they will be evaluated against known node-pre-gyp variables. See [Versioning](#versioning for details).
+Note: This property supports variables based on [Versioning](#versioning).
 
 #### 2) Dynamically require your `.node`
 

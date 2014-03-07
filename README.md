@@ -259,7 +259,7 @@ Or put the local version on your PATH
 
     export PATH=`pwd`/node_modules/.bin/:$PATH
 
-#### 3) Create an `~/.node_pre_gyprc`
+#### 3) Create `~/.node_pre_gyprc`
 
 Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
 

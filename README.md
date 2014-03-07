@@ -332,7 +332,7 @@ If you want binaries for OS X change your `.travis.yml` to use:
 language: objective-c
 ```
 
-Perhaps keep that change in a different git branch and sync that when you want binaries published.
+Keep that change in a different git branch and sync that when you want binaries published. This little hack will hopefully become obsolete when [travis adds proper support for different operating systems](https://github.com/travis-ci/travis-ci/issues/216).
 
 Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
 
@@ -361,10 +361,10 @@ before_install:
 
 #### 4) Publish when you want
 
-You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish]`:
+You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
 
     COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
-    if test "${COMMIT_MESSAGE#*'[publish]'}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
+    if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
 
 Or you could automatically detect if the git branch is a tag:
 

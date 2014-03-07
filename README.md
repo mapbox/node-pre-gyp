@@ -245,9 +245,9 @@ You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects
 
 First, get setup locally and test the workflow:
 
-#### 1) Create an S3 bucket**
+#### 1) Create an S3 bucket
 
-And have your key and secret key ready for writing to the bucket.
+And have your **key** and **secret key** ready for writing to the bucket.
 
 #### 2) Install node-pre-gyp
 

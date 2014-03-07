@@ -1,8 +1,11 @@
 # node-pre-gyp changelog
 
-## 0.5.0-alpha
+## 0.5.0
 
- - First pass of support for versioned install path (#18)
+ - Changed property names in `binary` object: now required are `module_name`, `module_path`, and `host`.
+ - Now `module_path` supports versioning, which allows developers to opt-in to using a versioned install path (#18).
+ - Added `remote_path` which also supports versioning.
+ - Changed `remote_uri` to `host`.
 
 ## 0.4.2
 

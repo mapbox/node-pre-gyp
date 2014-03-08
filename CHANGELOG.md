@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.1
+
+ - Various minor bug fixes, several improving windows support for publishing.
+
 ## 0.5.0
 
  - Changed property names in `binary` object: now required are `module_name`, `module_path`, and `host`.

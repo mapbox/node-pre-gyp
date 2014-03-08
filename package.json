@@ -27,7 +27,8 @@
     "tar-pack":"~2.0.0",
     "mkdirp":"~0.3.5",
     "rc":"~0.3.4",
-    "rimraf":"~2.2.5"
+    "rimraf":"~2.2.5",
+    "bindings":"https://github.com/springmeyer/node-bindings/tarball/master"
   },
   "engineStrict": true,
   "engines": {

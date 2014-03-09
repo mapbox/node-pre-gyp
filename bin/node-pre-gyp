@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+#!/bin/sh
+// 2>/dev/null; if [[ `which nodejs` ]]; then exec nodejs "$0" "$@"; else exec node "$0" "$@";fi;
+;(function () {
 
 /**
  * Set the title.
@@ -122,3 +124,5 @@ function issueMessage () {
 
 // start running the given commands!
 run()
+
+})()

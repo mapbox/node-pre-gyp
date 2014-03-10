@@ -1,5 +1,5 @@
 #!/bin/sh
-// 2>/dev/null; if [[ `which nodejs` ]]; then exec nodejs "$0" "$@"; else exec node "$0" "$@";fi;
+// 2>/dev/null; if [ `which nodejs` ]; then exec nodejs "$0" "$@"; else exec node "$0" "$@";fi;
 ;(function () {
 
 /**

@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.2
+
+ - Support for debian systems where the node binary is named `nodejs`.
+ - Added `bin/node-pre-gyp.cmd` to be able to run command on windows locally (npm creates an .npm automatically when globally installed)
+
 ## 0.5.1
 
  - Various minor bug fixes, several improving windows support for publishing.

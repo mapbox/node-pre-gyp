@@ -98,6 +98,8 @@ function build_app {
     else
         npm install
     fi
+
+    MARK "G" $1
     npm test
 
     # cleanup

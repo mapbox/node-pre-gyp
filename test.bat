@@ -11,8 +11,7 @@ call node-pre-gyp -C test/app1 clean install
 cd test/app1
 call npm test
 cd %BASE%
-@rem node bin/node-pre-gyp -C test/app1 unpublish build package testpackage publish info --target_arch=x64
-node node-pre-gyp -C test/app2 unpublish build package testpackage publish info --custom_include_path=%BASE%\test\app2\include
+call node-pre-gyp -C test/app2 unpublish build package testpackage publish info --custom_include_path=%BASE%\test\app2\include
 cd test/app2
 call npm test
 cd %BASE%

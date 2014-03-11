@@ -133,7 +133,7 @@ Note: This property supports variables based on [Versioning](#versioning).
 
 ###### package_name
 
-It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`.
+It is **not recommended** to override this property unless you are also overriding the `remote_path`. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path` directory. Unless you specify `package_name` in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which allows your binary to work across node versions, platforms, and architectures. If you are using `remote_path` that is also versioned by `./{module_name}/v{version}` then you could remove these variables from the `package_name` and just use: `{node_abi}-{platform}-{arch}.tar.gz`. Then your remote tarball will be looked up at, for example, `https://example.com/your-module/v0.1.0/node-v11-linux-x64.tar.gz`.
 
 Note: This property supports variables based on [Versioning](#versioning).
 

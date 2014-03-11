@@ -66,6 +66,7 @@ Options include:
 
  - `-C/--directory`: run the command in this directory
  - `--build-from-source`: build from source instead of using pre-built binary
+ - `--runtime=node-webkit`: customize the runtime: `node` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
  - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch (will override the host `arch`) 

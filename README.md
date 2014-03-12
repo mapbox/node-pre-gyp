@@ -250,6 +250,31 @@ First, get setup locally and test the workflow:
 
 And have your **key** and **secret key** ready for writing to the bucket.
 
+It is recommended to create a IAM user with a policy that only gives permissions to the specific bucket you plan to publish to. This can be done in the [IAM console](https://console.aws.amazon.com/iam/) by: 1) adding a new user, 2) choosing `Attach User Policy`, 3) Using the `Policy Generator`, 4) selecting `Amazon S3` for the service, 5) adding the actions: `DeleteObject`, `GetObject`, `GetObjectAcl`, `ListBucket`, `PutObject`, `PutObjectAcl`, 6) adding an ARN of `arn:aws:s3:::bucket/*` (replacing `bucket` with your bucket name), and finally 7) clicking `Add Statement` and saving the policy. It should generate a policy like:
+
+```js
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1394587197000",
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
+      "Resource": [
+        "arn:aws:s3:::node-pre-gyp-tests/*"
+      ]
+    }
+  ]
+}
+```
+
 #### 2) Install node-pre-gyp
 
 Either install it globally:
@@ -282,9 +307,16 @@ You may also need to specify the `region` if it is not explicit in the `host` va
 
 #### 4) Package and publish your build
 
+Install the `aws-sdk`:
+
+    npm install aws-sdk
+
+Then publish:
+
     node-pre-gyp package publish
 
 Note: if you hit an error like `Hostname/IP doesn't match certificate's altnames` it may mean that you need to provide the `region` option in your config.
+
 
 ## Travis Automation
 

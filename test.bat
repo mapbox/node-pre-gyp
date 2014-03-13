@@ -1,7 +1,4 @@
-@rem make sure node-gyp is on PATH
-call npm install node-gyp -g
 set BASE=%cd%
-@ rem - NODE_PATH only seems to work with forward slashs
 set NODE_PATH=%BASE%\lib
 @rem put local copy of node-pre-gyp on PATH
 set PATH=%BASE%\bin;%PATH%

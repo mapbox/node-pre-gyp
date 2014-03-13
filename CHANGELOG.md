@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.4
+
+ - No longer depends on external install of node-gyp for compiling builds.
+
 ## 0.5.3
 
  - Reverted fix for debian/nodejs since it broke windows (#45)

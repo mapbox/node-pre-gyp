@@ -3,10 +3,8 @@
 set -e -u
 #set -x
 
-# put npm's copy of node-gyp on the PATH
-export PATH=`npm explore npm -g -- pwd`/bin/node-gyp-bin:$PATH
+# put local copy of node-pre-gyp on NODE_PATH/PATH
 export NODE_PATH=`pwd`/lib
-# put local copy of node-pre-gyp on PATH
 export PATH=`pwd`/bin:$PATH
 
 BASE=$(pwd)

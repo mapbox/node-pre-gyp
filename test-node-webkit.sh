@@ -18,7 +18,7 @@ if [[ `uname -s` == 'Darwin' ]]; then
     node-pre-gyp package --runtime=node-webkit
     node-pre-gyp clean
     rm -rf lib/binding/
-    node-pre-gyp testpackage --runtime=node-webkit --overwrite 2>/dev/null 1>/dev/null &
+    node-pre-gyp testpackage --runtime=node-webkit 2>/dev/null 1>/dev/null &
     # now test installing from remote
     node-pre-gyp unpublish publish --runtime=node-webkit
     node-pre-gyp clean

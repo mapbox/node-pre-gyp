@@ -13,7 +13,7 @@ env:
 before_install:
 - echo $NODE_VERSION
 - if [[ "${NODE_VERSION}" == "ppa" ]]; then sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get update; sudo apt-get install nodejs; fi;
-- if [[ "${NODE_VERSION}" != "ppa" ]]; then git clone https://github.com/creationix/nvm.git ../.nvm; source ../.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
+- if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
 

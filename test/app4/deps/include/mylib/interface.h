@@ -7,7 +7,7 @@
 #define MYLIB_EXPORT __declspec (dllexport)
 #elif _WIN32
 #define MYLIB_EXPORT __declspec (dllexport)
-#elif if __GNUC__ >= 4
+#elif __GNUC__ >= 4
 #define MYLIB_EXPORT __attribute__ ((visibility ("default")))
 #else
 #define MYLIB_EXPORT

@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 0.5.5
+
+ - Improved binary validation that also now works with node-webkit (@Mithgol)
+ - Upgraded test apps to work with node v0.11.x
+ - Improved test coverage
+
 ## 0.5.4
 
  - No longer depends on external install of node-gyp for compiling builds.

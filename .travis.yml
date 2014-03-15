@@ -26,6 +26,8 @@ before_script:
 - npm install -g npm
 - npm install -g node-gyp
 - npm test
+# test node-webkit usage
+- ./test-node-webkit.sh
 
 script:
 # test non-authenticated mode

@@ -4,6 +4,7 @@ env:
   matrix:
    - export NODE_VERSION="0.8"
    - export NODE_VERSION="0.10"
+   - export NODE_VERSION="ppa"
   global:
    - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=
    - secure: Fs0ilCVBL0DUMkd5vzLGL/5K364kLj1LpSKzwZpPvlU6Gx2jW+Zt59RfM1yOTCvrPWWNb+jc8jz8lbbPXAgUnYNmL54WkIjapr8yPIClw6AtNOSuPtL+zGVGT7FZEO7EntNuEtTer6Wj8IuWUT7myeAezKzNogYg7HyaO4JsoJc=
@@ -11,10 +12,8 @@ env:
 
 before_install:
 - echo $NODE_VERSION
-- git clone https://github.com/creationix/nvm.git ../.nvm
-- source ../.nvm/nvm.sh
-- nvm install $NODE_VERSION
-- nvm use $NODE_VERSION
+- if [[ "${NODE_VERSION}" == "ppa"]]; then sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get update; sudo apt-get install nodejs; fi;
+- if [[ "${NODE_VERSION}" != "ppa"]]; then git clone https://github.com/creationix/nvm.git ../.nvm; source ../.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
 

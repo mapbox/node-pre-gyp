@@ -36,8 +36,8 @@ script:
 # test non-authenticated mode
 - unset node_pre_gyp_accessKeyId
 - npm test
-# test --target flag
-- if [[ $NODE_VERSION == "0.10" ]]; then ./test-custom-target.sh; fi;
+# test --target flag (depends on nvm)
+- if [[ $NODE_VERSION != "ppa" ]]; then ./test-custom-target.sh; fi;
 
 after_success:
 # publish to npm if this is a tag

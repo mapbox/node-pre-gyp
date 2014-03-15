@@ -6,15 +6,22 @@ export PATH=`pwd`/bin:$PATH
 
 BASE=$(pwd)
 
-cd ${BASE}/test/app1
 source ~/.nvm/nvm.sh
 
-for i in {"0.8.26","0.10.26"}; do
-    rm -rf build/
-    node-pre-gyp clean
-    npm install --build-from-source --target=$i
-    node-pre-gyp package --target=$i
-    nvm install $i
-    nvm use $i
-    node-pre-gyp testpackage
-done
+function dotest {
+    for i in {"0.8.26","0.10.26","0.11.12"}; do
+        rm -rf build/
+        node-pre-gyp clean
+        npm install --build-from-source --target=$i $1
+        node-pre-gyp package --target=$i
+        nvm install $i
+        nvm use $i
+        node-pre-gyp testpackage
+        node-pre-gyp clean
+    done
+}
+
+cd ${BASE}/test/app1 && dotest
+cd ${BASE}/test/app1 && dotest --custom_include_path=./include
+cd ${BASE}/test/app3 && dotest
+cd ${BASE}/test/app4 && dotest

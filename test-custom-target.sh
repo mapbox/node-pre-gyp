@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 # put local copy of node-pre-gyp on NODE_PATH/PATH
 export NODE_PATH=`pwd`/lib
 export PATH=`pwd`/bin:$PATH

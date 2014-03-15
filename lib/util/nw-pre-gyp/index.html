@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Node-webkit-based module test</title>
+<script>
+function nwModuleTest(){
+   var moduleFolder = require('nw.gui').App.argv[0];
+   try {
+      require(moduleFolder);
+   } catch(e) {
+      process.exit(1);
+   }
+   process.exit(0);
+}
+</script>
+</head>
+<body onload="nwModuleTest()">
+<h1>Node-webkit-based module test</h1>
+</body>
+</html>

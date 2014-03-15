@@ -44,8 +44,7 @@ function build_app {
     if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
         # it works, so now publish
-        node-pre-gyp -C $WD unpublish package testpackage
-        node-pre-gyp -C $WD publish
+        node-pre-gyp -C $WD package testpackage publish
 
         # now test listing published binaries
         CURRENT_ARCH=$(node -e "console.log(process.arch)")
@@ -71,7 +70,7 @@ function build_app {
         # directory now so we don't need -C
         cd $WD
         # now test installing via remote binary without fallback
-        node-pre-gyp -C $WD clean
+        node-pre-gyp clean
         npm install --fallback-to-build=false
         npm test
     else
@@ -99,6 +98,7 @@ function build_app {
     npm test
 
     # cleanup
+    node-pre-gyp unpublish
     node-pre-gyp clean
     rm -rf $WD/{build,node_modules}
     rm -rf $WD/lib/binding/

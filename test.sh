@@ -98,7 +98,9 @@ function build_app {
     npm test
 
     # cleanup
-    node-pre-gyp unpublish
+    if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
+        node-pre-gyp unpublish
+    fi
     node-pre-gyp clean
     rm -rf $WD/{build,node_modules}
     rm -rf $WD/lib/binding/

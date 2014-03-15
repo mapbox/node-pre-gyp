@@ -44,9 +44,8 @@ function build_app {
     if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
         # it works, so now publish
-        node-pre-gyp -C $WD unpublish package publish
-        node-pre-gyp -C $WD testpackage
-        node-pre-gyp -C $WD unpublish
+        node-pre-gyp -C $WD unpublish package testpackage
+        sleep 2
         node-pre-gyp -C $WD publish
 
         # now test listing published binaries

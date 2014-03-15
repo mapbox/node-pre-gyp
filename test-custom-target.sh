@@ -9,7 +9,7 @@ BASE=$(pwd)
 cd ${BASE}/test/app1
 source ~/.nvm/nvm.sh
 
-for i in {"0.8.26","0.10.26","0.11.7","0.11.10","0.11.11"}; do
+for i in {"0.8.26","0.10.26"}; do
     rm -rf build/
     node-pre-gyp clean
     npm install --build-from-source --target=$i

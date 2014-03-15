@@ -41,12 +41,14 @@ cd test/app1
 node-pre-gyp clean build --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 node-pre-gyp package --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
-#node-pre-gyp testpackage --runtime=node-webkit 2>/dev/null 1>/dev/null &
-# now test installing from remote
-node-pre-gyp publish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
-node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
-rm -rf build/
-rm -rf lib/binding/
-npm install --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
-# cleanup
-node-pre-gyp unpublish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+
+# now test publishing and installing from remote
+if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
+    node-pre-gyp publish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+    node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+    rm -rf build/
+    rm -rf lib/binding/
+    npm install --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+    # cleanup
+    node-pre-gyp unpublish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+fi

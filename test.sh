@@ -45,7 +45,6 @@ function build_app {
         MARK "D" $1
         # it works, so now publish
         node-pre-gyp -C $WD unpublish package testpackage
-        sleep 2
         node-pre-gyp -C $WD publish
 
         # now test listing published binaries

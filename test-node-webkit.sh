@@ -38,18 +38,15 @@ npm install nw-gyp
 export PATH=${BASE}/node_modules/.bin:${PATH}
 
 cd test/app1
-rm -rf build/
-rm -rf lib/binding/
 node-pre-gyp clean build --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
-node-pre-gyp package --runtime=node-webkit
-node-pre-gyp clean
-rm -rf lib/binding/
+node-pre-gyp package --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 #node-pre-gyp testpackage --runtime=node-webkit 2>/dev/null 1>/dev/null &
 # now test installing from remote
-node-pre-gyp publish --runtime=node-webkit
-node-pre-gyp clean
+node-pre-gyp publish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 rm -rf build/
 rm -rf lib/binding/
-npm install --runtime=node-webkit
+npm install --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 # cleanup
-node-pre-gyp unpublish
+node-pre-gyp unpublish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}

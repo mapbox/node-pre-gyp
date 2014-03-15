@@ -14,7 +14,7 @@ env:
 before_install:
 - echo $NODE_VERSION
 # upgrade nvm
-- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm/nvm.sh;
+- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm;
 - if [[ "${NODE_VERSION}" == "ppa" ]]; then unset node_pre_gyp_accessKeyId; sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get update; sudo apt-get install nodejs; fi;
 - if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version

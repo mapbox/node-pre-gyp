@@ -32,6 +32,8 @@ script:
 - unset node_pre_gyp_accessKeyId
 - unset node_pre_gyp_secretAccessKey
 - npm test
+# test --target flag
+- if [[ $NODE_VERSION == "0.10" ]]; then ./test-custom-target.sh; fi;
 
 after_success:
 # publish to npm if this is a tag

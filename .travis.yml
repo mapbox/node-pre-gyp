@@ -4,7 +4,9 @@ env:
   matrix:
    - export NODE_VERSION="0.8.26"
    - export NODE_VERSION="0.10.26"
-   - export NODE_VERSION="0.11.7"
+   - export NODE_VERSION="0.11.4"
+   - export NODE_VERSION="0.11.5"
+   - export NODE_VERSION="0.11.6"
    - export NODE_VERSION="0.11.10"
    - export NODE_VERSION="0.11.11"
    - export NODE_VERSION="ppa"
@@ -21,8 +23,6 @@ before_install:
 - if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
-# try to workaround 'shasum check failed' bug in node v0.11.7
-- if [[ "${NODE_VERSION}" == "0.11.7" ]]; then npm install npm -g; fi
 
 install:
 - npm install

@@ -46,8 +46,10 @@ node-pre-gyp clean
 rm -rf lib/binding/
 #node-pre-gyp testpackage --runtime=node-webkit 2>/dev/null 1>/dev/null &
 # now test installing from remote
-node-pre-gyp unpublish publish --runtime=node-webkit
+node-pre-gyp publish --runtime=node-webkit
 node-pre-gyp clean
 rm -rf build/
 rm -rf lib/binding/
 npm install --runtime=node-webkit
+# cleanup
+node-pre-gyp unpublish

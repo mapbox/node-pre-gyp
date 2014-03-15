@@ -29,6 +29,9 @@
     "rc":"~0.3.4",
     "rimraf":"~2.2.5"
   },
+  "devDependencies": {
+    "aws-sdk":"*"
+  },
   "engineStrict": true,
   "engines": {
     "node": ">= 0.8.0"

@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.6
+
+ - Added support for versioning on the `name` value in `package.json` (#57).
+ - Moved to using streams for reading tarball when publishing (#52)
+
 ## 0.5.5
 
  - Improved binary validation that also now works with node-webkit (@Mithgol)

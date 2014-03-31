@@ -112,7 +112,11 @@ For a full example see [node-addon-examples's package.json](https://github.com/s
 
 ###### module_name
 
-The name of your native node module. This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
+The name of your native node module. This value must:
+
+ - Match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world)
+ - Must be a valid C variable name (e.g. it cannot contain `-`)
+ - Should not include the `.node` extension.
 
 ###### module_path
 

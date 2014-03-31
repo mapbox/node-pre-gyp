@@ -128,7 +128,7 @@ A url to the remote location where you've published tarball binaries (must be `h
 
 ###### remote_path
 
-It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`.
+It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`.
 
 Note: This property supports variables based on [Versioning](#versioning).
 

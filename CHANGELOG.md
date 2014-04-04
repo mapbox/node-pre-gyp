@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## Future
+
+ - Binary validity check to determine if to re-download or source compile has been improved to work even in complex dependency situations (#63)
+ - New `testbinary` command available in node-pre-gyp command line tool
+
 ## 0.5.6
 
  - Added support for versioning on the `name` value in `package.json` (#57).

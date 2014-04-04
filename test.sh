@@ -116,5 +116,6 @@ build_app "app2"
 build_app "app3"
 # app that depends on an external shared library
 build_app "app4"
-cd test/app5 && npm cache clean;rm -rf node_modules/;npm install
+cd ${BASE}/test/app5 && npm cache clean;rm -rf node_modules/;npm install
+cd ${BASE}/test/app6 && npm cache clean;rm -rf node_modules/;npm install
 teardown

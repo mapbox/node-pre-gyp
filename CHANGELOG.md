@@ -1,9 +1,10 @@
 # node-pre-gyp changelog
 
-## Future
+## 0.5.7
 
- - Binary validity check to determine if to re-download or source compile has been improved to work even in complex dependency situations (#63)
- - New `testbinary` command available in node-pre-gyp command line tool
+ - Fixed the `testbinary` check, which is used to determine whether to re-download or source compile, to work even in complex dependency situations (#63)
+ - Exposed the internal `testbinary` command in node-pre-gyp command line tool
+ - Fixed minor bug so that `fallback_to_build` option is always respected
 
 ## 0.5.6
 

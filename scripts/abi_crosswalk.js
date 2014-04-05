@@ -1,12 +1,11 @@
 var https = require("https");
 var http = require("http");
-var fs   = require("fs");
 var url = require('url');
 var semver = require('semver');
 
 /*
 
-// https://github.com/mapbox/node-pre-gyp/wiki/Node-ABI
+// usage:
 node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json
 
 */

@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version" : "0.5.7",
+  "version" : "0.5.8",
   "keywords": [
     "native",
     "addon",
@@ -29,6 +29,17 @@
     "rc":"~0.3.4",
     "rimraf":"~2.2.5"
   },
+  "bundledDependencies":[
+    "nopt",
+    "npmlog",
+    "request",
+    "semver",
+    "tar",
+    "tar-pack",
+    "mkdirp",
+    "rc",
+    "rimraf"
+  ],
   "devDependencies": {
     "aws-sdk":"*"
   },

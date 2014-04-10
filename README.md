@@ -1,6 +1,6 @@
 # node-pre-gyp
 
-#### node-pre-gyp makes it easy to publish and install Node.js C++ from binaries
+#### node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries
 
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 

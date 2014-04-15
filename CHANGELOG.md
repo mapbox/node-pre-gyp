@@ -1,5 +1,13 @@
 # node-pre-gyp changelog
 
+## 0.5.9
+
+ - Fixed regression in `testbinary` command causing installs to fail on windows with 0.5.7 (#60)
+
+## 0.5.8
+
+ - Started bundling deps
+
 ## 0.5.7
 
  - Fixed the `testbinary` check, which is used to determine whether to re-download or source compile, to work even in complex dependency situations (#63)

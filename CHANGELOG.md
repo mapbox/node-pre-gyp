@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.10
+
+ - Fixed handling of `-debug` flag passed directory to node-pre-gyp (#72)
+ - Added optional second arg to `node_pre_gyp.find` to customize the default versioning options used to locate the runtime binary
+
 ## 0.5.9
 
  - Fixed regression in `testbinary` command causing installs to fail on windows with 0.5.7 (#60)

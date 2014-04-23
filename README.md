@@ -128,6 +128,14 @@ Note: This property supports variables based on [Versioning](#versioning).
 
 A url to the remote location where you've published tarball binaries (must be `https` not `http`).
 
+It is highly recommended that you use Amazon S3. The reasons are:
+
+  - Various node-pre-gyp commands like `publish` and `info` only work with an S3 host.
+  - S3 is a very solid hosting platform for distributing large files, even [Github recommends using it instead of github](https://help.github.com/articles/distributing-large-binaries).
+  - We provide detail documentation for using [S3 hosting](#s3-hosting) with node-pre-gyp.
+
+Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a github repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
+
 ##### The `binary` object has two optional properties
 
 ###### remote_path

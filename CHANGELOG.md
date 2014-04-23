@@ -4,6 +4,7 @@
 
  - Fixed handling of `-debug` flag passed directory to node-pre-gyp (#72)
  - Added optional second arg to `node_pre_gyp.find` to customize the default versioning options used to locate the runtime binary
+ - Failed install due to `testbinary` check failure no longer leaves behind binary (#70)
 
 ## 0.5.9
 

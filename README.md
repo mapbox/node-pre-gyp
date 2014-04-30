@@ -5,6 +5,9 @@
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
 [![Build Status](https://api.travis-ci.org/mapbox/node-pre-gyp.svg)](https://travis-ci.org/mapbox/node-pre-gyp)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/n6l9796p4vigsk0e)](https://ci.appveyor.com/project/springmeyer/node-pre-gyp)
+
 [![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.png)](https://david-dm.org/mapbox/node-pre-gyp)
 
 `node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.

@@ -14,7 +14,7 @@ install:
   # ensure python is on path so that srs_settings.js are generated
   - cmd: SET PATH=c:\python27;%PATH%
   - npm install
-  - .\test.bat
+  - cmd: test.bat
 
 build: OFF
 

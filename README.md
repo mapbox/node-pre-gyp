@@ -88,7 +88,8 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` as a bundled dependency
+ - Add `node-pre-gyp` to `bundledDependencies`
+ - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
 
@@ -99,13 +100,16 @@ This looks like:
       "node-pre-gyp": "0.5.x"
     },
     "bundledDependencies":["node-pre-gyp"],
+    "devDependencies": {
+      "aws-sdk": "~2.0.0-rc.15"
+    }
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
     },
     "binary": {
         "module_name": "your_module",
         "module_path": "./lib/binding/",
-        "host": "https://your_module.s3-us-west-1.amazonaws.com",
+        "host": "https://your_module.s3-us-west-1.amazonaws.com"
     }
 ```
 

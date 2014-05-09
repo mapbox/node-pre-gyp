@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.11
+
+ - Updated target versions listing
+
 ## 0.5.10
 
  - Fixed handling of `-debug` flag passed directory to node-pre-gyp (#72)

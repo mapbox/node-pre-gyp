@@ -12,8 +12,8 @@ node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json
 
 var cross = {};
 
-var template = 'https://raw.github.com/joyent/node/v{VERSION}/src/';
-var v8template = 'https://raw.github.com/joyent/node/v{VERSION}/deps/v8/src/version.cc';
+var template = 'https://raw.githubusercontent.com/joyent/node/v{VERSION}/src/';
+var v8template = 'https://raw.githubusercontent.com/joyent/node/v{VERSION}/deps/v8/src/version.cc';
 
 var sortObjectByKey = function(obj){
     var keys = [];
@@ -49,7 +49,7 @@ function get(ver,callback) {
   var path = template.replace('{VERSION}',ver) + header;
   var uri = url.parse(path);
   https.get(uri, function(res) {
-      if (res.statusCode != 200) {
+      if (res.statusCode != 200 ) {
         throw new Error("server returned " + res.statusCode + ' for: ' + path);
       }
       res.setEncoding('utf8');
@@ -120,6 +120,10 @@ http.get(url.parse(versions_doc), function(res) {
     });
     res.on('end',function(err) {
       var lines = body.split('\n').map(function(line) { return line.split(' ')[0].slice(1); }).filter(function(line) { return (line.length && line != 'node'); });
+      lines.push('0.11.12');
+      lines.push('0.11.13');
+      lines.push('0.10.27');
+      lines.push('0.10.28');
       lines.forEach(function(ver) {
           get(ver,function(err,version,node_abi,v8_version) {
             cross[version] = {node_abi:node_abi,v8:v8_version};

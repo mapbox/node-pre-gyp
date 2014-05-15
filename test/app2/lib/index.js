@@ -1,10 +1,10 @@
 try {
-    var binding = require('node-pre-gyp').binding({debug:true});
+    var binding = require('pre-gyp-find')('app2',{debug:true});
     require('assert').equal(binding.hello(),"hello-debug");
     console.log('Loaded Debug build');
 } catch (err) {
     if (err.code == 'MODULE_NOT_FOUND') {
-        var binding = require('node-pre-gyp').binding();
+        var binding = require('pre-gyp-find')('app2',{debug:false});
         require('assert').equal(binding.hello(),"hello-release");        
         console.log('Loaded Release build');
     } else {

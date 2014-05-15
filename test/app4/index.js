@@ -1,3 +1,3 @@
-var binding = require('node-pre-gyp').binding();
+var binding = require('pre-gyp-find')('app4');
 
 require('assert').equal(binding.hello(),"hello");

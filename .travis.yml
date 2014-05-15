@@ -2,36 +2,45 @@ language: cpp
 
 env:
   matrix:
-   - export NODE_VERSION="0.8"
-   - export NODE_VERSION="0.10"
+   - export NODE_VERSION="0.8.26"
+   - export NODE_VERSION="0.10.26"
+   - export NODE_VERSION="0.11.10"
+   - export NODE_VERSION="0.11.12"
+   - export NODE_VERSION="ppa"
   global:
-   - secure: F+sEL/v56CzHqmCSSES4pEyC9NeQlkoR0Gs/ZuZxX1ytrj8SKtp3MKqBj7zhIclSdXBz4Ev966Da5ctmcTd410p0b240MV6BVOkLUtkjZJyErMBOkeb8n8yVfSoeMx8RiIhBmIvEn+rlQq+bSFis61/JkE9rxsjkGRZi14hHr4M=
-   - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
+   - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=
+   - secure: Fs0ilCVBL0DUMkd5vzLGL/5K364kLj1LpSKzwZpPvlU6Gx2jW+Zt59RfM1yOTCvrPWWNb+jc8jz8lbbPXAgUnYNmL54WkIjapr8yPIClw6AtNOSuPtL+zGVGT7FZEO7EntNuEtTer6Wj8IuWUT7myeAezKzNogYg7HyaO4JsoJc=
    - secure: ovgkAH1h18pGmoYWN/2tWLF1lqaAK74eK1vnNFB5FMq3wTZYXpzM1W9nT3uqaDsNBUbs/groMcCDU/WBvfQtz9DcocVkuSCVgQ+6MaVVIuH7z7erfIe2sNdq0yhjT4KgBjTZcu6ccVSLjNNQwWctOiPuVgMOLacpN1PuPfs7KCk=
 
 before_install:
 - echo $NODE_VERSION
-- git clone https://github.com/creationix/nvm.git ../.nvm
-- source ../.nvm/nvm.sh
-- nvm install $NODE_VERSION
-- nvm use $NODE_VERSION
+# upgrade nvm
+- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm;
+- if [[ "${NODE_VERSION}" == "ppa" ]]; then unset node_pre_gyp_accessKeyId; source ~/.nvm/nvm.sh; nvm deactivate; sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get -qq update; sudo apt-get install -y nodejs; fi;
+- if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
 
 install:
 - npm install
-- npm install aws-sdk
 
 before_script:
 - npm test
+# test against upgraded npm and node-gyp
+- if [[ "${NODE_VERSION}" == "ppa" ]]; then sudo npm install -g npm; sudo npm install -g node-gyp; else npm install -g npm;npm install -g node-gyp;fi;
+- npm test
+# test node-webkit usage
+- ./test-node-webkit.sh
 
 script:
+# test non-authenticated mode
 - unset node_pre_gyp_accessKeyId
-- unset node_pre_gyp_secretAccessKey
 - npm test
+# test --target flag (depends on nvm)
+- if [[ $NODE_VERSION != "ppa" ]]; then ./test-custom-target.sh; fi;
 
 after_success:
 # publish to npm if this is a tag
 - npm config set email dane@dbsgeo.com
 - npm config set _auth $NPM_AUTH
-- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] && [[ $NODE_VERSION == "0.10" ]]; then npm publish; fi;
+- if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] && [[ $NODE_VERSION == "0.10.26" ]]; then npm publish; fi;

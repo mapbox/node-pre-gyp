@@ -10,8 +10,8 @@
     "main": "./lib/index.js",
     "binary": {
         "module_name": "app2",
-        "module_path": "./lib/binding/{node_abi}-{platform}-{arch}",
-        "remote_path": "./{module_name}/v{version}",
+        "module_path": "./lib/binding/{configuration}/{name}-{node_abi}-{platform}-{arch}",
+        "remote_path": "./{name}/v{version}/{configuration}",
         "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
         "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
     },

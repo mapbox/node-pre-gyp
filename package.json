@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "0.5.0",
+  "version" : "0.5.11",
   "keywords": [
     "native",
     "addon",
@@ -22,19 +22,34 @@
     "nopt": "~2.2.0",
     "npmlog": "~0.0.6",
     "request": "2",
-    "semver": "~2.2.1",
+    "semver": "~2.3.0",
     "tar": "~0.1.19",
     "tar-pack":"~2.0.0",
-    "mkdirp":"~0.3.5",
+    "mkdirp":"~0.5.0",
     "rc":"~0.3.4",
     "rimraf":"~2.2.5",
     "bindings":"https://github.com/springmeyer/node-bindings/tarball/master"
+  },
+  "bundledDependencies":[
+    "nopt",
+    "npmlog",
+    "request",
+    "semver",
+    "tar",
+    "tar-pack",
+    "mkdirp",
+    "rc",
+    "rimraf"
+  ],
+  "devDependencies": {
+    "aws-sdk":"*"
   },
   "engineStrict": true,
   "engines": {
     "node": ">= 0.8.0"
   },
   "scripts": {
+    "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
     "test":"./test.sh"
   }
 }

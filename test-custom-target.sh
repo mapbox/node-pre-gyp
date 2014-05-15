@@ -1,19 +1,27 @@
 #!/bin/bash
 
-set -e -u
+# put local copy of node-pre-gyp on NODE_PATH/PATH
+export NODE_PATH=`pwd`/lib
+export PATH=`pwd`/bin:$PATH
 
-if [[ `uname -s` == 'Darwin' ]]; then
-    export PATH=`pwd`/bin:$PATH
-    BASE=`pwd`
-    cd ${BASE}/test/app1
-    rm -rf build/
-    rm -rf lib/binding/
-    source ~/.nvm/nvm.sh
-    for i in $(ls ~/.node-gyp/); do
-        npm install --build-from-source --target=$i
+BASE=$(pwd)
+
+source ~/.nvm/nvm.sh
+
+function dotest {
+    for i in {"0.8.26","0.10.26","0.11.12"}; do
+        rm -rf build/
+        node-pre-gyp clean
+        npm install --build-from-source --target=$i $1
         node-pre-gyp package --target=$i
+        nvm install $i
         nvm use $i
-        node-pre-gyp testpackage --overwrite
-        /Users/dane/.nvm/v$i/bin/node ../../bin/node-pre-gyp testpackage --overwrite
+        node-pre-gyp testpackage
+        node-pre-gyp clean
     done
-fi
+}
+
+cd ${BASE}/test/app1 && dotest
+cd ${BASE}/test/app1 && dotest --custom_include_path=./include
+cd ${BASE}/test/app3 && dotest
+cd ${BASE}/test/app4 && dotest

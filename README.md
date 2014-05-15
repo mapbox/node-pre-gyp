@@ -1,11 +1,14 @@
 # node-pre-gyp
 
-#### node-pre-gyp makes it easy to publish and install Node.js C++ from binaries
+#### node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries
 
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
-[![Build Status](https://secure.travis-ci.org/mapbox/node-pre-gyp.png)](https://travis-ci.org/mapbox/node-pre-gyp)
-[![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.png)](https://david-dm.org/mapbox/node-pre-gyp)
+[![Build Status](https://api.travis-ci.org/mapbox/node-pre-gyp.svg)](https://travis-ci.org/mapbox/node-pre-gyp)
+
+[![Build status](https://ci.appveyor.com/api/projects/status/n6l9796p4vigsk0e)](https://ci.appveyor.com/project/springmeyer/node-pre-gyp)
+
+[![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.svg)](https://david-dm.org/mapbox/node-pre-gyp)
 
 `node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
 
@@ -66,6 +69,7 @@ Options include:
 
  - `-C/--directory`: run the command in this directory
  - `--build-from-source`: build from source instead of using pre-built binary
+ - `--runtime=node-webkit`: customize the runtime: `node` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
  - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch (will override the host `arch`) 
@@ -84,7 +88,8 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` as a bundled dependency
+ - Add `node-pre-gyp` to `bundledDependencies`
+ - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
 
@@ -95,13 +100,16 @@ This looks like:
       "node-pre-gyp": "0.5.x"
     },
     "bundledDependencies":["node-pre-gyp"],
+    "devDependencies": {
+      "aws-sdk": "~2.0.0-rc.15"
+    }
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",
     },
     "binary": {
         "module_name": "your_module",
         "module_path": "./lib/binding/",
-        "host": "https://your_module.s3-us-west-1.amazonaws.com",
+        "host": "https://your_module.s3-us-west-1.amazonaws.com"
     }
 ```
 
@@ -111,7 +119,11 @@ For a full example see [node-addon-examples's package.json](https://github.com/s
 
 ###### module_name
 
-The name of your native node module. This must match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world) and should not include the `.node` extension.
+The name of your native node module. This value must:
+
+ - Match the name passed to [the NODE_MODULE macro](http://nodejs.org/api/addons.html#addons_hello_world)
+ - Must be a valid C variable name (e.g. it cannot contain `-`)
+ - Should not include the `.node` extension.
 
 ###### module_path
 
@@ -123,17 +135,25 @@ Note: This property supports variables based on [Versioning](#versioning).
 
 A url to the remote location where you've published tarball binaries (must be `https` not `http`).
 
+It is highly recommended that you use Amazon S3. The reasons are:
+
+  - Various node-pre-gyp commands like `publish` and `info` only work with an S3 host.
+  - S3 is a very solid hosting platform for distributing large files, even [Github recommends using it instead of github](https://help.github.com/articles/distributing-large-binaries).
+  - We provide detail documentation for using [S3 hosting](#s3-hosting) with node-pre-gyp.
+
+Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a github repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
+
 ##### The `binary` object has two optional properties
 
 ###### remote_path
 
-It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{module_name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`.
+It **is recommended** that you customize this property. This is an extra path to use for publishing and finding remote tarballs. The default value for `remote_path` is `""` meaning that if you do not provide it then all packages will be published at the base of the `host`. It is recommended to provide a value like `./{name}/v{version}` to help organize remote packages in the case that you choose to publish multiple node addons to the same `host`.
 
 Note: This property supports variables based on [Versioning](#versioning).
 
 ###### package_name
 
-It is **not recommended** to override this property. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path`. If you do not provide it in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which is a versioning string capable of supporting any remove lookup of your modules across all of its pubished versions and various node versions, platforms and architectures.  But if you only wish to support windows you could could change it to `{module_name}-v{version}-{node_abi}-win32-{arch}.tar.gz`.
+It is **not recommended** to override this property unless you are also overriding the `remote_path`. This is the versioned name of the remote tarball containing the binary `.node` module and any supporting files you've placed inside the `module_path` directory. Unless you specify `package_name` in your `package.json` then it defaults to `{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz` which allows your binary to work across node versions, platforms, and architectures. If you are using `remote_path` that is also versioned by `./{module_name}/v{version}` then you could remove these variables from the `package_name` and just use: `{node_abi}-{platform}-{arch}.tar.gz`. Then your remote tarball will be looked up at, for example, `https://example.com/your-module/v0.1.0/node-v11-linux-x64.tar.gz`.
 
 Note: This property supports variables based on [Versioning](#versioning).
 
@@ -249,6 +269,31 @@ First, get setup locally and test the workflow:
 
 And have your **key** and **secret key** ready for writing to the bucket.
 
+It is recommended to create a IAM user with a policy that only gives permissions to the specific bucket you plan to publish to. This can be done in the [IAM console](https://console.aws.amazon.com/iam/) by: 1) adding a new user, 2) choosing `Attach User Policy`, 3) Using the `Policy Generator`, 4) selecting `Amazon S3` for the service, 5) adding the actions: `DeleteObject`, `GetObject`, `GetObjectAcl`, `ListBucket`, `PutObject`, `PutObjectAcl`, 6) adding an ARN of `arn:aws:s3:::bucket/*` (replacing `bucket` with your bucket name), and finally 7) clicking `Add Statement` and saving the policy. It should generate a policy like:
+
+```js
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1394587197000",
+      "Effect": "Allow",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
+      "Resource": [
+        "arn:aws:s3:::node-pre-gyp-tests/*"
+      ]
+    }
+  ]
+}
+```
+
 #### 2) Install node-pre-gyp
 
 Either install it globally:
@@ -281,9 +326,16 @@ You may also need to specify the `region` if it is not explicit in the `host` va
 
 #### 4) Package and publish your build
 
+Install the `aws-sdk`:
+
+    npm install aws-sdk
+
+Then publish:
+
     node-pre-gyp package publish
 
 Note: if you hit an error like `Hostname/IP doesn't match certificate's altnames` it may mean that you need to provide the `region` option in your config.
+
 
 ## Travis Automation
 

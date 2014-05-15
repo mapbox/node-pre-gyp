@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.13
+
+ - Fix problem in 0.5.12 whereby the wrong versions of mkdirp and semver where bundled.
+
 ## 0.5.12
 
  - Improved support for node-webkit (@Mithgol)

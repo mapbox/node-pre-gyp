@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.12
+
+ - Improved support for node-webkit (@Mithgol)
+
 ## 0.5.11
 
  - Updated target versions listing

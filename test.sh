@@ -10,7 +10,7 @@ export PATH=`pwd`/bin:$PATH
 BASE=$(pwd)
 
 function setup {
-    if [[ `node -v` =~ 'v0.10' ]]; then
+    if [[ `node -v` =~ 'v0.10' ]] && [[ ! -d "./node_modules/nw-gyp" ]]; then
         npm ls
     fi
     cd ${BASE}

@@ -48,7 +48,6 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "prepublish":"npm ls",
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
     "test":"./test.sh"
   }

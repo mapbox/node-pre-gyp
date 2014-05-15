@@ -28,7 +28,7 @@
     "mkdirp":"~0.5.0",
     "rc":"~0.3.4",
     "rimraf":"~2.2.5",
-    "bindings":"1.1.1"
+    "bindings":"1.2.0"
   },
   "bundledDependencies":[
     "nopt",

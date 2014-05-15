@@ -10,6 +10,9 @@ export PATH=`pwd`/bin:$PATH
 BASE=$(pwd)
 
 function setup {
+    if [[ `node -v` =~ 'v0.10' ]]; then
+        npm ls
+    fi
     cd ${BASE}
 }
 

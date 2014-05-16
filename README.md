@@ -16,15 +16,23 @@
 
  - A command line tool called `node-pre-gyp` that can install your package's c++ module from a binary.
  - A variety of developer targeted commands for packaging, testing, and publishing binaries.
- - A Javascript module that can dynamically require your installed binary: `require('node-pre-gyp').find`
+ - A standalone module called [pre-gyp-versioning](https://github.com/mapbox/pre-gyp-versioning) which handles versioning binaries by arch, node version, platform, and more.
+ - A standalone module, pre-gyp-find](https://github.com/mapbox/pre-gyp-find), that makes it easy to load the versioned binary: `require('node-pre-find')('app.node')`
 
 For a hello world example of a module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example> and [the wiki ](https://github.com/mapbox/node-pre-gyp/wiki/Modules-using-node-pre-gyp) for real world examples.
 
+### Versions
+
+This the documentation for **node-pre-gyp@0.6.x**. For previous versions see:
+
+  - **node-pre-gyp@0.5.x**: https://github.com/mapbox/node-pre-gyp/blob/v0.5.13/README.md
+  - **node-pre-gyp@0.4.x**: https://github.com/mapbox/node-pre-gyp/blob/v0.4.2/README.md
+
 ## Credits
 
- - The module is modeled after [node-gyp](https://github.com/Tootallnate/node-gyp) by [@Tootallnate](https://github.com/Tootallnate)
+ - The module is fashioned after [node-gyp](https://github.com/Tootallnate/node-gyp) by [@Tootallnate](https://github.com/Tootallnate)
  - Motivation for initial development came from [@ErisDS](https://github.com/ErisDS) and the [Ghost Project](https://github.com/TryGhost/Ghost).
- - Development is sponsored by [Mapbox](https://www.mapbox.com/)
+ - Development is sponsored by [Mapbox](https://www.mapbox.com)
 
 ## Depends
 
@@ -88,7 +96,8 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` to `bundledDependencies`
+ - Add `node-pre-gyp` to `bundledDependencies` and `dependencies`
+ - Add `pre-gyp-find` to `dependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
@@ -97,7 +106,8 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "0.5.x"
+      "node-pre-gyp": "0.6.x",
+      "pre-gyp-find": "0.6.x"
     },
     "bundledDependencies":["node-pre-gyp"],
     "devDependencies": {
@@ -107,15 +117,17 @@ This looks like:
         "install": "node-pre-gyp install --fallback-to-build",
     },
     "binary": {
-        "module_name": "your_module",
-        "module_path": "./lib/binding/",
-        "host": "https://your_module.s3-us-west-1.amazonaws.com"
+        "module_name" : "your_binding",
+        "module_path" : "./lib/binding/",
+        "host"        : "https://mapbox-node-binary.s3.amazonaws.com",
+        "remote_path" : "./{module_name}/v{version}",
+        "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
     }
 ```
 
 For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/package.json#L11-L22).
 
-##### The `binary` object has three required properties
+##### The `binary` object has **three required** properties
 
 ###### module_name
 
@@ -143,7 +155,7 @@ It is highly recommended that you use Amazon S3. The reasons are:
 
 Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a github repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
 
-##### The `binary` object has two optional properties
+##### The `binary` object has **two optional** properties
 
 ###### remote_path
 
@@ -192,16 +204,13 @@ var binding = require('../build/Release/binding.node');
 or:
 
 ```js
-var bindings = require('./bindings')
+var binding = require('bindings')('binding.node');
 ```
 
 Change those lines to:
 
 ```js
-var binary = require('node-pre-gyp');
-var path = require('path');
-var binding_path = binary.find(path.resolve(path.join(__dirname,'./package.json')));
-var binding = require(binding_path);
+var binding = require('node-pre-find')('your_binding.node'); // where `your_binding` == your package.json `module_name`
 ```
 
 For a full example see [node-addon-example's index.js](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/index.js#L1-L4)

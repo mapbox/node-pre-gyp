@@ -28,7 +28,8 @@
     "mkdirp":"~0.5.0",
     "rc":"~0.3.4",
     "rimraf":"~2.2.5",
-    "bindings":"1.2.0"
+    "bindings":"1.2.0",
+    "pre-gyp-versioning":"0.1.0"
   },
   "bundledDependencies":[
     "nopt",
@@ -49,7 +50,6 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
     "test":"./test.sh"
   }
 }

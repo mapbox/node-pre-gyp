@@ -385,7 +385,7 @@ More details on travis encryption at http://about.travis-ci.org/docs/user/encryp
 
 #### 3) Hook up publishing
 
-Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
+You can put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
 If you want binaries for OS X change your `.travis.yml` to use:
 
@@ -393,7 +393,7 @@ If you want binaries for OS X change your `.travis.yml` to use:
 language: objective-c
 ```
 
-Keep that change in a different git branch and sync that when you want binaries published. This little hack will hopefully become obsolete when [travis adds proper support for different operating systems](https://github.com/travis-ci/travis-ci/issues/216).
+Keep that change in a different git branch and sync that when you want binaries published. This little hack will hopefully become obsolete when [travis adds proper support for different operating systems](https://github.com/travis-ci/travis-ci/issues/216) which is currently in [private beta](http://blog.travis-ci.com/2014-05-13-multi-os-feature-available/).
 
 Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
 
@@ -422,17 +422,22 @@ before_install:
 
 #### 4) Publish when you want
 
-You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
+You should publish binaries before you publish your source code with `npm publish`.
+
+If you want binary publishing to be automatic you could trigger publishing when you tag by doing:
+
+    if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] ; then node-pre-gyp publish; fi
+
+But its usually best to manually trigger publishing so you can easily make followup tweaks before final tagging. An easy way to ask travis to trigger publishing is to borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
 
     COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
     if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
 
-Or you could automatically detect if the git branch is a tag:
+Note: if you want to test publishing but don't have any new changes to commit to your repo you can simply push to github without changes with:
 
-    if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] ; then node-pre-gyp publish; fi
+    git commit --allow-empty -m "[publish binary]"
 
-Remember this publishing is not the same as `npm publish`. We're just talking about the
-binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
+Finally remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/.
 
 # Versioning
 

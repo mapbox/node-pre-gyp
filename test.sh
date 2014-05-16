@@ -38,13 +38,17 @@ function build_app {
     # test install from binary with fallback
     # run directly against node-pre-gyp
     node-pre-gyp clean -C $WD
+
+    # because we use node-pre-gyp directly not npm
+    # we need to install pre-gyp-find
+    cd $WD && npm install pre-gyp-find && cd $BASE
     if [[ $1  == "app2" ]]; then
         node-pre-gyp -C $WD install --fallback-to-build --custom_include_path=$WD/include $OPT_ARG
     else
         node-pre-gyp -C $WD install --fallback-to-build $OPT_ARG
     fi
     # run npm commands from correct directory
-    cd $WD && npm test && cd $BASE
+    cd $WD && npm test && npm ls && cd $BASE
 
     if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
@@ -129,4 +133,5 @@ build_app "app3"
 build_app "app4"
 cd ${BASE}/test/app5 && npm cache clean;rm -rf node_modules/;npm install
 cd ${BASE}/test/app6 && npm cache clean;rm -rf node_modules/;npm install
+
 teardown

@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 0.5.14
+
+ - Finished support for cross building using `--target_platform` option (#82)
+ - Now skipping binary validation on install if target arch/platform do not match the host.
+ - Removed multi-arch validing for OS X since it required a FAT node.js binary
+
 ## 0.5.13
 
  - Fix problem in 0.5.12 whereby the wrong versions of mkdirp and semver where bundled.

@@ -80,6 +80,7 @@ function run () {
       log.error('stack', err.stack)
       errorMessage()
       log.error('not ok')
+      console.log(err.message);
       return process.exit(1)
     }
     var args_array = [].slice.call(arguments, 1)

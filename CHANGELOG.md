@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.15
+
+ - Fixed installation of windows packages sub directories on unix systems (#84)
+
 ## 0.5.14
 
  - Finished support for cross building using `--target_platform` option (#82)

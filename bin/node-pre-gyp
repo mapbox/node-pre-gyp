@@ -30,6 +30,11 @@ if (prog.todo.length === 0) {
   return process.exit(0)
 }
 
+// if --no-color is passed
+if (prog.opts && prog.opts.hasOwnProperty('color') && !prog.opts.color) {
+  log.disableColor();
+}
+
 log.info('it worked if it ends with', 'ok')
 log.verbose('cli', process.argv)
 log.info('using', process.title + '@%s', prog.version)

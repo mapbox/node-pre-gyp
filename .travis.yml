@@ -1,5 +1,10 @@
 language: cpp
 
+# http://docs.travis-ci.com/user/multi-os/
+os:
+  - linux
+  - osx
+
 env:
   matrix:
    - export NODE_VERSION="0.8.26"
@@ -16,8 +21,8 @@ before_install:
 - echo $NODE_VERSION
 # upgrade nvm
 - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm;
-- if [[ "${NODE_VERSION}" == "ppa" ]]; then unset node_pre_gyp_accessKeyId; source ~/.nvm/nvm.sh; nvm deactivate; sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get -qq update; sudo apt-get install -y nodejs; fi;
-- if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] && [[ "${NODE_VERSION}" == "ppa" ]]; then unset node_pre_gyp_accessKeyId; source ~/.nvm/nvm.sh; nvm deactivate; sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get -qq update; sudo apt-get install -y nodejs; fi;
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] && [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
 
@@ -27,7 +32,7 @@ install:
 before_script:
 - npm test
 # test against upgraded npm and node-gyp
-- if [[ "${NODE_VERSION}" == "ppa" ]]; then sudo npm install -g npm; sudo npm install -g node-gyp; else npm install -g npm;npm install -g node-gyp;fi;
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] && [[ "${NODE_VERSION}" == "ppa" ]]; then sudo npm install -g npm; sudo npm install -g node-gyp; else npm install -g npm;npm install -g node-gyp;fi;
 - npm test
 # test node-webkit usage
 - ./test-node-webkit.sh

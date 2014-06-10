@@ -49,7 +49,7 @@ function build_app {
     # run npm commands from correct directory
     cd $WD && npm test && cd $BASE
 
-    if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
+    if [[ "${AWS_ACCESS_KEY_ID:-false}" != false ]] || [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
         # it works, so now publish
         node-pre-gyp -C $WD package testpackage publish $OPT_ARG
@@ -110,7 +110,7 @@ function build_app {
     npm test
 
     # cleanup
-    if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
+    if [[ "${AWS_ACCESS_KEY_ID:-false}" != false ]] || [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         node-pre-gyp unpublish $OPT_ARG
     fi
     node-pre-gyp clean $OPT_ARG

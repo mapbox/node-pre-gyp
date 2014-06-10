@@ -305,7 +305,13 @@ Or put the local version on your PATH
 
     export PATH=`pwd`/node_modules/.bin/:$PATH
 
-#### 3) Create `~/.node_pre_gyprc`
+#### 3) Configure AWS credentials
+
+There are several ways to do this.
+
+You can use any of the methods described at http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html.
+
+Or you can create a `~/.node_pre_gyprc`
 
 Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
 

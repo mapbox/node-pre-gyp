@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.16
+
+ - Now supporting all aws-sdk configuration parameters (http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) (#86)
+
 ## 0.5.15
 
  - Fixed installation of windows packages sub directories on unix systems (#84)

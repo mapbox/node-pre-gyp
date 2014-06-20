@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.17
+
+ - Updated to know about node v0.10.29 release
+
 ## 0.5.16
 
  - Now supporting all aws-sdk configuration parameters (http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html) (#86)

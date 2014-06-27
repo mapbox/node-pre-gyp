@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.18
+
+ - Updated to know about more node-webkit releases
+
 ## 0.5.17
 
  - Updated to know about node v0.10.29 release

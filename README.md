@@ -5,9 +5,7 @@
 [![NPM](https://nodei.co/npm/node-pre-gyp.png)](https://nodei.co/npm/node-pre-gyp/)
 
 [![Build Status](https://api.travis-ci.org/mapbox/node-pre-gyp.svg)](https://travis-ci.org/mapbox/node-pre-gyp)
-
-[![Build status](https://ci.appveyor.com/api/projects/status/n6l9796p4vigsk0e)](https://ci.appveyor.com/project/springmeyer/node-pre-gyp)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/3nxewb425y83c0gv)](https://ci.appveyor.com/project/Mapbox/node-pre-gyp)
 [![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.svg)](https://david-dm.org/mapbox/node-pre-gyp)
 
 `node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
@@ -245,11 +243,14 @@ You can also host your binaries elsewhere. To do this requires:
 
 #### 7) Automate builds
 
-Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated. See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux. On windows consider using a script [like this](https://github.com/mapbox/node-sqlite3/blob/master/scripts/build.bat) to quickly create and publish binaries and check out <https://appveyor.com>.
+Now you need to publish builds for all the platforms and node versions you wish to support. This is best automated.
+
+ - See [Appveyor Automation](#appveyor-automation) for how to auto-publish builds on Windows.
+ - See [Travis Automation](#travis-automation) for how to auto-publish builds on OS X and Linux.
 
 #### 8) You're done!
 
-Now publish your package to the npm registry. Users will now be able to install your module from a binary. 
+Now publish your module to the npm registry. Users will now be able to install your module from a binary. 
 
 What will happen is this:
 
@@ -343,15 +344,66 @@ Then publish:
 
 Note: if you hit an error like `Hostname/IP doesn't match certificate's altnames` it may mean that you need to provide the `region` option in your config.
 
+## Appveyor Automation
+
+[Appveyor](http://www.appveyor.com/) can build binaries and publish the results per commit and supports:
+
+ - Windows Visual Studio 2013 and related compilers
+ - Both 64 bit (x64) and 32 bit (x86) build configurations
+ - Multiple Node.js versions
+
+For an example of doing this see [node-sqlite3's appveyor.yml](https://github.com/mapbox/node-sqlite3/blob/master/appveyor.yml).
+
+Below is a guide to getting set up:
+
+#### 1) Create a free Appveyor account
+
+Go to https://ci.appveyor.com/signup/free and sign in with your github account.
+
+#### 2) Create a new project
+
+Go to https://ci.appveyor.com/projects/new and select the github repo for your module
+
+#### 3) Add appveyor.yml and push it
+
+Once you have committed an `appveyor.yml` to your github repo and pushed it appveyor should automatically start building your project.
+
+#### 4) Create secure variables
+
+Encrypt your S3 AWS keys by going to <https://ci.appveyor.com/tools/encrypt> and hitting the `encrypt` button.
+
+Then paste the result into your `appveyor.yml`
+
+```yml
+environment:
+  node_pre_gyp_accessKeyId:
+    secure: Dn9HKdLNYvDgPdQOzRq/DqZ/MPhjknRHB1o+/lVU8MA=
+  node_pre_gyp_secretAccessKey:
+    secure: W1rwNoSnOku1r+28gnoufO8UA8iWADmL1LiiwH9IOkIVhDTNGdGPJqAlLjNqwLnL
+```
+
+NOTE: keys are per account but not per repo (this is difference than travis where keys are per repo but not related to the account used to encrypt them).
+
+#### 5) Hook up publishing
+
+Just put `node-pre-gyp package publish` in your `appveyor.yml` after `npm install`.
+
+#### 6) Publish when you want
+
+You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
+
+    SET CM=%APPVEYOR_REPO_COMMIT_MESSAGE%
+    if not "%CM%" == "%CM:[publish binary]=%" node-pre-gyp --msvs_version=2013 publish
+
+Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
+
 
 ## Travis Automation
 
-Travis can push to S3 after a successful build and supports both:
+[Travis](https://travis-ci.org/) can push to S3 after a successful build and supports both:
 
  - Ubuntu Precise and OS X
  - Multiple Node.js versions
-
-This enables you to cheaply auto-build and auto-publish binaries for (likely) the majority of your users.
 
 For an example of doing this see [node-add-example's .travis.yml](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/.travis.yml).
 
@@ -361,7 +413,7 @@ Below is a guide to getting set up:
 
     gem install travis
 
-#### 2) Create secure `global` variables
+#### 2) Create secure variables
 
 Make sure you run this command from within the directory of your module.
 
@@ -385,13 +437,21 @@ More details on travis encryption at http://about.travis-ci.org/docs/user/encryp
 
 Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
-If you want binaries for OS X change your `.travis.yml` to use:
+If you want binaries for OS X change you have two options:
+
+ - Enable `multi-os` for your repo by emailing a request to `support@travis-ci.com`. More details at <http://docs.travis-ci.com/user/multi-os/>. An example of a repo using multi-os is [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/f69b89a078e2200fee54a9f897e6957bd627d8b7/.travis.yml#L4-L6).
+ - Or, you can change the `language` and push to a different branch to build on OS X just when you commit to that branch. Details on this below:
+
+
+##### OS X publishing via a branch
+
+Tweak your `.travis.yml` to use:
 
 ```yml
 language: objective-c
 ```
 
-Keep that change in a different git branch and sync that when you want binaries published. This little hack will hopefully become obsolete when [travis adds proper support for different operating systems](https://github.com/travis-ci/travis-ci/issues/216).
+Keep that change in a different git branch and sync that when you want binaries published.
 
 Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
 
@@ -429,8 +489,7 @@ Or you could automatically detect if the git branch is a tag:
 
     if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] ; then node-pre-gyp publish; fi
 
-Remember this publishing is not the same as `npm publish`. We're just talking about the
-binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
+Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
 
 # Versioning
 

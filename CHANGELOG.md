@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.0
+
+ - Now versioning node-webkit binaries based on major.minor.patch - assuming no compatible ABI across versions (#90)
+
 ## 0.5.19
 
  - Updated to know about more node-webkit releases

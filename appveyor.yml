@@ -2,6 +2,7 @@ environment:
   matrix:
     - nodejs_version: 0.8
     - nodejs_version: 0.10
+    - nodejs_version: 0.11
 
 platform:
   - x64
@@ -16,11 +17,3 @@ install:
   - cmd: SET PATH=c:\python27;%PATH%
   - npm install
   - cmd: test.bat
-
-build: OFF
-
-test: OFF
-
-test_script: OFF
-
-deploy: OFF

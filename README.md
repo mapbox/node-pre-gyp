@@ -366,7 +366,7 @@ Go to https://ci.appveyor.com/projects/new and select the github repo for your m
 
 #### 3) Add appveyor.yml and push it
 
-Once you have committed an `appveyor.yml` to your github repo and pushed it appveyor should automatically start building your project.
+Once you have committed an `appveyor.yml` ([appveyor.yml reference](http://www.appveyor.com/docs/appveyor-yml)) to your github repo and pushed it appveyor should automatically start building your project.
 
 #### 4) Create secure variables
 

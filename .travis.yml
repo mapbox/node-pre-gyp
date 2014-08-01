@@ -24,6 +24,8 @@ before_install:
 - if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
 - node --version
 - npm --version
+- npm update -g npm
+- npm --version
 
 install:
 - npm install

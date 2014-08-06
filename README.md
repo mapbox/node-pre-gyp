@@ -90,6 +90,7 @@ This is a guide to configuring your module to use node-pre-gyp.
  - Add `node-pre-gyp` to `bundledDependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
+ - Add a `prepublish` script
  - Declare a `binary` object
 
 This looks like:
@@ -103,6 +104,7 @@ This looks like:
       "aws-sdk": "~2.0.0-rc.15"
     }
     "scripts": {
+        "prepublish": "npm ls",
         "install": "node-pre-gyp install --fallback-to-build",
     },
     "binary": {
@@ -111,6 +113,8 @@ This looks like:
         "host": "https://your_module.s3-us-west-1.amazonaws.com"
     }
 ```
+
+NOTE: the `prepublish` is optional but a good idea. Because `node-pre-gyp` is bundled you need to be careful that the right `./node_modules/node-pre-gyp` is on your local system before running `npm publish`. This `npm ls` command will enforce that by throwing an error if things look out of sync.
 
 For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/package.json#L11-L22).
 

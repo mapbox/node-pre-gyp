@@ -13,7 +13,7 @@
     static void get_hello(const v8::FunctionCallbackInfo<v8::Value>& args)
     {
         v8::HandleScope scope(v8::Isolate::GetCurrent());
-        args.GetReturnValue().Set(v8::String::New(HELLO_WORLD));
+        args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),HELLO_WORLD));
     }
 
 #else

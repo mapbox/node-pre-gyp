@@ -14,7 +14,7 @@
         v8::HandleScope scope(v8::Isolate::GetCurrent());
         MyLib::Message msg("hello");
         std::string msg_string = msg.get();
-        args.GetReturnValue().Set(v8::String::New(msg_string.c_str()));
+        args.GetReturnValue().Set(v8::String::NewFromUtf8(v8::Isolate::GetCurrent(),msg_string.c_str()));
     }
 
 #else

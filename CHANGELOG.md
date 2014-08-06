@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.21
+
+ - New package to fix `shasum check failed` error with v0.5.20
+
 ## 0.5.20
 
  - Now versioning node-webkit binaries based on major.minor.patch - assuming no compatible ABI across versions (#90)

@@ -52,7 +52,7 @@ function build_app {
     if [[ "${AWS_ACCESS_KEY_ID:-false}" != false ]] || [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
         MARK "D" $1
         # it works, so now publish
-        node-pre-gyp -C $WD package testpackage publish $OPT_ARG
+        node-pre-gyp -C $WD package testpackage unpublish publish $OPT_ARG
 
         # now test listing published binaries
         CURRENT_ARCH=$(node -e "console.log(process.arch)")

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.22
+
+ - Fixed node-webkit versioning name (NOTE: node-webkit support still experimental)
+
 ## 0.5.21
 
  - New package to fix `shasum check failed` error with v0.5.20

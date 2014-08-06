@@ -8,6 +8,8 @@ platform:
   - x64
   - x86
 
+shallow_clone: true
+
 install:
   - ps: Update-NodeJsInstallation $env:nodejs_version $env:Platform
   - node --version

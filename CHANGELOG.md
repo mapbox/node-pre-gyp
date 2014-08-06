@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.23
+
+ - Added `reveal` command. Pass no options to get all versioning data as json. Pass a second arg to grab a single versioned property value
+ - Added support for `--silent` (shortcut for `--loglevel=silent`)
+
 ## 0.5.22
 
  - Fixed node-webkit versioning name (NOTE: node-webkit support still experimental)

@@ -46,6 +46,20 @@ function build_app {
     else
         node-pre-gyp -C $WD install --fallback-to-build $OPT_ARG
     fi
+
+    # ensure the binary exists in the same spot the reveal command thinks it is
+    MODULE_PATH_DIR=$(node-pre-gyp -C $WD reveal module_path $OPT_ARG)
+    if [[ ! -d ${MODULE_PATH_DIR} ]]; then
+        echo "failed to locate expected module_path directory: $MODULE_PATH_DIR"
+        false
+    fi
+
+    MODULE_FILE=$(node-pre-gyp -C $WD reveal module $OPT_ARG)
+    if [[ ! -f ${MODULE_FILE} ]]; then
+        echo "failed to locate expected module file: $MODULE_FILE"
+        false
+    fi
+
     # run npm commands from correct directory
     cd $WD && npm test && cd $BASE
 

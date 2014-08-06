@@ -10,7 +10,6 @@ env:
    - export NODE_VERSION="0.8.28"
    - export NODE_VERSION="0.10.30"
    - export NODE_VERSION="0.11.13"
-   - export NODE_VERSION="ppa"
   global:
    - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=
    - secure: Fs0ilCVBL0DUMkd5vzLGL/5K364kLj1LpSKzwZpPvlU6Gx2jW+Zt59RfM1yOTCvrPWWNb+jc8jz8lbbPXAgUnYNmL54WkIjapr8yPIClw6AtNOSuPtL+zGVGT7FZEO7EntNuEtTer6Wj8IuWUT7myeAezKzNogYg7HyaO4JsoJc=
@@ -19,20 +18,19 @@ env:
 before_install:
 - echo $NODE_VERSION
 # upgrade nvm
-- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm;
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] && [[ "${NODE_VERSION}" == "ppa" ]]; then unset node_pre_gyp_accessKeyId; source ~/.nvm/nvm.sh; nvm deactivate; sudo add-apt-repository -y ppa:chris-lea/node.js; sudo apt-get -qq update; sudo apt-get install -y nodejs; fi;
-- if [[ "${NODE_VERSION}" != "ppa" ]]; then source ~/.nvm/nvm.sh; nvm install $NODE_VERSION; nvm use $NODE_VERSION; fi;
+- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
+- source ~/.nvm/nvm.sh
+- nvm install $NODE_VERSION
+- nvm use $NODE_VERSION
 - node --version
 - npm --version
-- if [[ "${NODE_VERSION}" != "ppa" ]]; then npm update -g npm; npm --version; fi;
+- npm update -g npm
+- npm --version
 
 install:
 - npm install
 
 before_script:
-- npm test
-# test against upgraded npm and node-gyp
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] && [[ "${NODE_VERSION}" == "ppa" ]]; then sudo npm install -g npm; sudo npm install -g node-gyp; else npm install -g npm;npm install -g node-gyp;fi;
 - npm test
 # test node-webkit usage
 - ./test-node-webkit.sh
@@ -42,4 +40,4 @@ script:
 - unset node_pre_gyp_accessKeyId
 - npm test
 # test --target flag (depends on nvm)
-- if [[ $NODE_VERSION != "ppa" ]]; then ./test-custom-target.sh; fi;
+- ./test-custom-target.sh

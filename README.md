@@ -395,6 +395,10 @@ You might wish to publish binaries only on a specific commit. To do this you cou
     SET CM=%APPVEYOR_REPO_COMMIT_MESSAGE%
     if not "%CM%" == "%CM:[publish binary]=%" node-pre-gyp --msvs_version=2013 publish
 
+If your commit message contains special characters (e.g. `&`) this method might fail. An alternative is to use PowerShell, which gives you additional possibilites, like ignoring case by using `ToLower()`:
+
+    ps: if($env:APPVEYOR_REPO_COMMIT_MESSAGE.ToLower().Contains('[publish binary]')) { node-pre-gyp --msvs_version=2013 publish }
+
 Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
 
 

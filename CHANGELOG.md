@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.25
+
+ - Fix bundling of deps
+
 ## 0.5.24
 
  - Updated ABI crosswalk to incldue node v0.10.30 and v0.10.31

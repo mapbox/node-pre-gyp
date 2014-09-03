@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.24
+
+ - Updated ABI crosswalk to incldue node v0.10.30 and v0.10.31
+
 ## 0.5.23
 
  - Added `reveal` command. Pass no options to get all versioning data as json. Pass a second arg to grab a single versioned property value

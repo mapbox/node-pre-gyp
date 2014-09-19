@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.26
+
+ - Fix node-webkit support when `--target` option is not provided
+
 ## 0.5.25
 
  - Fix bundling of deps

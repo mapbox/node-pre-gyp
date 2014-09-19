@@ -489,9 +489,13 @@ You might wish to publish binaries only on a specific commit. To do this you cou
     COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
     if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE"; then node-pre-gyp publish; fi;
 
-Or you could automatically detect if the git branch is a tag:
+Then you can trigger new binaries to be built like:
 
-    if [[ $TRAVIS_BRANCH == `git describe --tags --always HEAD` ]] ; then node-pre-gyp publish; fi
+    git commit -a -m "[publish binary]"
+
+Or, if you don't have any changes to make simply run:
+
+    git commit --allow-empty -m "[publish binary]"
 
 Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
 

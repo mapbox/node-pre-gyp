@@ -1,7 +1,7 @@
 environment:
   matrix:
     - nodejs_version: 0.8.28
-    - nodejs_version: 0.10.30
+    - nodejs_version: 0.10.32
     - nodejs_version: 0.11.13
 
 platform:
@@ -15,7 +15,7 @@ install:
   - node --version
   - npm --version
   - SET PATH=%APPDATA%\npm;%PATH%
-  - npm install npm -g
+  - npm update -g npm
   - npm --version
   - node -e "console.log(process.arch);"
   - SET PATH=C:\python27;%PATH%

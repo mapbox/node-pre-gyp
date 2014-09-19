@@ -8,7 +8,7 @@ os:
 env:
   matrix:
    - export NODE_VERSION="0.8.28"
-   - export NODE_VERSION="0.10.30"
+   - export NODE_VERSION="0.10.32"
    - export NODE_VERSION="0.11.13"
   global:
    - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=

@@ -92,7 +92,7 @@ describe('build', function() {
             });
         });
 
-        if (process.env.AWS_ACCESS_KEY_ID) {
+        if (process.env.AWS_ACCESS_KEY_ID || process.env.node_pre_gyp_accessKeyId) {
 
             it(app.name + ' publishes ' + app.args, function(done) {
                 run('node-pre-gyp unpublish publish', app, {}, function(err,stdout,stderr) {

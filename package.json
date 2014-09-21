@@ -50,6 +50,6 @@
   },
   "scripts": {
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
-    "test":"mocha -R spec --timeout 50000"
+    "test":"mocha -R spec --timeout 100000"
   }
 }

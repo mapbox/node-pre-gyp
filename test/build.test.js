@@ -128,7 +128,7 @@ describe('build', function() {
             });
 
             it(app.name + ' can be installed via remote ' + app.args, function(done) {
-                run('npm install --fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm install --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) throw err;
                     assert.equal(stderr,'');
                     assert.notEqual(stdout,'');

@@ -1,7 +1,7 @@
 environment:
   matrix:
-    - nodejs_version: 0.8.27
-    - nodejs_version: 0.10.31
+    #- nodejs_version: 0.8.28
+    - nodejs_version: 0.10.32
     - nodejs_version: 0.11.13
 
 platform:

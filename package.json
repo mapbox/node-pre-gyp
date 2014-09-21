@@ -41,7 +41,8 @@
     "rimraf"
   ],
   "devDependencies": {
-    "aws-sdk":"*"
+    "aws-sdk":"*",
+    "mocha": "1.x"
   },
   "engineStrict": true,
   "engines": {
@@ -49,6 +50,6 @@
   },
   "scripts": {
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
-    "test":"./test.sh"
+    "test":"mocha -R spec --timeout 50000"
   }
 }

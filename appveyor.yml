@@ -24,6 +24,7 @@ install:
   - node -e "console.log(process.arch);"
   - SET PATH=C:\python27;%PATH%
   - npm install
+  - npm test
   - cmd: test.bat
 
 build: off

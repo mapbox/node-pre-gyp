@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 0.5.27
+
+ - Fixed support for auto-detecting s3 bucket name when it contains `.` - @taavo 
+ - Fixed support for installing when path contains a `'` - @halfdan
+ - Ported tests to mocha
+
 ## 0.5.26
 
  - Fix node-webkit support when `--target` option is not provided

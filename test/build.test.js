@@ -4,7 +4,11 @@ var path = require('path');
 var existsSync = require('fs').existsSync || require('path').existsSync;
 
 var cmd_path = path.join(__dirname,'../bin/');
-process.env.PATH = cmd_path+':'+process.env.PATH;
+var sep = ':';
+if (process.platform === 'win32') {
+    sep = ';'
+}
+process.env.PATH = cmd_path + sep + process.env.PATH;
 process.env.NODE_PATH = path.join(__dirname,'../lib/');
 
 function run(command,app,cb) {

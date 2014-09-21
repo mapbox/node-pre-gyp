@@ -45,10 +45,9 @@ describe('build', function() {
         it('should build '+ app.name + ' ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build', app, function(err,stdout,stderr) {
                 if (err) throw err;
-                assert.ok(stdout.search('COPY') > -1);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.equal(stderr,'');
-                run('node-pre-gyp reveal module_path', app, function(err,stdout,stderr) {
+                run('node-pre-gyp reveal module_path --silent', app, function(err,stdout,stderr) {
                     if (err) throw err;
                     assert.equal(stderr,'');
                     var module_path = stdout.trim();

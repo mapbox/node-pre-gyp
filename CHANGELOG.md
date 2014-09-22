@@ -1,5 +1,23 @@
 # node-pre-gyp changelog
 
+## 0.5.27
+
+ - Fixed support for auto-detecting s3 bucket name when it contains `.` - @taavo 
+ - Fixed support for installing when path contains a `'` - @halfdan
+ - Ported tests to mocha
+
+## 0.5.26
+
+ - Fix node-webkit support when `--target` option is not provided
+
+## 0.5.25
+
+ - Fix bundling of deps
+
+## 0.5.24
+
+ - Updated ABI crosswalk to incldue node v0.10.30 and v0.10.31
+
 ## 0.5.23
 
  - Added `reveal` command. Pass no options to get all versioning data as json. Pass a second arg to grab a single versioned property value

@@ -1,7 +1,7 @@
 environment:
   matrix:
-    - nodejs_version: 0.8.28
-    - nodejs_version: 0.10.30
+    #- nodejs_version: 0.8.28
+    - nodejs_version: 0.10.32
     - nodejs_version: 0.11.13
 
 platform:
@@ -11,15 +11,20 @@ platform:
 shallow_clone: true
 
 install:
-  - ps: Update-NodeJsInstallation $env:nodejs_version $env:Platform
+  #- ps: Update-NodeJsInstallation $env:nodejs_version $env:Platform
+  # http://help.appveyor.com/discussions/problems/618-nodejs-10030-doesnt-work-on-appveyor-cant-find-npm#comment_34002825
+  - ps: Install-Product node $env:nodejs_version $env:Platform
+  - ps: gcm node
+  - ps: gcm npm
   - node --version
   - npm --version
   - SET PATH=%APPDATA%\npm;%PATH%
-  - npm install npm -g
+  - npm update -g npm
   - npm --version
   - node -e "console.log(process.arch);"
   - SET PATH=C:\python27;%PATH%
   - npm install
+  - npm test
   - cmd: test.bat
 
 build: off

@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version" : "0.5.23",
+  "version" : "0.5.27",
   "keywords": [
     "native",
     "addon",
@@ -11,6 +11,7 @@
     "bindings",
     "binary"
   ],
+  "license": "BSD",
   "author": "Dane Springmeyer <dane@mapbox.com>",
   "repository": {
     "type": "git",
@@ -41,7 +42,8 @@
     "rimraf"
   ],
   "devDependencies": {
-    "aws-sdk":"*"
+    "aws-sdk":"*",
+    "mocha": "1.x"
   },
   "engineStrict": true,
   "engines": {
@@ -49,6 +51,6 @@
   },
   "scripts": {
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
-    "test":"./test.sh"
+    "test":"mocha -R spec --timeout 100000"
   }
 }

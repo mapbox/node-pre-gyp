@@ -122,8 +122,13 @@ http.get(url.parse(versions_doc), function(res) {
       var lines = body.split('\n').map(function(line) { return line.split(' ')[0].slice(1); }).filter(function(line) { return (line.length && line != 'node'); });
       lines.push('0.11.12');
       lines.push('0.11.13');
+      lines.push('0.11.14');
       lines.push('0.10.27');
       lines.push('0.10.28');
+      lines.push('0.10.29');
+      lines.push('0.10.30');
+      lines.push('0.10.31');
+      lines.push('0.10.32');
       lines.forEach(function(ver) {
           get(ver,function(err,version,node_abi,v8_version) {
             cross[version] = {node_abi:node_abi,v8:v8_version};

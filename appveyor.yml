@@ -22,10 +22,10 @@ install:
   - npm update -g npm
   - npm --version
   - node -e "console.log(process.arch);"
-  - SET PATH=C:\python27;%PATH%
+  - if "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
+  - if "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
   - npm install
-  - .\test.bat
-  - cmd: test.bat
+  - .\scripts\test.bat
 
 build: off
 test: off

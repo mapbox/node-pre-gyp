@@ -32,13 +32,10 @@ install:
 
 before_script:
 - npm test
-- ./test.sh
 # test node-webkit usage
-- ./test-node-webkit.sh
+- ./scripts/test-node-webkit.sh
 
 script:
 # test non-authenticated mode
 - unset node_pre_gyp_accessKeyId
-- ./test.sh
-# test --target flag (depends on nvm)
-- ./test-custom-target.sh
+- npm test

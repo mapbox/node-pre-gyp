@@ -9,7 +9,7 @@ BASE=$(pwd)
 source ~/.nvm/nvm.sh
 
 function dotest {
-    for i in {"0.8.26","0.10.26","0.11.12"}; do
+    for i in {"0.8.28","0.10.32","0.11.13"}; do
         rm -rf build/
         node-pre-gyp clean
         npm install --build-from-source --target=$i $1

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.28
+
+ - Now reporting unix style paths only in reveal command
+
 ## 0.5.27
 
  - Fixed support for auto-detecting s3 bucket name when it contains `.` - @taavo 

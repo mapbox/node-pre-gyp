@@ -54,6 +54,15 @@ describe('build', function() {
             })
         });
 
+        it(app.name + ' builds with custom --target ' + app.args, function(done) {
+            run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
+                if (err) throw err;
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.equal(stderr,'');
+                done();
+            })
+        });
+
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;

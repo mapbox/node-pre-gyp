@@ -6,13 +6,13 @@
        "type" : "git",
        "url"  : "git://github.com/mapbox/node-pre-gyp.git"
     },
-    "version": "0.1.0",
+    "version": "0.1.0-release1.release2+build1.build2",
     "main": "./lib/index.js",
     "binary": {
         "module_name": "app2",
-        "module_path": "./lib/binding/{configuration}/{name}-{node_abi}-{platform}-{arch}",
-        "remote_path": "./{name}/v{version}/{configuration}",
-        "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}.tar.gz",
+        "module_path": "./lib/binding/{configuration}/{name}",
+        "remote_path": "./{name}/v{version}/{configuration}/{version}",
+        "package_name": "{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{node_abi}-{platform}-{arch}.tar.gz",
         "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
     },
     "scripts": {

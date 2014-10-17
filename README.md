@@ -503,13 +503,15 @@ Remember this publishing is not the same as `npm publish`. We're just talking ab
 
 The `binary` properties of `module_path`, `remote_path`, and `package_name` support variable substitution. The strings are evaluated by `node-pre-gyp` depending on your system and any custom build flags you passed.
 
- - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.
- - `module_name` - the `binary.module_name` attribute from `package.json`.
- - `version` - the semver `version` value for your module from `package.json`.
- - `major`, `minor`, `patch`, and `prelease` match the individual semver values for your module's `version`
  - `node_abi`: The node C++ `ABI` number. This value is available in javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
  - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32` unless the user passed the `--target_platform` option to override.
  - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
+ - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.
+ - `module_name` - the `binary.module_name` attribute from `package.json`.
+ - `version` - the semver `version` value for your module from `package.json` (NOTE: ignores the `semver.build` property).
+ - `major`, `minor`, `patch`, and `prelease` match the individual semver values for your module's `version`
+ - `build` - the sevmer `build` value. For example it would be `this.that` if your package.json `version` was `v1.0.0+this.that`
+ - `prerelease` - the semver `prerelease` value. For example it would be `alpha.beta` if your package.json `version` was `v1.0.0-alpha.beta`
 
 
 The options are visible in the code at <https://github.com/mapbox/node-pre-gyp/blob/612b7bca2604508d881e1187614870ba19a7f0c5/lib/util/versioning.js#L114-L127>

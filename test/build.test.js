@@ -117,11 +117,11 @@ describe('build', function() {
                     if (err) throw err;
                     assert.equal(stderr,'');
                     assert.notEqual(stdout,'');
-                    var package_name = stdout.trim().replace('+','%2B');
+                    var package_name = stdout.trim();
                     run('node-pre-gyp info', app, {}, function(err,stdout,stderr) {
                         if (err) throw err;
                         assert.equal(stderr,'');
-                        assert.ok(stdout.replace('+','%2B').search(package_name) > -1);
+                        assert.ok(stdout.indexOf(package_name) > -1);
                         done();
                     });
                 });

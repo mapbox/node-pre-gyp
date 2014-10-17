@@ -24,6 +24,10 @@ For a hello world example of a module packaged with `node-pre-gyp` see <https://
  - Motivation for initial development came from [@ErisDS](https://github.com/ErisDS) and the [Ghost Project](https://github.com/TryGhost/Ghost).
  - Development is sponsored by [Mapbox](https://www.mapbox.com/)
 
+## FAQ
+
+See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/FAQ).
+
 ## Depends
 
  - Node.js 0.10.x or 0.8.x

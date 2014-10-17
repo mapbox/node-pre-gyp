@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.29
+
+ - Added support for semver `build`.
+ - Fixed support for downloading from urls that include `+`.
+
 ## 0.5.28
 
  - Now reporting unix style paths only in reveal command

@@ -406,10 +406,12 @@ Remember this publishing is not the same as `npm publish`. We're just talking ab
 
 [Travis](https://travis-ci.org/) can push to S3 after a successful build and supports both:
 
- - Ubuntu Precise and OS X
+ - Ubuntu Precise and OS X (64 bit)
  - Multiple Node.js versions
 
 For an example of doing this see [node-add-example's .travis.yml](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/.travis.yml).
+
+Note: if you need 32 bit binaries, this can be done from a 64 bit travis machine. See [the node-sqlite3 scripts for an example of doing this](https://github.com/mapbox/node-sqlite3/blob/bae122aa6a2b8a45f6b717fab24e207740e32b5d/scripts/build_against_node.sh#L54-L74).
 
 Below is a guide to getting set up:
 

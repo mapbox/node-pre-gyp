@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.5.30
+
+ - Repackaged with latest bundled deps
+
 ## 0.5.29
 
  - Added support for semver `build`.

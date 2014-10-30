@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.5.31
+
+ - Added support for deducing node_abi for node.js runtime from previous release if the series is even
+ - Added support for --target=0.10.33
+
 ## 0.5.30
 
  - Repackaged with latest bundled deps

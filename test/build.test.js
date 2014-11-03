@@ -16,7 +16,7 @@ function run(command,app,opts,cb) {
         command += ' -C ' + path.join(__dirname,app.name);
     }
     if (process.platform === 'win32') {
-        commang += ' --msvs_version=2013 '
+        command += ' --msvs_version=2013 '
     }
     command += ' ' + app.args;
     cp.exec(command,opts, cb);

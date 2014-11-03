@@ -46,7 +46,7 @@ describe('build', function() {
     apps.forEach(function(app) {
 
         it(app.name + ' builds ' + app.args, function(done) {
-            run('node-pre-gyp rebuild --fallback-to-build', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp rebuild --fallback-to-build --loglevel=silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.equal(stderr,'');

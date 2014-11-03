@@ -48,6 +48,7 @@ describe('build', function() {
         it(app.name + ' builds ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --loglevel=silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
+                console.log(stdout);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.equal(stderr,'');
                 done();
@@ -57,6 +58,7 @@ describe('build', function() {
         it(app.name + ' builds with custom --target ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
+                console.log(stdout);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.equal(stderr,'');
                 done();
@@ -66,6 +68,7 @@ describe('build', function() {
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
+                console.log(stdout);
                 assert.equal(stderr,'');
                 var module_path = stdout.trim();
                 assert.ok(module_path.search(app.name) > -1);

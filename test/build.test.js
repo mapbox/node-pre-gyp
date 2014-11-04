@@ -36,6 +36,10 @@ var apps = [
         'args': '--custom_include_path=../include --debug'
     }
     ,{
+        'name': 'app2',
+        'args': '--custom_include_path=../include --toolset=cpp11'
+    }
+    ,{
         'name': 'app3',
         'args': ''
     }

@@ -18,7 +18,9 @@ describe('versioning', function() {
         }
         var opts = versioning.evaluate(mock_package_json, {});
         assert.equal(opts.remote_path,"./test/v0.1.0/Release/0.1.0/");
-        assert.equal(opts.module_path,path.join(process.cwd(),"lib/binding/Release/test"));
+        // Node v0.11.x on windows lowercases C:// when path.join is called
+        // https://github.com/joyent/node/issues/7031
+        assert.equal(path.normalize(opts.module_path),path.join(process.cwd(),"lib/binding/Release/test"));
         var opts_toolset = versioning.evaluate(mock_package_json, {toolset:"custom-toolset"});
         assert.equal(opts_toolset.remote_path,"./test/v0.1.0/Release/0.1.0/custom-toolset/");
     });

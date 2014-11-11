@@ -10,9 +10,9 @@
     "main": "./lib/index.js",
     "binary": {
         "module_name": "app2",
-        "module_path": "./lib/binding/{configuration}/{toolset}/{name}",
+        "module_path": "./lib/binding/{configuration}/{name}",
         "remote_path": "./{name}/v{version}/{configuration}/{version}/{toolset}/",
-        "package_name": "{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{toolset}-{node_abi}-{platform}-{arch}.tar.gz",
+        "package_name": "{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{node_abi}-{platform}-{arch}.tar.gz",
         "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
     },
     "scripts": {

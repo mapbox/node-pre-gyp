@@ -108,32 +108,19 @@ process.on('exit', function(err) {
     console.log(JSON.stringify(sorted,null,2));
 })
 
-var versions_doc = 'http://nodejs.org/dist/npm-versions.txt';
-http.get(url.parse(versions_doc), function(res) {
-    if (res.statusCode != 200) {
-      throw new Error("server returned " + res.statusCode + ' for: ' + versions_doc);
-    }
-    res.setEncoding('utf8');
-    var body = '';
-    res.on('data', function (chunk) {
-      body += chunk;
-    });
-    res.on('end',function(err) {
-      var lines = body.split('\n').map(function(line) { return line.split(' ')[0].slice(1); }).filter(function(line) { return (line.length && line != 'node'); });
-      lines.push('0.11.12');
-      lines.push('0.11.13');
-      lines.push('0.11.14');
-      lines.push('0.10.27');
-      lines.push('0.10.28');
-      lines.push('0.10.29');
-      lines.push('0.10.30');
-      lines.push('0.10.31');
-      lines.push('0.10.32');
-      lines.forEach(function(ver) {
-          get(ver,function(err,version,node_abi,v8_version) {
-            cross[version] = {node_abi:node_abi,v8:v8_version};
-          });
-      });
+var lines = [];
+for (var i=0;i<=28;++i) {
+  lines.push('0.8.'+i);
+}
+for (var i=0;i<=33;++i) {
+  lines.push('0.10.'+i);
+}
+for (var i=0;i<=14;++i) {
+  lines.push('0.11.'+i);
+}
+lines.forEach(function(ver) {
+    get(ver,function(err,version,node_abi,v8_version) {
+      cross[version] = {node_abi:node_abi,v8:v8_version};
     });
 });
 

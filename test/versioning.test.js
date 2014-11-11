@@ -3,7 +3,7 @@ var versioning = require('../lib/util/versioning.js');
 var assert = require('assert');
 
 describe('versioning', function() {
-    it('should normalize double slash', function() {
+    it.only('should normalize double slash', function() {
         var mock_package_json = {
             "name"   : "test",
             "main"   : "test.js",
@@ -17,8 +17,10 @@ describe('versioning', function() {
             }
         }
         var opts = versioning.evaluate(mock_package_json, {});
-        assert.equal(opts.remote_path,"test/v0.1.0/Release/0.1.0/");
+        assert.equal(opts.remote_path,"./test/v0.1.0/Release/0.1.0/");
         assert.equal(opts.module_path,path.join(process.cwd(),"lib/binding/Release/test"));
+        var opts_toolset = versioning.evaluate(mock_package_json, {toolset:"custom-toolset"});
+        assert.equal(opts_toolset.remote_path,"./test/v0.1.0/Release/0.1.0/custom-toolset/");
     });
 
     it('should detect abi for node process', function() {

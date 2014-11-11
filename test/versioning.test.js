@@ -3,7 +3,7 @@ var versioning = require('../lib/util/versioning.js');
 var assert = require('assert');
 
 describe('versioning', function() {
-    it.only('should normalize double slash', function() {
+    it('should normalize double slash', function() {
         var mock_package_json = {
             "name"   : "test",
             "main"   : "test.js",

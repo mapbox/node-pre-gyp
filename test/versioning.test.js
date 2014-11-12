@@ -31,9 +31,9 @@ describe('versioning', function() {
             v8: '3.14.5.9',
             modules: '11',
         }
-        var abi = versioning.get_node_abi_for_process('node',mock_process_versions);
+        var abi = versioning.get_node_abi('node',mock_process_versions);
         assert.equal(abi,'node-v11');
-        assert.equal(versioning.get_runtime_abi('node',undefined),versioning.get_node_abi_for_process('node',process.versions));
+        assert.equal(versioning.get_runtime_abi('node',undefined),versioning.get_node_abi('node',process.versions));
     });
 
     it('should detect abi for odd node target', function() {
@@ -41,7 +41,7 @@ describe('versioning', function() {
             node: '0.11.1000000',
             modules: 'bogus',
         }
-        var abi = versioning.get_node_abi_for_process('node',mock_process_versions);
+        var abi = versioning.get_node_abi('node',mock_process_versions);
         assert.equal(abi,'node-v0.11.1000000');
     });
 
@@ -50,12 +50,12 @@ describe('versioning', function() {
             "node": '0.10.0',
             "modules": '11',
         }
-        assert.equal(versioning.get_runtime_abi('node','0.10.0'),versioning.get_node_abi_for_process('node',mock_process_versions));
+        assert.equal(versioning.get_runtime_abi('node','0.10.0'),versioning.get_node_abi('node',mock_process_versions));
         var mock_process_versions2 = {
             "node": '0.8.0',
             "v8": "3.11"
         }
-        assert.equal(versioning.get_runtime_abi('node','0.8.0'),versioning.get_node_abi_for_process('node',mock_process_versions2));
+        assert.equal(versioning.get_runtime_abi('node','0.8.0'),versioning.get_node_abi('node',mock_process_versions2));
     });
 
     it('should detect abi for node-webkit runtime', function() {

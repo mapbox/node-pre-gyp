@@ -152,6 +152,15 @@ describe('build', function() {
                 });
             });
 
+            it(app.name + ' can be reinstalled via remote ' + app.args, function(done) {
+                run('npm install --update-binary --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                    if (err) throw err;
+                    assert.equal(stderr,'');
+                    assert.notEqual(stdout,'');
+                    done();
+                });
+            });
+
             it(app.name + ' via remote passes tests ' + app.args, function(done) {
                 run('npm test', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) throw err;

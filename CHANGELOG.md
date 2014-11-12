@@ -6,6 +6,7 @@
  - Added support for `toolset` option in versioning. By default is an empty string but `--toolset=cpp11` can be passed to publish or select alternative binaries that target a custom toolset like C++11 (this is intended for targeting visual studio 2014).
  - Added support for `--no-rollback` option to request that a failed binary test leaves the binary module in place.
  - Added support for `--update-binary` option to request an existing binary be re-installed
+ - Added support for passing build options to node-gyp: `--nodedir`, `--disturl`, `--python`, and `--msvs_version`
 
 ## 0.5.31
 

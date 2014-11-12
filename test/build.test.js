@@ -61,20 +61,20 @@ describe('build', function() {
             })
         });
 
-        it(app.name + ' builds with custom --target ' + app.args, function(done) {
-            run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
-                assert.ok(stdout.search(app.name+'.node') > -1);
-                assert.equal(stderr,'');
-                done();
-            })
-        });
-
         it(app.name + ' passes --nodedir down to node-gyp ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
                 assert.ok(err);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.ok(stderr.indexOf('common.gypi not found' > -1));
+                done();
+            })
+        });
+
+        it(app.name + ' builds with custom --target ' + app.args, function(done) {
+            run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
+                if (err) throw err;
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.equal(stderr,'');
                 done();
             })
         });

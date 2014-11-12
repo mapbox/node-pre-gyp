@@ -4,7 +4,7 @@
 
  - BREAKING: node even releases like v0.11.x are now versioned on `major.minor.patch` instead of `NODE_MODULE_VERSION` (#124)
  - Added support for `toolset` option in versioning. By default is an empty string but `--toolset=cpp11` can be passed to publish or select alternative binaries that target a custom toolset like C++11 (this is intended for targeting visual studio 2014).
- - Added support for `--no-rollback` option to request a failed binary test leaves binary module in place.
+ - Added support for `--no-rollback` option to request that a failed binary test leaves the binary module in place.
 
 ## 0.5.31
 

@@ -2,11 +2,11 @@
 
 ## 0.6.0
 
- - BREAKING: node even releases like v0.11.x are now versioned on `major.minor.patch` instead of `NODE_MODULE_VERSION` (#124)
- - Added support for `toolset` option in versioning. By default is an empty string but `--toolset=cpp11` can be passed to publish or select alternative binaries that target a custom toolset like C++11 (this is intended for targeting visual studio 2014).
- - Added support for `--no-rollback` option to request that a failed binary test leaves the binary module in place.
- - Added support for `--update-binary` option to request an existing binary be re-installed
- - Added support for passing build options to node-gyp: `--nodedir`, `--disturl`, `--python`, and `--msvs_version`
+ - BREAKING: node odd releases like v0.11.x now use `major.minor.patch` for `{node_abi}` instead of `NODE_MODULE_VERSION` (#124)
+ - Added support for `toolset` option in versioning. By default is an empty string but `--toolset` can be passed to publish or install to select alternative binaries that target a custom toolset like C++11. For example to target Visual Studio 2014 modules like node-sqlite3 use `--toolset=v140`.
+ - Added support for `--no-rollback` option to request that a failed binary test does not remove the binary module leaves it in place.
+ - Added support for `--update-binary` option to request an existing binary be re-installed and the check for a valid local module be skipped.
+ - Added support for passing build options from `npm` through `node-pre-gyp` to `node-gyp`: `--nodedir`, `--disturl`, `--python`, and `--msvs_version`
 
 ## 0.5.31
 

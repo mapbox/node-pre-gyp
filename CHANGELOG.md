@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.1
+
+ - Fixed bundled `tar` version
+
 ## 0.6.0
 
  - BREAKING: node odd releases like v0.11.x now use `major.minor.patch` for `{node_abi}` instead of `NODE_MODULE_VERSION` (#124)

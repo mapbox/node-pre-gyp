@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version" : "0.6.0",
+  "version" : "0.6.1",
   "keywords": [
     "native",
     "addon",
@@ -50,6 +50,7 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
+    "prepublish":"npm ls",
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
     "test":"mocha -R spec --timeout 100000"
   }

@@ -161,7 +161,7 @@ It is **not recommended** to override this property unless you are also overridi
 Avoiding the version of your module in the `package_name` and instead only embedding in a directory name can be useful when you want to make a quick tag of your module that does not change any C++ code. In this case you can just copy binaries to the new version behind the scenes like:
 
 ```sh
-aws s3 sync s3://mapbox-node-binary/sqlite3/v3.0.3/ s3://mapbox-node-binary/sqlite3/v3.0.4/
+aws s3 sync --acl public-read s3://mapbox-node-binary/sqlite3/v3.0.3/ s3://mapbox-node-binary/sqlite3/v3.0.4/
 ```
 
 Note: This property supports variables based on [Versioning](#versioning).

@@ -50,16 +50,16 @@ View all possible commands:
 
     node-pre-gyp --help
 
-- clean - Removes the entire folder containing the compiled .node module
-- install - Attempts to install pre-built binary for module
-- reinstall - Runs "clean" and "install" at once
-- build - Attempts to compile the module by dispatching to node-gyp or nw-gyp
-- rebuild - Runs "clean" and "build" at once
-- package - Packs binary into tarball
-- testpackage - Tests that the staged package is valid
-- publish - Publishes pre-built binary
-- unpublish - Unpublishes pre-built binary
-- info - Fetches info on published binaries
+- clean - Remove the entire folder containing the compiled .node module
+- install - Install pre-built binary for module
+- reinstall - Run "clean" and "install" at once
+- build - Compile the module by dispatching to node-gyp or nw-gyp
+- rebuild - Run "clean" and "build" at once
+- package - Pack binary into tarball
+- testpackage - Test that the staged package is valid
+- publish - Publish pre-built binary
+- unpublish - Unpublish pre-built binary
+- info - Fetch info on published binaries
 
 You can also chain commands:
 
@@ -130,7 +130,7 @@ The name of your native node module. This value must:
 
 ###### module_path
 
-The location your native module is placed after a build. This should be an empty directory without other javascript files. This entire directory will be packaged in the binary tarball. When installing from a remote package this directory will be overwritten with the contents of the tarball.
+The location your native module is placed after a build. This should be an empty directory without other Javascript files. This entire directory will be packaged in the binary tarball. When installing from a remote package this directory will be overwritten with the contents of the tarball.
 
 Note: This property supports variables based on [Versioning](#versioning).
 
@@ -405,7 +405,7 @@ You might wish to publish binaries only on a specific commit. To do this you cou
     SET CM=%APPVEYOR_REPO_COMMIT_MESSAGE%
     if not "%CM%" == "%CM:[publish binary]=%" node-pre-gyp --msvs_version=2013 publish
 
-If your commit message contains special characters (e.g. `&`) this method might fail. An alternative is to use PowerShell, which gives you additional possibilites, like ignoring case by using `ToLower()`:
+If your commit message contains special characters (e.g. `&`) this method might fail. An alternative is to use PowerShell, which gives you additional possibilities, like ignoring case by using `ToLower()`:
 
     ps: if($env:APPVEYOR_REPO_COMMIT_MESSAGE.ToLower().Contains('[publish binary]')) { node-pre-gyp --msvs_version=2013 publish }
 
@@ -453,13 +453,32 @@ More details on travis encryption at http://about.travis-ci.org/docs/user/encryp
 
 Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
-If you want binaries for OS X change you have two options:
+If you want binaries for OS X too you have two options: using `multi-os` or creating a branch with `language: objective-c`.
 
- - Enable `multi-os` for your repo by emailing a request to `support@travis-ci.com`. More details at <http://docs.travis-ci.com/user/multi-os/>. An example of a repo using multi-os is [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/f69b89a078e2200fee54a9f897e6957bd627d8b7/.travis.yml#L4-L6).
- - Or, you can change the `language` and push to a different branch to build on OS X just when you commit to that branch. Details on this below:
+##### OS X publishing: Multi-OS
 
+You can build for both Linux and OS X in one go with this configuration:
 
-##### OS X publishing via a branch
+```yml
+os:
+  - linux
+  - osx
+```
+
+But this requires emailing a request to `support@travis-ci.com` for each repo you wish to have enabled. More details at <http://docs.travis-ci.com/user/multi-os/>.
+
+This also requires tweaking the code in `.travis.yml` to ensure it is cross platform. For example if you need to install a build dependency with `apt-get` on Linux and `brew` on OS X, then you'd need custom handling like:
+
+```yml
+- if [ $(uname -s) == 'Linux' ]; then apt-get install libpng-dev; fi;
+- if [ $(uname -s) == 'Darwin' ]; then brew install libpng; fi;
+```
+
+For an examples of repos using multi-os see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
+
+NOTE: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way (see below).
+
+##### OS X publishing: using `language: objective-c` in a branch
 
 Tweak your `.travis.yml` to use:
 
@@ -469,27 +488,25 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Note: using `language: objective-c` instead of `language: nodejs` looses node.js specific travis sugar like a matrix for multiple node.js versions.
-
-But you can replicate the lost behavior by replacing:
+Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this:
 
 ```yml
 node_js:
-  - "0.8"
   - "0.10"
+  - "0.11.14"
 ```
 
-With:
+But you can replicate the lost behavior by doing:
 
 ```yml
 env:
   matrix:
-    - export NODE_VERSION="0.8"
-    - export NODE_VERSION="0.10"
+    - NODE_VERSION="0.10"
+    - NODE_VERSION="0.11.14"
 
 before_install:
- - git clone https://github.com/creationix/nvm.git ./.nvm
- - source ./.nvm/nvm.sh
+ - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
+ - source ~/.nvm/nvm.sh
  - nvm install $NODE_VERSION
  - nvm use $NODE_VERSION
 ```
@@ -515,7 +532,7 @@ Remember this publishing is not the same as `npm publish`. We're just talking ab
 
 The `binary` properties of `module_path`, `remote_path`, and `package_name` support variable substitution. The strings are evaluated by `node-pre-gyp` depending on your system and any custom build flags you passed.
 
- - `node_abi`: The node C++ `ABI` number. This value is available in javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
+ - `node_abi`: The node C++ `ABI` number. This value is available in Javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
  - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32` unless the user passed the `--target_platform` option to override.
  - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
  - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.

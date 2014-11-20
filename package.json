@@ -43,7 +43,8 @@
   ],
   "devDependencies": {
     "aws-sdk":"*",
-    "mocha": "1.x"
+    "mocha": "1.x",
+    "retire": "0.3.x"
   },
   "engineStrict": true,
   "engines": {
@@ -52,6 +53,6 @@
   "scripts": {
     "prepublish":"npm ls",
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
-    "test":"mocha -R spec --timeout 100000"
+    "test":"retire -n && mocha -R spec --timeout 100000"
   }
 }

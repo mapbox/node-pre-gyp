@@ -457,11 +457,11 @@ Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install
 
 If you want binaries for OS X in addition to linux you have two options:
 
-1) [Using multi-OS](#os-x-publishing-multi-os)
+1) [Enabling multi-OS](#enabling-multi-os)
 
-2) [language: objective-c](#os-x-publishing-using-language-objective-c in a git branch).
+2) [Using `language: objective-c` in a git branch](#using-language-objective-c).
 
-##### OS X publishing: multi-OS
+##### Enabling multi-OS
 
 You can build for both Linux and OS X in one go with this configuration:
 
@@ -471,7 +471,7 @@ os:
   - osx
 ```
 
-But this requires emailing a request to `support@travis-ci.com` for each repo you wish to have enabled. More details at <http://docs.travis-ci.com/user/multi-os/>.
+This requires emailing a request to `support@travis-ci.com` for each repo you wish to have enabled. More details at <http://docs.travis-ci.com/user/multi-os/>.
 
 This also requires tweaking the code in `.travis.yml` to ensure it is cross platform. For example if you need to install a build dependency with `apt-get` on Linux and `brew` on OS X, then you'd need custom handling like:
 
@@ -482,9 +482,9 @@ This also requires tweaking the code in `.travis.yml` to ensure it is cross plat
 
 For detailed multi-OS examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
 
-Next learn about a few Travis [OS X Gochas](#osx-publishing-gochas).
+Next learn about a few [Travis OS X Gochas](#travis-osx-gochas).
 
-##### OS X publishing: using `language: objective-c`
+##### Using `language: objective-c`
 
 If your repo does not have multi-OS enabled, an alternative method for building for OS X is to tweak your `.travis.yml` to use:
 
@@ -494,10 +494,9 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Next learn about a few Travis [OS X Gochas](#osx-publishing-gochas).
+Next learn about a few [Travis OS X Gochas](#travis-osx-gochas).
 
-
-##### OSX Publishing Gochas
+##### Travis OS X Gochas
 
 First, unlike the Travis linux machines the OS X machines do not put `node-pre-gyp` on PATH by default. So to you will need to:
 

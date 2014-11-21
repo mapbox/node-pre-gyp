@@ -453,7 +453,10 @@ More details on travis encryption at http://about.travis-ci.org/docs/user/encryp
 
 Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
-If you want binaries for OS X too you have two options: using `multi-os` or creating a branch with `language: objective-c`.
+If you want binaries for OS X in addition to linux you have two options:
+
+1) Using [multi-os](#os-x-publishing-multi-os)
+2) [language: objective-c](#os-x-publishing-using-language-objective-c) in a git branch.
 
 ##### OS X publishing: Multi-OS
 
@@ -474,11 +477,11 @@ This also requires tweaking the code in `.travis.yml` to ensure it is cross plat
 - if [ $(uname -s) == 'Darwin' ]; then brew install libpng; fi;
 ```
 
-For an examples of repos using multi-os see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
+For multi-os examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
 
-NOTE: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way (see below).
+Note: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way. See [details on a cross platform way to install Node.js](##cross-platform-node-install).
 
-##### OS X publishing: using `language: objective-c` in a branch
+##### OS X publishing: using `language: objective-c`
 
 Tweak your `.travis.yml` to use:
 
@@ -488,15 +491,11 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this:
+Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this. So you need to bootstrap the installation of node.js in a cross platform way. See [details on a cross platform way to install Node.js](##os-x-publishing-cross-platform-node-install).
 
-```yml
-node_js:
-  - "0.10"
-  - "0.11.14"
-```
+##### Cross Platform Node Install
 
-But you can replicate the lost behavior by doing:
+By doing:
 
 ```yml
 env:
@@ -509,6 +508,14 @@ before_install:
  - source ~/.nvm/nvm.sh
  - nvm install $NODE_VERSION
  - nvm use $NODE_VERSION
+```
+
+You can easily recreate the previous behavior of this matrix:
+
+```yml
+node_js:
+  - "0.10"
+  - "0.11.14"
 ```
 
 #### 4) Publish when you want

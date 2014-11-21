@@ -453,13 +453,15 @@ More details on travis encryption at http://about.travis-ci.org/docs/user/encryp
 
 Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install`.
 
+##### OS X publishing
+
 If you want binaries for OS X in addition to linux you have two options:
 
-1) [Using Multi os](#os-x-publishing-multi-os)
+1) [Using multi-OS](#os-x-publishing-multi-os)
 
 2) [language: objective-c](#os-x-publishing-using-language-objective-c in a git branch).
 
-##### OS X publishing: Multi-OS
+##### OS X publishing: multi-OS
 
 You can build for both Linux and OS X in one go with this configuration:
 
@@ -478,13 +480,13 @@ This also requires tweaking the code in `.travis.yml` to ensure it is cross plat
 - if [ $(uname -s) == 'Darwin' ]; then brew install libpng; fi;
 ```
 
-For multi-os examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
+For detailed multi-OS examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
 
-Note: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way. See [Cross platform Node Install](#cross-platform-node-install) for details.
+Next learn about a few Travis [OS X Gochas](#osx-publishing-gochas).
 
 ##### OS X publishing: using `language: objective-c`
 
-If your repo does not have Multi OS enabled, an alternative method for building for OS X is to tweak your `.travis.yml` to use:
+If your repo does not have multi-OS enabled, an alternative method for building for OS X is to tweak your `.travis.yml` to use:
 
 ```yml
 language: objective-c
@@ -492,9 +494,18 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this. So you need to bootstrap the installation of node.js in a cross platform way. See [Cross platform Node Install](#cross-platform-node-install) for details.
+Next learn about a few Travis [OS X Gochas](#osx-publishing-gochas).
 
-##### Cross Platform Node Install
+
+##### OSX Publishing Gochas
+
+First, unlike the Travis linux machines the OS X machines do not put `node-pre-gyp` on PATH by default. So to you will need to:
+
+```sh
+export PATH=$(pwd)/node_modules/.bin:${PATH}
+```
+
+Second, the OS X machines doe not support using a matrix for installing node.js different versions. So you need to bootstrap the installation of node.js in a cross platform way. 
 
 By doing:
 

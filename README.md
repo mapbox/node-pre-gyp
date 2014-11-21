@@ -456,6 +456,7 @@ Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install
 If you want binaries for OS X in addition to linux you have two options:
 
 1) Using [multi-os](#os-x-publishing-multi-os)
+
 2) [language: objective-c](#os-x-publishing-using-language-objective-c) in a git branch.
 
 ##### OS X publishing: Multi-OS

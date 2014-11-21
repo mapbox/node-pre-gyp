@@ -455,9 +455,9 @@ Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install
 
 If you want binaries for OS X in addition to linux you have two options:
 
-1) Using [multi-os](#os-x-publishing-multi-os)
+1) [Using Multi os](#os-x-publishing-multi-os)
 
-2) [language: objective-c](#os-x-publishing-using-language-objective-c) in a git branch.
+2) [language: objective-c](#os-x-publishing-using-language-objective-c in a git branch).
 
 ##### OS X publishing: Multi-OS
 
@@ -480,11 +480,11 @@ This also requires tweaking the code in `.travis.yml` to ensure it is cross plat
 
 For multi-os examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
 
-Note: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way. See [details on a cross platform way to install Node.js](##cross-platform-node-install).
+Note: because the OS X machines don't yet support the `node_js:` shorthand you need to bootstrap the installation of node.js in a cross platform way. See [Cross platform Node Install](#cross-platform-node-install) for details.
 
 ##### OS X publishing: using `language: objective-c`
 
-Tweak your `.travis.yml` to use:
+If your repo does not have Multi OS enabled, an alternative method for building for OS X is to tweak your `.travis.yml` to use:
 
 ```yml
 language: objective-c
@@ -492,7 +492,7 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this. So you need to bootstrap the installation of node.js in a cross platform way. See [details on a cross platform way to install Node.js](##os-x-publishing-cross-platform-node-install).
+Note: using `language: objective-c` instead of `language: nodejs` looses the ability to use a matrix for installing node.js versions like this. So you need to bootstrap the installation of node.js in a cross platform way. See [Cross platform Node Install](#cross-platform-node-install) for details.
 
 ##### Cross Platform Node Install
 

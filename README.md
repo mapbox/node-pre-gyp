@@ -463,17 +463,36 @@ If you want binaries for OS X in addition to linux you have two options:
 
 ##### Enabling multi-OS
 
-You can build for both Linux and OS X in one go with this configuration:
-
-```yml
-os:
-  - linux
-  - osx
-```
-
 This requires emailing a request to `support@travis-ci.com` for each repo you wish to have enabled. More details at <http://docs.travis-ci.com/user/multi-os/>.
 
-This also requires tweaking the code in `.travis.yml` to ensure it is cross platform. For example if you need to install a build dependency with `apt-get` on Linux and `brew` on OS X, then you'd need custom handling like:
+Next you need to tweak the `.travis.yml` to ensure it is cross platform.
+
+Use a configuration like:
+
+```yml
+
+language: cpp
+
+os:
+- linux
+- osx
+
+env:
+  matrix:
+    - NODE_VERSION="0.10"
+    - NODE_VERSION="0.11.14"
+
+before_install:
+- rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
+- source ~/.nvm/nvm.sh
+- nvm install $NODE_VERSION
+- nvm use $NODE_VERSION
+```
+
+See [Travis OS X Gochas](#travis-os-x-gochas) for why we replace `language: node_js` and `node_js:` sections with `language: cpp` and a custom matrix.
+
+
+Also create platform specific sections for any deps that need install. For example if you need libpng:
 
 ```yml
 - if [ $(uname -s) == 'Linux' ]; then apt-get install libpng-dev; fi;
@@ -481,8 +500,6 @@ This also requires tweaking the code in `.travis.yml` to ensure it is cross plat
 ```
 
 For detailed multi-OS examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
-
-Next learn about a few [Travis OS X Gochas](#travis-osx-gochas).
 
 ##### Using `language: objective-c`
 
@@ -494,7 +511,7 @@ language: objective-c
 
 Keep that change in a different git branch and sync that when you want binaries published.
 
-Next learn about a few [Travis OS X Gochas](#travis-osx-gochas).
+Next learn about a few [Travis OS X Gochas](#travis-os-x-gochas).
 
 ##### Travis OS X Gochas
 

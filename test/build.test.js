@@ -56,7 +56,9 @@ describe('build', function() {
             run('node-pre-gyp rebuild --fallback-to-build --loglevel=silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
                 assert.ok(stdout.search(app.name+'.node') > -1);
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 done();
             })
         });
@@ -74,7 +76,9 @@ describe('build', function() {
             run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
                 assert.ok(stdout.search(app.name+'.node') > -1);
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 done();
             })
         });
@@ -82,7 +86,9 @@ describe('build', function() {
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 var module_path = stdout.trim();
                 assert.ok(module_path.search(app.name) > -1);
                 assert.ok(existsSync(module_path));
@@ -95,7 +101,9 @@ describe('build', function() {
         it(app.name + ' passes tests ' + app.args, function(done) {
             run('npm test', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                 if (err) throw err;
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 assert.notEqual(stdout,'');
                 done();
             });
@@ -104,7 +112,9 @@ describe('build', function() {
         it(app.name + ' packages ' + app.args, function(done) {
             run('node-pre-gyp package', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 done();
             });
         });
@@ -112,7 +122,9 @@ describe('build', function() {
         it(app.name + ' package is valid ' + app.args, function(done) {
             run('node-pre-gyp testpackage', app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
-                assert.equal(stderr,'');
+                if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                    assert.equal(stderr,'');
+                }
                 done();
             });
         });
@@ -122,7 +134,9 @@ describe('build', function() {
             it(app.name + ' publishes ' + app.args, function(done) {
                 run('node-pre-gyp unpublish publish', app, {}, function(err,stdout,stderr) {
                     if (err) throw err;
-                    assert.equal(stderr,'');
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
                     assert.notEqual(stdout,'');
                     done();
                 });
@@ -136,7 +150,9 @@ describe('build', function() {
                     var package_name = stdout.trim();
                     run('node-pre-gyp info', app, {}, function(err,stdout,stderr) {
                         if (err) throw err;
-                        assert.equal(stderr,'');
+                        if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                            assert.equal(stderr,'');
+                        }
                         assert.ok(stdout.indexOf(package_name) > -1);
                         done();
                     });
@@ -146,7 +162,9 @@ describe('build', function() {
             it(app.name + ' can be uninstalled ' + app.args, function(done) {
                 run('node-pre-gyp clean', app, {}, function(err,stdout,stderr) {
                     if (err) throw err;
-                    assert.equal(stderr,'');
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
                     assert.notEqual(stdout,'');
                     done();
                 });
@@ -155,7 +173,9 @@ describe('build', function() {
             it(app.name + ' can be installed via remote ' + app.args, function(done) {
                 run('npm install --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) throw err;
-                    assert.equal(stderr,'');
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
                     assert.notEqual(stdout,'');
                     done();
                 });
@@ -164,7 +184,9 @@ describe('build', function() {
             it(app.name + ' can be reinstalled via remote ' + app.args, function(done) {
                 run('npm install --update-binary --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) throw err;
-                    assert.equal(stderr,'');
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
                     assert.notEqual(stdout,'');
                     done();
                 });
@@ -173,7 +195,9 @@ describe('build', function() {
             it(app.name + ' via remote passes tests ' + app.args, function(done) {
                 run('npm test', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) throw err;
-                    assert.equal(stderr,'');
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
                     assert.notEqual(stdout,'');
                     done();
                 });

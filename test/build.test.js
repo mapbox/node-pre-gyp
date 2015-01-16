@@ -2,6 +2,7 @@ var assert = require('assert');
 var cp = require('child_process')
 var path = require('path');
 var existsSync = require('fs').existsSync || require('path').existsSync;
+var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
 
 var cmd_path = path.join(__dirname,'../bin/');
 var sep = ':';
@@ -49,7 +50,33 @@ var apps = [
     }
 ]
 
+
+function getFutureVersion(current_version) {
+    var current_parts = current_version.split('.').map(function(i) { return +i });
+    var major = current_parts[0];
+    var minor = current_parts[1];
+    var patch = current_parts[2];
+    while (true) {
+        ++patch;
+        var new_target = '' + major + '.' + minor + '.' + patch;
+        if (new_target == current_version) {
+            break;
+        }
+        if (abi_crosswalk[new_target]) {
+            continue;
+        } else {
+            // excellent: we ran past the versions known in abi_crosswalk
+            return new_target;
+        }
+
+
+    }
+    // failed to find suitable future version that we expect is ABI compatible
+    return undefined;
+}
+
 describe('build', function() {
+    var future_version = getFutureVersion("0.10.33");
     apps.forEach(function(app) {
 
         it(app.name + ' builds ' + app.args, function(done) {
@@ -82,6 +109,21 @@ describe('build', function() {
                 done();
             })
         });
+
+        if (future_version) {
+            it(app.name + ' builds with custom --target that is greater than know in ABI crosswalk ' + app.args, function(done) {
+                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout,stderr) {
+                    if (err) throw err;
+                    assert.ok(stdout.search(app.name+'.node') > -1);
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
+                    done();
+                })
+            });
+        } else {
+            it.skip(app.name + ' builds with custom --target that is greater than know in ABI crosswalk ' + app.args, function() {});
+        }
 
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {

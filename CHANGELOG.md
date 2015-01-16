@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.6.2
+
+ - Support for io.js >= v1.0.2
+ - Deferred require of `request` and `tar` to help speed up command line usage of `node-pre-gyp`.
+
 ## 0.6.1
 
  - Fixed bundled `tar` version

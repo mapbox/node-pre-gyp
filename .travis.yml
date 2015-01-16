@@ -8,7 +8,6 @@ os:
 env:
   matrix:
    - NODE_VERSION="0.10.33"
-   - NODE_VERSION="0.10.35"
    - NODE_VERSION="0.11.13"
    - NODE_VERSION="0.11.14"
   global:

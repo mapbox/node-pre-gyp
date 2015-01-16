@@ -111,7 +111,7 @@ describe('build', function() {
         });
 
         if (future_version) {
-            it(app.name + ' builds with custom --target that is greater than know in ABI crosswalk ' + app.args, function(done) {
+            it(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function(done) {
                 run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout,stderr) {
                     if (err) throw err;
                     assert.ok(stdout.search(app.name+'.node') > -1);
@@ -122,7 +122,7 @@ describe('build', function() {
                 })
             });
         } else {
-            it.skip(app.name + ' builds with custom --target that is greater than know in ABI crosswalk ' + app.args, function() {});
+            it.skip(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function() {});
         }
 
         it(app.name + ' is found ' + app.args, function(done) {

@@ -68,8 +68,6 @@ function getFutureVersion(current_version) {
             // excellent: we ran past the versions known in abi_crosswalk
             return new_target;
         }
-
-
     }
     // failed to find suitable future version that we expect is ABI compatible
     return undefined;
@@ -99,6 +97,34 @@ describe('build', function() {
             })
         });
 
+        if (future_version) {
+            it(app.name + ' builds with custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
+                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout,stderr) {
+                    if (err) throw err;
+                    assert.ok(stdout.search(app.name+'.node') > -1);
+                    // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
+                    done();
+                })
+            });
+
+            it(app.name + ' cleans up after installing custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
+                run('node-pre-gyp clean --target='+future_version, app, {}, function(err,stdout,stderr) {
+                    if (err) throw err;
+                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
+                        assert.equal(stderr,'');
+                    }
+                    assert.notEqual(stdout,'');
+                    done();
+                });
+            });
+
+        } else {
+            it.skip(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function() {});
+            it.skip(app.name + ' builds with custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function() {});
+        }
+
+        // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all future test will fail
+
         it(app.name + ' builds with custom --target ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
                 if (err) throw err;
@@ -109,21 +135,6 @@ describe('build', function() {
                 done();
             })
         });
-
-        if (future_version) {
-            it(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout,stderr) {
-                    if (err) throw err;
-                    assert.ok(stdout.search(app.name+'.node') > -1);
-                    if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
-                        assert.equal(stderr,'');
-                    }
-                    done();
-                })
-            });
-        } else {
-            it.skip(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function() {});
-        }
 
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {

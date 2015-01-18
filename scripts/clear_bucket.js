@@ -1,12 +1,9 @@
+"use strict";
 
-var fs = require('fs')
-  , path = require('path')
-  , log = require('npmlog')
-  , versioning = require('../lib/util/versioning.js')
-  , s3_setup = require('../lib/util/s3_setup.js')
-  , mkdirp = require('mkdirp')
-  , existsAsync = fs.exists || path.exists
-  , config = require('rc')("node_pre_gyp",{acl:"public-read"});
+var fs = require('fs');
+var versioning = require('../lib/util/versioning.js');
+var s3_setup = require('../lib/util/s3_setup.js');
+var config = require('rc')("node_pre_gyp",{acl:"public-read"});
 
 if(!config.accessKeyId  || !config.secretAccessKey) {
     throw new Error("Unknown S3 `accessKeyId` and `secretAccessKey`");
@@ -28,7 +25,7 @@ if(!config.accessKeyId  || !config.secretAccessKey) {
               var s3_obj_opts = {  Bucket: config.bucket,
                                    Key: item.Key
                                 };
-              s3.deleteObject(s3_obj_opts, function(err, resp) {
+              s3.deleteObject(s3_obj_opts, function(err) {
                   if (err) console.log(err);
                   console.log('deleted '+ item.Key);
               });

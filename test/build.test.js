@@ -1,5 +1,7 @@
+"use strict";
+
 var assert = require('assert');
-var cp = require('child_process')
+var cp = require('child_process');
 var path = require('path');
 var existsSync = require('fs').existsSync || require('path').existsSync;
 var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
@@ -7,7 +9,7 @@ var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
 var cmd_path = path.join(__dirname,'../bin/');
 var sep = ':';
 if (process.platform === 'win32') {
-    sep = ';'
+    sep = ';';
 }
 process.env.PATH = cmd_path + sep + process.env.PATH;
 process.env.NODE_PATH = path.join(__dirname,'../lib/');
@@ -17,7 +19,7 @@ function run(command,app,opts,cb) {
         command += ' -C ' + path.join(__dirname,app.name);
     }
     if (process.platform === 'win32') {
-        command += ' --msvs_version=2013 '
+        command += ' --msvs_version=2013 ';
     }
     command += ' ' + app.args;
     cp.exec(command,opts, cb);
@@ -27,32 +29,32 @@ var apps = [
     {
         'name': 'app1',
         'args': ''
-    }
-    ,{
+    },
+    {
         'name': 'app2',
         'args': '--custom_include_path=../include'
-    }
-    ,{
+    },
+    {
         'name': 'app2',
         'args': '--custom_include_path=../include --debug'
-    }
-    ,{
+    },
+    {
         'name': 'app2',
         'args': '--custom_include_path=../include --toolset=cpp11'
-    }
-    ,{
+    },
+    {
         'name': 'app3',
         'args': ''
-    }
-    ,{
+    },
+    {
         'name': 'app4',
         'args': ''
     }
-]
+];
 
 
 function getFutureVersion(current_version) {
-    var current_parts = current_version.split('.').map(function(i) { return +i });
+    var current_parts = current_version.split('.').map(function(i) { return +i; });
     var major = current_parts[0];
     var minor = current_parts[1];
     var patch = current_parts[2];
@@ -85,7 +87,7 @@ describe('build', function() {
                     assert.equal(stderr,'');
                 }
                 done();
-            })
+            });
         });
 
         it(app.name + ' passes --nodedir down to node-gyp ' + app.args, function(done) {
@@ -94,17 +96,17 @@ describe('build', function() {
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.ok(stderr.indexOf('common.gypi not found' > -1));
                 done();
-            })
+            });
         });
 
         if (future_version) {
             it(app.name + ' builds with custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout,stderr) {
+                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout) {
                     if (err) throw err;
                     assert.ok(stdout.search(app.name+'.node') > -1);
                     // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
                     done();
-                })
+                });
             });
 
             it(app.name + ' cleans up after installing custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
@@ -133,7 +135,7 @@ describe('build', function() {
                     assert.equal(stderr,'');
                 }
                 done();
-            })
+            });
         });
 
         it(app.name + ' is found ' + app.args, function(done) {

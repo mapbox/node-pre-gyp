@@ -44,15 +44,24 @@
   "devDependencies": {
     "aws-sdk":"*",
     "mocha": "1.x",
-    "retire": "0.3.x"
+    "retire": "0.3.x",
+    "jshint": "^2.5.10"
+  },
+  "jshintConfig": {
+    "node": true,
+    "globalstrict": true,
+    "undef": true,
+    "unused": true,
+    "noarg": true,
+    "mocha": true
   },
   "engineStrict": true,
   "engines": {
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "prepublish":"npm ls",
+    "prepublish":"retire -n && npm ls && jshint test/*.js lib/*.js lib/util/*.js scripts/*js bin/node-pre-gyp",
     "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
-    "test":"retire -n && mocha -R spec --timeout 100000"
+    "test":"mocha -R spec --timeout 100000"
   }
 }

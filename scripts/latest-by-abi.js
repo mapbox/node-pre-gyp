@@ -1,3 +1,5 @@
+"use strict";
+
 var semver = require('semver');
 var data = require('../lib/util/abi_crosswalk.json');
 
@@ -10,7 +12,7 @@ Object.keys(data).forEach(function(v) {
     } else {
         abi = 'node-v'+o.node_abi;
     }
-    if (targets[abi] == undefined) {
+    if (targets[abi] === undefined) {
         targets[abi] = v;
     } else {
         var cur = targets[abi];
@@ -18,8 +20,8 @@ Object.keys(data).forEach(function(v) {
             targets[abi] = v;
         }
     }
-})
+});
 
 Object.keys(targets).forEach(function(k) {
     console.log(targets[k]);
-})
+});

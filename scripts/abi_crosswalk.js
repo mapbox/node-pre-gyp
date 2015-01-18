@@ -1,5 +1,6 @@
+"use strict";
+
 var https = require("https");
-var http = require("http");
 var url = require('url');
 var semver = require('semver');
 
@@ -26,11 +27,11 @@ var sortObjectByKey = function(obj){
     // sort keys
     keys.sort(function(a,b) {
       if (semver.gt(a, b)) {
-        return 1
+        return 1;
       }
       return -1;
     });
-    len = keys.length;
+    var len = keys.length;
 
     for (i = 0; i < len; i++)
     {
@@ -58,7 +59,8 @@ function get(ver,callback) {
         body += chunk;
       });
       res.on('end',function(err) {
-        var term = 'define NODE_MODULE_VERSION'
+        if (err) throw err;
+        var term = 'define NODE_MODULE_VERSION';
         var idx = body.indexOf(term);
         var following = body.slice(idx);
         var end = following.indexOf('\n');
@@ -69,7 +71,7 @@ function get(ver,callback) {
           value = value.slice(0,value.indexOf(' '));
         }
         var int_val = +value;
-        if (int_val != undefined) {
+        if (int_val !== undefined) {
           // TODO - if val is 1 then we need to get the v8 version from
           // https://github.com/joyent/node/blob/master/deps/v8/src/version.cc
           var v8path = v8template.replace('{VERSION}',ver);
@@ -84,12 +86,13 @@ function get(ver,callback) {
                 body += chunk;
               });
               res.on('end',function(err) {
-                  var term = 'define MAJOR_VERSION'
+                  if (err) throw err;
+                  var term = 'define MAJOR_VERSION';
                   var idx = body.indexOf(term);
                   var following = body.slice(idx);
                   var end = following.indexOf('\n');
                   var major = following.slice(term.length,end).trim();
-                  var term1 = 'define MINOR_VERSION'
+                  var term1 = 'define MINOR_VERSION';
                   var idx1 = body.indexOf(term1);
                   var following1 = body.slice(idx1);
                   var end1 = following1.indexOf('\n');
@@ -99,14 +102,15 @@ function get(ver,callback) {
               });
           });
         }
-      })
+      });
     });
 }
 
 process.on('exit', function(err) {
+    if (err) throw err;
     var sorted = sortObjectByKey(cross);
     console.log(JSON.stringify(sorted,null,2));
-})
+});
 
 var lines = [];
 for (var i=0;i<=28;++i) {

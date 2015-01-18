@@ -61,7 +61,7 @@
   },
   "scripts": {
     "prepublish":"retire -n && npm ls && jshint test/*.js lib/*.js lib/util/*.js scripts/*js bin/node-pre-gyp",
-    "update-crosswalk":"node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json",
+    "update-crosswalk":"node scripts/abi_crosswalk.js",
     "test":"mocha -R spec --timeout 100000"
   }
 }

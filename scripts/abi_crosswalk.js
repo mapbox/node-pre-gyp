@@ -3,7 +3,7 @@
 var https = require("https");
 var url = require('url');
 var semver = require('semver');
-
+var fs = require('fs');
 /*
 
 // usage:
@@ -108,28 +108,49 @@ function get(ver,callback) {
 
 process.on('exit', function(err) {
     if (err) throw err;
-    var sorted = sortObjectByKey(cross);
-    console.log(JSON.stringify(sorted,null,2));
+    fs.writeFileSync('./lib/util/abi_crosswalk.json',JSON.stringify(sortObjectByKey(cross),null,2));
 });
 
-var lines = [];
-for (var i=0;i<=28;++i) {
-  lines.push('0.8.'+i);
+// These need to be manually read and updated based on http://nodejs.org/dist
+// because I'm not keen to parse the html and in the http://nodejs.org/dist/npm-versions.txt worked well.
+// but joyent has stopped updating this https://github.com/joyent/node/issues/7409
+var update_node = false;
+if (update_node) {
+  var lines = [];
+  for (var i=0;i<=28;++i) {
+    lines.push('0.8.'+i);
+  }
+  for (var i=0;i<=35;++i) {
+    lines.push('0.10.'+i);
+  }
+  for (var i=0;i<=14;++i) {
+    lines.push('0.11.'+i);
+  }
+  lines.forEach(function(ver) {
+      get(ver,function(err,version,node_abi,v8_version) {
+        cross[version] = {node_abi:node_abi,v8:v8_version};
+      });
+  });
+} else {
+   cross = JSON.parse(fs.readFileSync('./lib/util/abi_crosswalk.json'));
 }
-for (var i=0;i<=33;++i) {
-  lines.push('0.10.'+i);
-}
-for (var i=0;i<=14;++i) {
-  lines.push('0.11.'+i);
-}
-lines.forEach(function(ver) {
-    get(ver,function(err,version,node_abi,v8_version) {
-      cross[version] = {node_abi:node_abi,v8:v8_version};
+
+// IO.js
+// thanks to rvagg, this is so simple
+https.get('https://iojs.org/download//release/index.json', function(res) {
+  if (res.statusCode != 200 ) {
+    throw new Error("server returned " + res.statusCode + ' for iojs.org');
+  }
+  res.setEncoding('utf8');
+  var body = '';
+  res.on('data', function (chunk) {
+    body += chunk;
+  });
+  res.on('end',function(err) {
+    if (err) throw err;
+    var releases = JSON.parse(body);
+    releases.forEach(function(release) {
+        cross[release.version.replace('v','')] = {node_abi:+release.modules,v8:release.v8.split('.').slice(0,2).join('.')};
     });
+  });
 });
-
-/*
-get("0.8.1",function(err,version,node_abi,v8_version) {
-    cross[version] = {node_abi:node_abi,v8:v8_version};
-});
-*/

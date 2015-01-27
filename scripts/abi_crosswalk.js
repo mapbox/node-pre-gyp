@@ -114,16 +114,16 @@ process.on('exit', function(err) {
 // These need to be manually read and updated based on http://nodejs.org/dist
 // because I'm not keen to parse the html and in the http://nodejs.org/dist/npm-versions.txt worked well.
 // but joyent has stopped updating this https://github.com/joyent/node/issues/7409
-var update_node = false;
+var update_node = true;
 if (update_node) {
   var lines = [];
   for (var i=0;i<=28;++i) {
     lines.push('0.8.'+i);
   }
-  for (var i=0;i<=35;++i) {
+  for (var i=0;i<=34;++i) {
     lines.push('0.10.'+i);
   }
-  for (var i=0;i<=14;++i) {
+  for (var i=0;i<=15;++i) {
     lines.push('0.11.'+i);
   }
   lines.forEach(function(ver) {

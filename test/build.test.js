@@ -74,6 +74,13 @@ function getPreviousVersion(current_version) {
     return undefined;
 }
 
+function on_error(err,stdout,stderr) {
+    var msg = err.message;
+    msg += '\nstdout: ' + stdout;
+    msg += '\nstderr: ' + stderr;
+    throw new Error(msg);
+}
+
 describe('build', function() {
     var current_version = process.version.replace('v','');
     var previous_version = getPreviousVersion(current_version);
@@ -90,7 +97,7 @@ describe('build', function() {
 
         it(app.name + ' builds ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --loglevel=silent', app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
@@ -113,8 +120,8 @@ describe('build', function() {
             new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
             var opts = { env : new_env };
             it(app.name + ' builds with custom --target='+previous_version+' that is greater than known version in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp rebuild --fallback-to-build --target='+previous_version, app, opts, function(err,stdout) {
-                    if (err) throw err;
+                run('node-pre-gyp rebuild --fallback-to-build --target='+previous_version, app, opts, function(err,stdout,stderr) {
+                    if (err) return on_error(err,stdout,stderr);
                     assert.ok(stdout.search(app.name+'.node') > -1);
                     // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
                     done();
@@ -123,7 +130,7 @@ describe('build', function() {
 
             it(app.name + ' cleans up after installing custom --target='+previous_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
                 run('node-pre-gyp clean --target='+previous_version, app, opts, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }
@@ -141,7 +148,7 @@ describe('build', function() {
 
         it(app.name + ' builds with custom --target ' + app.args, function(done) {
             run('node-pre-gyp rebuild --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
@@ -152,7 +159,7 @@ describe('build', function() {
 
         it(app.name + ' is found ' + app.args, function(done) {
             run('node-pre-gyp reveal module_path --silent', app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
                 }
@@ -167,7 +174,7 @@ describe('build', function() {
 
         it(app.name + ' passes tests ' + app.args, function(done) {
             run('npm test', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
                 }
@@ -178,7 +185,7 @@ describe('build', function() {
 
         it(app.name + ' packages ' + app.args, function(done) {
             run('node-pre-gyp package', app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
                 }
@@ -188,7 +195,7 @@ describe('build', function() {
 
         it(app.name + ' package is valid ' + app.args, function(done) {
             run('node-pre-gyp testpackage', app, {}, function(err,stdout,stderr) {
-                if (err) throw err;
+                if (err) return on_error(err,stdout,stderr);
                 if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                     assert.equal(stderr,'');
                 }
@@ -200,7 +207,7 @@ describe('build', function() {
 
             it(app.name + ' publishes ' + app.args, function(done) {
                 run('node-pre-gyp unpublish publish', app, {}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }
@@ -211,12 +218,12 @@ describe('build', function() {
 
             it(app.name + ' info shows it ' + app.args, function(done) {
                 run('node-pre-gyp reveal package_name --silent', app, {}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     assert.equal(stderr,'');
                     assert.notEqual(stdout,'');
                     var package_name = stdout.trim();
                     run('node-pre-gyp info', app, {}, function(err,stdout,stderr) {
-                        if (err) throw err;
+                        if (err) return on_error(err,stdout,stderr);
                         if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                             assert.equal(stderr,'');
                         }
@@ -228,7 +235,7 @@ describe('build', function() {
 
             it(app.name + ' can be uninstalled ' + app.args, function(done) {
                 run('node-pre-gyp clean', app, {}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }
@@ -239,7 +246,7 @@ describe('build', function() {
 
             it(app.name + ' can be installed via remote ' + app.args, function(done) {
                 run('npm install --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }
@@ -250,7 +257,7 @@ describe('build', function() {
 
             it(app.name + ' can be reinstalled via remote ' + app.args, function(done) {
                 run('npm install --update-binary --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }
@@ -261,7 +268,7 @@ describe('build', function() {
 
             it(app.name + ' via remote passes tests ' + app.args, function(done) {
                 run('npm test', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
-                    if (err) throw err;
+                    if (err) return on_error(err,stdout,stderr);
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
                     }

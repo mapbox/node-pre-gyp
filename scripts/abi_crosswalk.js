@@ -6,8 +6,9 @@ var semver = require('semver');
 var fs = require('fs');
 /*
 
-// usage:
-node scripts/abi_crosswalk.js > lib/util/abi_crosswalk.json
+usage:
+
+node scripts/abi_crosswalk.js
 
 */
 
@@ -120,11 +121,14 @@ if (update_node) {
   for (var i=0;i<=28;++i) {
     lines.push('0.8.'+i);
   }
-  for (var i=0;i<=34;++i) {
+  for (var i=0;i<=36;++i) {
     lines.push('0.10.'+i);
   }
-  for (var i=0;i<=15;++i) {
+  for (var i=0;i<=16;++i) {
     lines.push('0.11.'+i);
+  }
+  for (var i=0;i<=0;++i) {
+    lines.push('0.12.'+i);
   }
   lines.forEach(function(ver) {
       get(ver,function(err,version,node_abi,v8_version) {

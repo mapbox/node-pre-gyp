@@ -5,6 +5,8 @@ var cp = require('child_process');
 var path = require('path');
 var existsSync = require('fs').existsSync || require('path').existsSync;
 var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
+var os = require('os');
+var fs = require('fs');
 
 var cmd_path = path.join(__dirname,'../bin/');
 var sep = ':';
@@ -53,21 +55,18 @@ var apps = [
 ];
 
 
-function getFutureVersion(current_version) {
+function getPreviousVersion(current_version) {
     var current_parts = current_version.split('.').map(function(i) { return +i; });
     var major = current_parts[0];
     var minor = current_parts[1];
     var patch = current_parts[2];
-    while (true) {
-        ++patch;
+    while (patch > 0) {
+        --patch;
         var new_target = '' + major + '.' + minor + '.' + patch;
         if (new_target == current_version) {
             break;
         }
         if (abi_crosswalk[new_target]) {
-            continue;
-        } else {
-            // excellent: we ran past the versions known in abi_crosswalk
             return new_target;
         }
     }
@@ -76,7 +75,17 @@ function getFutureVersion(current_version) {
 }
 
 describe('build', function() {
-    var future_version = getFutureVersion("0.10.33");
+    var current_version = process.version.replace('v','');
+    var previous_version = getPreviousVersion(current_version);
+    var target_abi;
+    var testing_crosswalk;
+    if (previous_version !== undefined && previous_version !== current_version) {
+        target_abi = {};
+        target_abi[previous_version] = abi_crosswalk[previous_version];
+        testing_crosswalk = path.join(os.tmpdir(),'fake_abi_crosswalk.json');
+        fs.writeFileSync(testing_crosswalk,JSON.stringify(target_abi));
+    }
+
     apps.forEach(function(app) {
 
         it(app.name + ' builds ' + app.args, function(done) {
@@ -99,9 +108,12 @@ describe('build', function() {
             });
         });
 
-        if (future_version) {
-            it(app.name + ' builds with custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp rebuild --fallback-to-build --target='+future_version, app, {}, function(err,stdout) {
+        if (target_abi) {
+            var new_env = JSON.parse(JSON.stringify(process.env));
+            new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
+            var opts = { env : new_env };
+            it(app.name + ' builds with custom --target='+previous_version+' that is greater than known version in ABI crosswalk ' + app.args, function(done) {
+                run('node-pre-gyp rebuild --fallback-to-build --target='+previous_version, app, opts, function(err,stdout) {
                     if (err) throw err;
                     assert.ok(stdout.search(app.name+'.node') > -1);
                     // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
@@ -109,8 +121,8 @@ describe('build', function() {
                 });
             });
 
-            it(app.name + ' cleans up after installing custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp clean --target='+future_version, app, {}, function(err,stdout,stderr) {
+            it(app.name + ' cleans up after installing custom --target='+previous_version+' that is greater than known in ABI crosswalk ' + app.args, function(done) {
+                run('node-pre-gyp clean --target='+previous_version, app, opts, function(err,stdout,stderr) {
                     if (err) throw err;
                     if (stderr != "child_process: customFds option is deprecated, use stdio instead.\n") {
                         assert.equal(stderr,'');
@@ -122,7 +134,7 @@ describe('build', function() {
 
         } else {
             it.skip(app.name + ' builds with custom --target that is greater than known in ABI crosswalk ' + app.args, function() {});
-            it.skip(app.name + ' builds with custom --target='+future_version+' that is greater than known in ABI crosswalk ' + app.args, function() {});
+            it.skip(app.name + ' builds with custom --target='+previous_version+' that is greater than known in ABI crosswalk ' + app.args, function() {});
         }
 
         // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all future test will fail

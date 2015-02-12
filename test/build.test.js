@@ -24,7 +24,13 @@ function run(command,app,opts,cb) {
         command += ' --msvs_version=2013 ';
     }
     command += ' ' + app.args;
-    cp.exec(command,opts, cb);
+    cp.exec(command,opts,function(err,stdout,stderr) {
+        if (err) {
+            var error = new Error("Command failed '" + command + "'");
+            return cb(error,stdout,stderr);
+        }
+        return cb(err,stdout,stderr);
+    });
 }
 
 var apps = [
@@ -96,7 +102,7 @@ describe('build', function() {
     apps.forEach(function(app) {
 
         it(app.name + ' builds ' + app.args, function(done) {
-            run('node-pre-gyp rebuild --fallback-to-build --loglevel=silent', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp rebuild --fallback-to-build --loglevel=error', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
@@ -217,7 +223,7 @@ describe('build', function() {
             });
 
             it(app.name + ' info shows it ' + app.args, function(done) {
-                run('node-pre-gyp reveal package_name --silent', app, {}, function(err,stdout,stderr) {
+                run('node-pre-gyp reveal package_name', app, {}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     assert.equal(stderr,'');
                     assert.notEqual(stdout,'');
@@ -245,7 +251,7 @@ describe('build', function() {
             });
 
             it(app.name + ' can be installed via remote ' + app.args, function(done) {
-                run('npm install --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm install --fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');
@@ -256,7 +262,7 @@ describe('build', function() {
             });
 
             it(app.name + ' can be reinstalled via remote ' + app.args, function(done) {
-                run('npm install --update-binary --fallback-to-build=false --silent', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm install --update-binary --fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');

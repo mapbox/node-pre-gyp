@@ -30,7 +30,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js 0.10.x or 0.8.x
+ - Node.js 0.12.x -> 0.8.x
 
 ## Install
 

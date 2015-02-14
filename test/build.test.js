@@ -10,8 +10,10 @@ var fs = require('fs');
 
 var cmd_path = path.join(__dirname,'../bin/');
 var sep = ':';
+var propertyPrefix = '';
 if (process.platform === 'win32') {
     sep = ';';
+    propertyPrefix = '/p:';
 }
 process.env.PATH = cmd_path + sep + process.env.PATH;
 process.env.NODE_PATH = path.join(__dirname,'../lib/');
@@ -26,7 +28,7 @@ function run(prog,command,args,app,opts,cb) {
     }
     final_cmd += ' ' + app.args;
     final_cmd += ' ' + args;
-    //console.log(final_cmd)
+    // console.log(final_cmd)
     cp.exec(final_cmd,opts,function(err,stdout,stderr) {
         if (err) {
             var error = new Error("Command failed '" + command + "'");
@@ -100,13 +102,31 @@ describe('build', function() {
 
     apps.forEach(function(app) {
 
-        it(app.name + ' configures ' + app.args, function(done) {
-            run('node-pre-gyp', 'configure', '--fallback-to-build', app, {}, function(err,stdout,stderr) {
+        it(app.name + ' installs', function(done) {
+            run('node-pre-gyp', 'install', '--fallback-to-build', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
-                assert.equal(stdout,'');
+                assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');
                 }
+                done();
+            });
+        });
+
+        it(app.name + ' configures ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '', app, {}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                    assert.equal(stderr,'');
+                }
+                done();
+            });
+        });
+
+        it(app.name + ' configures with unparsed options ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                assert.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
                 done();
             });
         });
@@ -118,6 +138,15 @@ describe('build', function() {
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');
                 }
+                done();
+            });
+        });
+
+        it(app.name + ' builds with unparsed options ' + app.args, function(done) {
+            run('node-pre-gyp', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
                 done();
             });
         });

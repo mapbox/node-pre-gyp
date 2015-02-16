@@ -106,9 +106,6 @@ describe('build', function() {
             run('node-pre-gyp', 'install', '--fallback-to-build', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
-                if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
-                    assert.equal(stderr,'');
-                }
                 done();
             });
         });

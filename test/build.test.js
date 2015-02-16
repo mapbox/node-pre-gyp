@@ -140,11 +140,14 @@ describe('build', function() {
         });
 
         it(app.name + ' builds with unparsed options ' + app.args, function(done) {
-            run('node-pre-gyp', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'clean', '', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
-                assert.ok(stdout.search(app.name+'.node') > -1);
-                assert.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
-                done();
+                run('node-pre-gyp', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, function(err,stdout,stderr) {
+                    if (err) return on_error(err,stdout,stderr);
+                    assert.ok(stdout.search(app.name+'.node') > -1);
+                    assert.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
+                    done();
+                });
             });
         });
 

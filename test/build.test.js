@@ -61,6 +61,13 @@ var apps = [
     }
 ];
 
+function detectIOJS(current_version) {
+    var current_parts = current_version.split('.').map(function(i) { return +i; });
+    if (current_parts[0] == 1) return true;
+    return false;
+}
+
+var is_iojs = detectIOJS(process.version.replace('v',''));
 
 function getPreviousVersion(current_version) {
     var current_parts = current_version.split('.').map(function(i) { return +i; });
@@ -270,14 +277,24 @@ describe('build', function() {
         });
 
         it(app.name + ' passes tests ' + app.args, function(done) {
-            run('npm','test','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
-                if (err) return on_error(err,stdout,stderr);
-                if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+            // work around https://github.com/iojs/io.js/issues/751
+            if (is_iojs && process.platform === 'win32') {
+                run('iojs','index.js','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                    if (err) return on_error(err,stdout,stderr);
                     assert.equal(stderr,'');
-                }
-                assert.notEqual(stdout,'');
-                done();
-            });
+                    assert.equal(stdout,'');
+                    done();
+                });
+            } else {
+                run('npm','test','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                    if (err) return on_error(err,stdout,stderr);
+                    if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                        assert.equal(stderr,'');
+                    }
+                    assert.notEqual(stdout,'');
+                    done();
+                });
+            }
         });
 
         it(app.name + ' packages ' + app.args, function(done) {

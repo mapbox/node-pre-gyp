@@ -215,10 +215,12 @@ describe('build', function() {
             new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
             var opts = { env : new_env };
             it(app.name + ' builds with custom --target='+previous_version+' that is greater than known version in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp', 'rebuild', '--fallback-to-build --target='+previous_version, app, opts, function(err,stdout,stderr) {
+                run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target='+previous_version, app, opts, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     assert.ok(stdout.search(app.name+'.node') > -1);
-                    // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
+                    if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                        assert.equal(stderr,'');
+                    }
                     done();
                 });
             });
@@ -239,10 +241,10 @@ describe('build', function() {
             it.skip(app.name + ' builds with custom --target='+previous_version+' that is greater than known in ABI crosswalk ' + app.args, function() {});
         }
 
-        // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all future test will fail
+        // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all following tests will fail
 
         it(app.name + ' builds with custom --target ' + app.args, function(done) {
-            run('node-pre-gyp', 'rebuild', '--fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {

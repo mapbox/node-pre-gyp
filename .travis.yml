@@ -9,7 +9,6 @@ env:
   matrix:
    - NODE_VERSION="0.10.36"
    - NODE_VERSION="0.12.0"
-   - NODE_VERSION="iojs-v1.0.4"
    - NODE_VERSION="iojs-v1.2.0"
   global:
    - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=

@@ -102,16 +102,8 @@ describe('build', function() {
 
     apps.forEach(function(app) {
 
-        it(app.name + ' installs', function(done) {
-            run('node-pre-gyp', 'install', '--fallback-to-build', app, {}, function(err,stdout,stderr) {
-                if (err) return on_error(err,stdout,stderr);
-                assert.ok(stdout.search(app.name+'.node') > -1);
-                done();
-            });
-        });
-
         it(app.name + ' configures ' + app.args, function(done) {
-            run('node-pre-gyp', 'configure', '', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'configure', '--loglevel=error', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');
@@ -124,6 +116,14 @@ describe('build', function() {
             run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
+                done();
+            });
+        });
+
+        it(app.name + ' installs', function(done) {
+            run('node-pre-gyp', 'install', '--update-binary --fallback-to-build', app, {}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                assert.ok(stdout.search(app.name+'.node') > -1);
                 done();
             });
         });
@@ -151,11 +151,61 @@ describe('build', function() {
             });
         });
 
-        it(app.name + ' passes --nodedir down to node-gyp ' + app.args, function(done) {
-            run('node-pre-gyp', 'rebuild', '--fallback-to-build --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
+        // make sure node-gyp options are passed by passing invalid values
+        // and ensuring the expected errors are returned from node-gyp
+        //Python executable "foo"
+        it(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
                 assert.ok(err);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.ok(stderr.indexOf('common.gypi not found' > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(done) {
+            run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.ok(stderr.indexOf('common.gypi not found' > -1));
+                done();
+            });
+        });
+
+        // TODO - for some reason these do not error on windows
+        if (process.platform !== 'win32') {
+            it(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+                run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
+                    assert.ok(err);
+                    assert.ok(stdout.search(app.name+'.node') > -1);
+                    assert.ok(stderr.indexOf("Can't find Python executable" > -1));
+                    done();
+                });
+            });
+
+            it(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(done) {
+                run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
+                    assert.ok(err);
+                    assert.ok(stdout.search(app.name+'.node') > -1);
+                    assert.ok(stderr.indexOf("Can't find Python executable" > -1));
+                    done();
+                });
+            });
+        }
+        // note: --ensure=false tells node-gyp to attempt to re-download the node headers
+        // even if they already exist on disk at ~/.node-gyp/{version}
+        it(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stderr.indexOf('Invalid protocol: null' > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, function(done) {
+            run('npm', 'install', '--build-from-source --ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stderr.indexOf('Invalid protocol: null' > -1));
                 done();
             });
         });
@@ -165,10 +215,12 @@ describe('build', function() {
             new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
             var opts = { env : new_env };
             it(app.name + ' builds with custom --target='+previous_version+' that is greater than known version in ABI crosswalk ' + app.args, function(done) {
-                run('node-pre-gyp', 'rebuild', '--fallback-to-build --target='+previous_version, app, opts, function(err,stdout,stderr) {
+                run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target='+previous_version, app, opts, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     assert.ok(stdout.search(app.name+'.node') > -1);
-                    // no stderr checking here since downloading a new version will bring in various expected stderr from node-gyp
+                    if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                        assert.equal(stderr,'');
+                    }
                     done();
                 });
             });
@@ -189,10 +241,10 @@ describe('build', function() {
             it.skip(app.name + ' builds with custom --target='+previous_version+' that is greater than known in ABI crosswalk ' + app.args, function() {});
         }
 
-        // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all future test will fail
+        // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all following tests will fail
 
         it(app.name + ' builds with custom --target ' + app.args, function(done) {
-            run('node-pre-gyp', 'rebuild', '--fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target='+process.versions.node, app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {

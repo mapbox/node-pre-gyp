@@ -60,8 +60,8 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "prepublish":"retire -n && npm ls && jshint test/*.js lib/*.js lib/util/*.js scripts/*js bin/node-pre-gyp",
+    "prepublish":"retire -n && npm ls && jshint test/*js",
     "update-crosswalk":"node scripts/abi_crosswalk.js",
-    "test":"mocha -R spec --timeout 100000"
+    "test":"jshint lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 100000"
   }
 }

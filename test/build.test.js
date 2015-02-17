@@ -103,7 +103,7 @@ describe('build', function() {
     apps.forEach(function(app) {
 
         it(app.name + ' configures ' + app.args, function(done) {
-            run('node-pre-gyp', 'configure', '--ensure=true --loglevel=http', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'configure', '', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');

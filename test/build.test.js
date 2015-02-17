@@ -102,16 +102,8 @@ describe('build', function() {
 
     apps.forEach(function(app) {
 
-        it(app.name + ' installs', function(done) {
-            run('node-pre-gyp', 'install', '--fallback-to-build', app, {}, function(err,stdout,stderr) {
-                if (err) return on_error(err,stdout,stderr);
-                assert.ok(stdout.search(app.name+'.node') > -1);
-                done();
-            });
-        });
-
         it(app.name + ' configures ' + app.args, function(done) {
-            run('node-pre-gyp', 'configure', '', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'configure', '--ensure=true --loglevel=http', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');
@@ -124,6 +116,14 @@ describe('build', function() {
             run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 assert.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
+                done();
+            });
+        });
+
+        it(app.name + ' installs', function(done) {
+            run('node-pre-gyp', 'install', '--update-binary --fallback-to-build', app, {}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                assert.ok(stdout.search(app.name+'.node') > -1);
                 done();
             });
         });
@@ -151,11 +151,59 @@ describe('build', function() {
             });
         });
 
-        it(app.name + ' passes --nodedir down to node-gyp ' + app.args, function(done) {
-            run('node-pre-gyp', 'rebuild', '--fallback-to-build --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
+        // make sure node-gyp options are passed by passing invalid values
+        // and ensuring the expected errors are returned from node-gyp
+        //Python executable "foo"
+        it(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
                 assert.ok(err);
                 assert.ok(stdout.search(app.name+'.node') > -1);
                 assert.ok(stderr.indexOf('common.gypi not found' > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(done) {
+            run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.ok(stderr.indexOf('common.gypi not found' > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.ok(stderr.indexOf("Can't find Python executable" > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stdout.search(app.name+'.node') > -1);
+                assert.ok(stderr.indexOf("Can't find Python executable" > -1));
+                done();
+            });
+        });
+
+        // note: --ensure=false tells node-gyp to attempt to re-download the node headers
+        // even if they already exist on disk at ~/.node-gyp/{version}
+        it(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(done) {
+            run('node-pre-gyp', 'configure', '--ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stderr.indexOf('Invalid protocol: null' > -1));
+                done();
+            });
+        });
+
+        it(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, function(done) {
+            run('npm', 'install', '--build-from-source --ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
+                assert.ok(err);
+                assert.ok(stderr.indexOf('Invalid protocol: null' > -1));
                 done();
             });
         });

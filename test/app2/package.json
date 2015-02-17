@@ -17,6 +17,6 @@
     },
     "scripts": {
         "install":"node-pre-gyp install --fallback-to-build",
-        "test":"node ./lib/index.js"
+        "test":"node index.js"
     }
 }

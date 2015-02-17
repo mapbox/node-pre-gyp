@@ -1,5 +1,19 @@
 # node-pre-gyp changelog
 
+## 0.6.4
+
+ - Improved support for `io.js` (@fengmk2)
+ - Test coverage improvements (@mikemorris)
+ - Fixed support for `--dist-url` that regressed in 0.6.3
+
+## 0.6.3
+
+ - Added support for passing raw options to node-gyp using `--` separator. Flags passed after
+   the `--` to `node-pre-gyp configure` will be passed directly to gyp while flags passed
+   after the `--` will be passed directly to make/visual studio.
+ - Added `node-pre-gyp configure` command to be able to call `node-gyp configure` directly
+ - Fix issue with require validation not working on windows 7 (@edgarsilva)
+
 ## 0.6.2
 
  - Support for io.js >= v1.0.2

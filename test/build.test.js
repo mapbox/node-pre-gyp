@@ -7,6 +7,7 @@ var existsSync = require('fs').existsSync || require('path').existsSync;
 var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
 var os = require('os');
 var fs = require('fs');
+var rm = require('rimraf');
 
 var cmd_path = path.join(__dirname,'../bin/');
 var sep = ':';
@@ -44,8 +45,8 @@ var apps = [
         'args': ''
     },
     {
-        'name': 'app2',
-        'args': '--custom_include_path=../include --debug'
+         'name': 'app2',
+         'args': '--custom_include_path=../include --debug'
     },
     {
         'name': 'app2',
@@ -95,19 +96,98 @@ function on_error(err,stdout,stderr) {
     throw new Error(msg);
 }
 
-describe('build', function() {
-    var current_version = process.version.replace('v','');
-    var previous_version = getPreviousVersion(current_version);
-    var target_abi;
-    var testing_crosswalk;
-    if (previous_version !== undefined && previous_version !== current_version) {
-        target_abi = {};
-        target_abi[previous_version] = abi_crosswalk[previous_version];
-        testing_crosswalk = path.join(os.tmpdir(),'fake_abi_crosswalk.json');
-        fs.writeFileSync(testing_crosswalk,JSON.stringify(target_abi));
-    }
+var current_version = process.version.replace('v','');
+var previous_version = getPreviousVersion(current_version);
+var target_abi;
+var testing_crosswalk;
+if (previous_version !== undefined && previous_version !== current_version) {
+    target_abi = {};
+    target_abi[previous_version] = abi_crosswalk[previous_version];
+    testing_crosswalk = path.join(os.tmpdir(),'fake_abi_crosswalk.json');
+    fs.writeFileSync(testing_crosswalk,JSON.stringify(target_abi));
+}
 
-    apps.forEach(function(app) {
+describe('simple build and test', function() {
+
+    var app = {"name": "app2", "args":'--custom_include_path=../include'};
+
+    before(function(done) {
+        // clear out entire binding directory
+        // to ensure no stale builds. This is needed
+        // because "node-pre-gyp clean" only removes
+        // the current target and not alternative builds
+        var binding_directory = path.join(__dirname,app.name,'lib/binding');
+        if (fs.existsSync(binding_directory)) {
+            rm(binding_directory,done);
+        }
+    });
+
+    it(app.name + ' rebuilds ' + app.args, function(done) {
+        run('node-pre-gyp', 'rebuild', '--loglevel=error', app, {}, function(err,stdout,stderr) {
+            if (err) return on_error(err,stdout,stderr);
+            if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                assert.equal(stderr,'');
+            }
+            done();
+        });
+    });
+
+    it(app.name + ' passes tests ' + app.args, function(done) {
+        // work around https://github.com/iojs/io.js/issues/751
+        if (is_iojs && process.platform === 'win32') {
+            run('iojs','index.js','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                assert.equal(stderr,'');
+                // we expect app2 to console.log on success
+                if (app.name == 'app2') {
+                    if (app.args.indexOf('--debug') > -1) {
+                        assert.ok(stdout.indexOf('Loaded Debug build') > -1);
+                    } else {
+                        assert.ok(stdout.indexOf('Loaded Release build') > -1);
+                    }
+                } else {
+                    assert.equal(stdout,'');
+                }
+                done();
+            });
+        } else {
+            run('npm','test','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                if (err) return on_error(err,stdout,stderr);
+                if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
+                    assert.equal(stderr,'');
+                }
+                // we expect app2 to console.log on success
+                if (app.name == 'app2') {
+                    if (app.args.indexOf('--debug') > -1) {
+                        assert.ok(stdout.indexOf('Loaded Debug build') > -1);
+                    } else {
+                        assert.ok(stdout.indexOf('Loaded Release build') > -1);
+                    }
+                } else {
+                    // we expect some npm output
+                    assert.notEqual(stdout,'');
+                }
+                done();
+            });
+        }
+    });
+});
+
+
+apps.forEach(function(app) {
+
+    describe('complex builds for ' + app.name, function() {
+
+        before(function(done) {
+            // clear out entire binding directory
+            // to ensure no stale builds. This is needed
+            // because "node-pre-gyp clean" only removes
+            // the current target and not alternative builds
+            var binding_directory = path.join(__dirname,app.name,'lib/binding');
+            if (fs.existsSync(binding_directory)) {
+                rm(binding_directory,done);
+            }
+        });
 
         it(app.name + ' configures ' + app.args, function(done) {
             run('node-pre-gyp', 'configure', '--loglevel=error', app, {}, function(err,stdout,stderr) {
@@ -282,7 +362,16 @@ describe('build', function() {
                 run('iojs','index.js','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     assert.equal(stderr,'');
-                    assert.equal(stdout,'');
+                    // we expect app2 to console.log on success
+                    if (app.name == 'app2') {
+                        if (app.args.indexOf('--debug') > -1) {
+                            assert.ok(stdout.indexOf('Loaded Debug build') > -1);
+                        } else {
+                            assert.ok(stdout.indexOf('Loaded Release build') > -1);
+                        }
+                    } else {
+                        assert.equal(stdout,'');
+                    }
                     done();
                 });
             } else {
@@ -291,7 +380,17 @@ describe('build', function() {
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');
                     }
-                    assert.notEqual(stdout,'');
+                    // we expect app2 to console.log on success
+                    if (app.name == 'app2') {
+                        if (app.args.indexOf('--debug') > -1) {
+                            assert.ok(stdout.indexOf('Loaded Debug build') > -1);
+                        } else {
+                            assert.ok(stdout.indexOf('Loaded Release build') > -1);
+                        }
+                    } else {
+                        // we expect some npm output
+                        assert.notEqual(stdout,'');
+                    }
                     done();
                 });
             }

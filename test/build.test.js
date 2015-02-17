@@ -270,7 +270,7 @@ describe('build', function() {
         });
 
         it(app.name + ' passes tests ' + app.args, function(done) {
-            run('npm','test','', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+            run('npm','test','', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                 if (err) return on_error(err,stdout,stderr);
                 if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                     assert.equal(stderr,'');
@@ -342,7 +342,7 @@ describe('build', function() {
             });
 
             it(app.name + ' can be installed via remote ' + app.args, function(done) {
-                run('npm', 'install', '--fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm', 'install', '--fallback-to-build=false', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');
@@ -353,7 +353,7 @@ describe('build', function() {
             });
 
             it(app.name + ' can be reinstalled via remote ' + app.args, function(done) {
-                run('npm', 'install', '--update-binary --fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm', 'install', '--update-binary --fallback-to-build=false', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');
@@ -364,7 +364,7 @@ describe('build', function() {
             });
 
             it(app.name + ' via remote passes tests ' + app.args, function(done) {
-                run('npm', 'install', '', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
+                run('npm', 'install', '', app, {env : process.env, cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     if (err) return on_error(err,stdout,stderr);
                     if (stderr.indexOf("child_process: customFds option is deprecated, use stdio instead") == -1) {
                         assert.equal(stderr,'');

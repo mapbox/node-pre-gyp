@@ -119,6 +119,8 @@ describe('simple build and test', function() {
         var binding_directory = path.join(__dirname,app.name,'lib/binding');
         if (fs.existsSync(binding_directory)) {
             rm(binding_directory,done);
+        } else {
+            done();
         }
     });
 
@@ -174,9 +176,9 @@ describe('simple build and test', function() {
 });
 
 
-apps.forEach(function(app) {
+describe('complex builds', function() {
 
-    describe('complex builds for ' + app.name, function() {
+    apps.forEach(function(app) {
 
         before(function(done) {
             // clear out entire binding directory
@@ -186,6 +188,8 @@ apps.forEach(function(app) {
             var binding_directory = path.join(__dirname,app.name,'lib/binding');
             if (fs.existsSync(binding_directory)) {
                 rm(binding_directory,done);
+            } else {
+                done();
             }
         });
 

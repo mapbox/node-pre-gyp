@@ -23,12 +23,6 @@ else
     # assume 64 bit linux
     wget https://s3.amazonaws.com/node-webkit/v${NODE_WEBKIT_VERSION}/node-webkit-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
     tar xf node-webkit-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
-    sudo apt-get install -y xvfb libasound2 libx11-6 libglib2.0-0 libgtk2.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libcairo2 libfreetype6 libfontconfig1 libxcomposite1 libasound2 libxdamage1 libxext6 libxfixes3 libnss3 libnspr4 libgconf-2-4 libexpat1 libdbus-1-3 libudev0
-    # wget https://gist.githubusercontent.com/kez/2028715/raw/86f5084edb5cb0b9cdc1675ff310fad5e7579ee0/xvfb
-    # sudo mv xvfb /etc/init.d/xvfb
-    # sudo chmod 755 /etc/init.d/xvfb
-    # sudo update-rc.d xvfb defaults
-    # sudo /etc/init.d/xvfb start
     export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start;
     export PATH=${BASE}/node-webkit-v0.8.5-linux-x64:${PATH}
 fi

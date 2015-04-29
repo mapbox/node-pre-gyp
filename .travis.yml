@@ -1,9 +1,17 @@
 language: cpp
 
-# http://docs.travis-ci.com/user/multi-os/
 os:
   - linux
   - osx
+
+sudo: false
+
+addons:
+  postgresql: "9.4"
+  apt:
+    # for testing node-webkit
+    packages: ['xvfb','libasound2','libx11-6','libglib2.0-0','libgtk2.0-0','libatk1.0-0','libgdk-pixbuf2.0-0','libcairo2','libfreetype6','libfontconfig1','libxcomposite1','libasound2','libxdamage1','libxext6','libxfixes3','libnss3','libnspr4','libgconf-2-4','libexpat1','libdbus-1-3','libudev0']
+
 
 env:
   matrix:

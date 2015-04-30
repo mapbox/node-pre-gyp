@@ -1,5 +1,12 @@
 # node-pre-gyp changelog
 
+
+## 0.6.5
+
+ - Now respecting `npm_config_node_gyp` (https://github.com/npm/npm/pull/4887)
+ - Updated to semver@4.3.2
+ - Updated known node v0.12.x versions and io.js 1.x versions.
+
 ## 0.6.4
 
  - Improved support for `io.js` (@fengmk2)

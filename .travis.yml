@@ -17,8 +17,7 @@ env:
   matrix:
    - NODE_VERSION="0.10.38"
    - NODE_VERSION="0.12.2"
-   # https://github.com/mapbox/node-pre-gyp/issues/158
-   #- NODE_VERSION="iojs-v1.8.1"
+   - NODE_VERSION="2.0.0"
   global:
    - secure: nxPEbegqL+ckZ03BvGJSOlfcNuoJvj+rkLbBmmOEuTrk79lvY0+gjpmvWu4gGXMt89Vz+iAJB29ERaUdriKzlmYmebhWEdwQ/aayUv2sNA0eduvr4TALW2iLfLqryeE4449xnuEvz469AVWxO8xoX9KgmrwTLnkMR9SbQHxB6jU=
    - secure: Fs0ilCVBL0DUMkd5vzLGL/5K364kLj1LpSKzwZpPvlU6Gx2jW+Zt59RfM1yOTCvrPWWNb+jc8jz8lbbPXAgUnYNmL54WkIjapr8yPIClw6AtNOSuPtL+zGVGT7FZEO7EntNuEtTer6Wj8IuWUT7myeAezKzNogYg7HyaO4JsoJc=

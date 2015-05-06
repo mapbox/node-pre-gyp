@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.7
+
+ - Fixed `node_abi` versions for io.js 1.1.x -> 1.8.x (should be 43, but was stored as 42) (refs https://github.com/iojs/build/issues/94)
+
 ## 0.6.6
 
  - Updated with known io.js 2.0.0 version

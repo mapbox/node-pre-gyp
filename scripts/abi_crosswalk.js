@@ -121,7 +121,7 @@ if (update_node) {
   for (var i=0;i<=28;++i) {
     lines.push('0.8.'+i);
   }
-  for (var i=0;i<=36;++i) {
+  for (var i=0;i<=38;++i) {
     lines.push('0.10.'+i);
   }
   for (var i=0;i<=16;++i) {
@@ -141,7 +141,8 @@ if (update_node) {
 
 // IO.js
 // thanks to rvagg, this is so simple
-https.get('https://iojs.org/download//release/index.json', function(res) {
+// https://github.com/iojs/build/issues/94
+https.get('https://iojs.org/download/release/index.json', function(res) {
   if (res.statusCode != 200 ) {
     throw new Error("server returned " + res.statusCode + ' for iojs.org');
   }

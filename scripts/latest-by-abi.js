@@ -23,5 +23,6 @@ Object.keys(data).forEach(function(v) {
 });
 
 Object.keys(targets).forEach(function(k) {
-    console.log(targets[k]);
+    var version = targets[k];
+    console.log(version,data[version]);
 });

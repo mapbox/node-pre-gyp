@@ -260,7 +260,7 @@ Now you need to publish builds for all the platforms and node versions you wish 
 
 #### 8) You're done!
 
-Now publish your module to the npm registry. Users will now be able to install your module from a binary. 
+Now publish your module to the npm registry. Users will now be able to install your module from a binary.
 
 What will happen is this:
 
@@ -521,7 +521,7 @@ First, unlike the Travis linux machines the OS X machines do not put `node-pre-g
 export PATH=$(pwd)/node_modules/.bin:${PATH}
 ```
 
-Second, the OS X machines doe not support using a matrix for installing node.js different versions. So you need to bootstrap the installation of node.js in a cross platform way. 
+Second, the OS X machines doe not support using a matrix for installing node.js different versions. So you need to bootstrap the installation of node.js in a cross platform way.
 
 By doing:
 
@@ -579,3 +579,15 @@ The `binary` properties of `module_path`, `remote_path`, and `package_name` supp
 
 
 The options are visible in the code at <https://github.com/mapbox/node-pre-gyp/blob/612b7bca2604508d881e1187614870ba19a7f0c5/lib/util/versioning.js#L114-L127>
+
+# Download binary files from a mirror
+
+S3 is broken in China for the well known reason.
+
+Using the `npm` config argument: `--{module_name}_binary_host_mirror` can download binary files through a mirror.
+
+e.g.: Install [v8-profiler](https://www.npmjs.com/package/v8-profiler) from `npm`.
+
+```bash
+$ npm install v8-profiler --profiler_binary_host_mirror=https://npm.taobao.org/mirrors/node-inspector/
+```

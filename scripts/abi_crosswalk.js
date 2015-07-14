@@ -121,13 +121,13 @@ if (update_node) {
   for (var i=0;i<=28;++i) {
     lines.push('0.8.'+i);
   }
-  for (var i=0;i<=39;++i) {
+  for (var i=0;i<=40;++i) {
     lines.push('0.10.'+i);
   }
   for (var i=0;i<=16;++i) {
     lines.push('0.11.'+i);
   }
-  for (var i=0;i<=6;++i) {
+  for (var i=0;i<=7;++i) {
     lines.push('0.12.'+i);
   }
   lines.forEach(function(ver) {

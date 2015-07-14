@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.6.8
+
+ - Upgraded `semver` and `rimraf` deps
+ - Updated known node and io.js versions
+
 ## 0.6.7
 
  - Fixed `node_abi` versions for io.js 1.1.x -> 1.8.x (should be 43, but was stored as 42) (refs https://github.com/iojs/build/issues/94)

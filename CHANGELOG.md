@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.6.9
+
+ - Upgraded `rc` dep
+ - Updated known io.js version: v2.4.0
+
 ## 0.6.8
 
  - Upgraded `semver` and `rimraf` deps

@@ -14,8 +14,9 @@ node scripts/abi_crosswalk.js
 
 var cross = {};
 
-var template = 'https://raw.githubusercontent.com/joyent/node/v{VERSION}/src/';
-var v8template = 'https://raw.githubusercontent.com/joyent/node/v{VERSION}/deps/v8/src/version.cc';
+var template = 'https://raw.githubusercontent.com/nodejs/node/v{VERSION}/src/';
+var v8template = 'https://raw.githubusercontent.com/nodejs/node/v{VERSION}/deps/v8/src/version.cc';
+var v8newtemplate = 'https://raw.githubusercontent.com/nodejs/node/v{VERSION}/deps/v8/include/v8-version.h';
 
 var sortObjectByKey = function(obj){
     var keys = [];
@@ -34,7 +35,7 @@ var sortObjectByKey = function(obj){
     });
     var len = keys.length;
 
-    for (i = 0; i < len; i++)
+    for (var i = 0; i < len; i++)
     {
       key = keys[i];
       sorted_obj[key] = obj[key];
@@ -76,6 +77,14 @@ function get(ver,callback) {
           // TODO - if val is 1 then we need to get the v8 version from
           // https://github.com/joyent/node/blob/master/deps/v8/src/version.cc
           var v8path = v8template.replace('{VERSION}',ver);
+          var term = 'define MAJOR_VERSION';
+          var term1 = 'define MINOR_VERSION';
+          if (parseInt(ver.split('.')[0],10) >= 4) {
+            v8path = v8newtemplate.replace('{VERSION}',ver);
+            console.log(v8path);
+            term = 'define V8_MAJOR_VERSION';
+            term1 = 'define V8_MINOR_VERSION';
+          }
           var v8uri = url.parse(v8path);
           https.get(v8uri, function(res) {
               if (res.statusCode != 200) {
@@ -88,12 +97,10 @@ function get(ver,callback) {
               });
               res.on('end',function(err) {
                   if (err) throw err;
-                  var term = 'define MAJOR_VERSION';
                   var idx = body.indexOf(term);
                   var following = body.slice(idx);
                   var end = following.indexOf('\n');
                   var major = following.slice(term.length,end).trim();
-                  var term1 = 'define MINOR_VERSION';
                   var idx1 = body.indexOf(term1);
                   var following1 = body.slice(idx1);
                   var end1 = following1.indexOf('\n');
@@ -130,6 +137,7 @@ if (update_node) {
   for (var i=0;i<=7;++i) {
     lines.push('0.12.'+i);
   }
+  lines.push('4.0.0');
   lines.forEach(function(ver) {
       get(ver,function(err,version,node_abi,v8_version) {
         cross[version] = {node_abi:node_abi,v8:v8_version};

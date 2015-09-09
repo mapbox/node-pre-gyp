@@ -24,14 +24,14 @@ function run(prog,command,args,app,opts,cb) {
     if (!opts.cwd) {
         final_cmd += ' -C ' + path.join(__dirname,app.name);
     }
+    // clang=1 is harmless to add, but avoids breakage on `-fno-tree-sink`
+    // flag that nodejs gyp scripts add and clang does not know about
+    final_cmd += ' --clang=1';
     if (process.platform === 'win32') {
         final_cmd += ' --msvs_version=2013 ';
     }
     final_cmd += ' ' + app.args;
     final_cmd += ' ' + args;
-    // clang=1 is harmless to add, but avoids breakage on `-fno-tree-sink`
-    // flag that nodejs gyp scripts add and clang does not know about
-    final_cmd += ' --clang=1';
     cp.exec(final_cmd,opts,function(err,stdout,stderr) {
         if (err) {
             var error = new Error("Command failed '" + command + "'");

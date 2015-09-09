@@ -1,9 +1,7 @@
 "use strict";
 
 var https = require("https");
-var url = require('url');
-var semver = require('semver');
-var fs = require('fs');
+
 /*
 
 usage:

@@ -32,6 +32,7 @@ before_install:
      export CC="clang-3.5";
   fi;
 - source ./scripts/install_node.sh ${NODE_VERSION}
+- npm config set loglevel=error
 
 install:
 - npm install

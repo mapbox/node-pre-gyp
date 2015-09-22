@@ -1,6 +1,8 @@
 "use strict";
 
 var https = require("https");
+var fs = require('fs');
+var semver = require('semver');
 
 /*
 
@@ -49,4 +51,34 @@ https.get('https://nodejs.org/download/release/index.json', function(res) {
         cross[release.version.replace('v','')] = {node_abi:+release.modules,v8:release.v8.split('.').slice(0,2).join('.')};
     });
   });
+});
+
+var sortObjectByKey = function(obj){
+    var keys = [];
+    var sorted_obj = {};
+    for(var key in obj){
+        if(obj.hasOwnProperty(key)){
+            keys.push(key);
+        }
+    }
+    // sort keys
+    keys.sort(function(a,b) {
+      if (semver.gt(a, b)) {
+        return 1;
+      }
+      return -1;
+    });
+    var len = keys.length;
+
+    for (var i = 0; i < len; i++)
+    {
+      key = keys[i];
+      sorted_obj[key] = obj[key];
+    }
+    return sorted_obj;
+};
+
+process.on('exit', function(err) {
+    if (err) throw err;
+    fs.writeFileSync('./lib/util/abi_crosswalk.json',JSON.stringify(sortObjectByKey(cross),null,2));
 });

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.11
+
+ - Added known node and io.js versions including more 3.x and 4.x versions
+
 ## 0.6.10
 
  - Added known node and io.js versions including 3.x and 4.x versions

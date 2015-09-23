@@ -12,7 +12,7 @@
 
 ### Features
 
- - A command line tool called `node-pre-gyp` that can install your package's c++ module from a binary.
+ - A command line tool called `node-pre-gyp` that can install your package's C++ module from a binary.
  - A variety of developer targeted commands for packaging, testing, and publishing binaries.
  - A Javascript module that can dynamically require your installed binary: `require('node-pre-gyp').find`
 
@@ -141,7 +141,7 @@ A url to the remote location where you've published tarball binaries (must be `h
 It is highly recommended that you use Amazon S3. The reasons are:
 
   - Various node-pre-gyp commands like `publish` and `info` only work with an S3 host.
-  - S3 is a very solid hosting platform for distributing large files, even [Github recommends using it instead of github](https://help.github.com/articles/distributing-large-binaries).
+  - S3 is a very solid hosting platform for distributing large files.
   - We provide detail documentation for using [S3 hosting](#s3-hosting) with node-pre-gyp.
 
 Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a github repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
@@ -273,7 +273,7 @@ If a a binary was not available for a given platform and `--fallback-to-build` w
 
 ## S3 Hosting
 
-You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects it, and S3 can be integrated well with [travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu. Here is an approach to do this:
+You can host wherever you choose but S3 is cheap, `node-pre-gyp publish` expects it, and S3 can be integrated well with [Travis.ci](http://travis-ci.org) to automate builds for OS X and Ubuntu, and with [Appveyor](http://appveyor.com) to automate builds for Windows. Here is an approach to do this:
 
 First, get setup locally and test the workflow:
 
@@ -392,7 +392,7 @@ environment:
     secure: W1rwNoSnOku1r+28gnoufO8UA8iWADmL1LiiwH9IOkIVhDTNGdGPJqAlLjNqwLnL
 ```
 
-NOTE: keys are per account but not per repo (this is difference than travis where keys are per repo but not related to the account used to encrypt them).
+NOTE: keys are per account but not per repo (this is difference than Travis where keys are per repo but not related to the account used to encrypt them).
 
 #### 5) Hook up publishing
 
@@ -400,7 +400,7 @@ Just put `node-pre-gyp package publish` in your `appveyor.yml` after `npm instal
 
 #### 6) Publish when you want
 
-You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
+You might wish to publish binaries only on a specific commit. To do this you could borrow from the [Travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
 
     SET CM=%APPVEYOR_REPO_COMMIT_MESSAGE%
     if not "%CM%" == "%CM:[publish binary]=%" node-pre-gyp --msvs_version=2013 publish
@@ -409,8 +409,7 @@ If your commit message contains special characters (e.g. `&`) this method might 
 
     ps: if($env:APPVEYOR_REPO_COMMIT_MESSAGE.ToLower().Contains('[publish binary]')) { node-pre-gyp --msvs_version=2013 publish }
 
-Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
-
+Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package.
 
 ## Travis Automation
 
@@ -421,11 +420,11 @@ Remember this publishing is not the same as `npm publish`. We're just talking ab
 
 For an example of doing this see [node-add-example's .travis.yml](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/.travis.yml).
 
-Note: if you need 32 bit binaries, this can be done from a 64 bit travis machine. See [the node-sqlite3 scripts for an example of doing this](https://github.com/mapbox/node-sqlite3/blob/bae122aa6a2b8a45f6b717fab24e207740e32b5d/scripts/build_against_node.sh#L54-L74).
+Note: if you need 32 bit binaries, this can be done from a 64 bit Travis machine. See [the node-sqlite3 scripts for an example of doing this](https://github.com/mapbox/node-sqlite3/blob/bae122aa6a2b8a45f6b717fab24e207740e32b5d/scripts/build_against_node.sh#L54-L74).
 
 Below is a guide to getting set up:
 
-#### 1) Install the travis gem
+#### 1) Install the Travis gem
 
     gem install travis
 
@@ -447,7 +446,7 @@ env:
     - secure: o2nkUQIiABD139XS6L8pxq3XO5gch27hvm/gOdV+dzNKc/s2KomVPWcOyXNxtJGhtecAkABzaW8KHDDi5QL1kNEFx6BxFVMLO8rjFPsMVaBG9Ks6JiDQkkmrGNcnVdxI/6EKTLHTH5WLsz8+J7caDBzvKbEfTux5EamEhxIWgrI=
 ```
 
-More details on travis encryption at http://about.travis-ci.org/docs/user/encryption-keys/.
+More details on Travis encryption at http://about.travis-ci.org/docs/user/encryption-keys/.
 
 #### 3) Hook up publishing
 
@@ -548,7 +547,7 @@ node_js:
 
 #### 4) Publish when you want
 
-You might wish to publish binaries only on a specific commit. To do this you could borrow from the [travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
+You might wish to publish binaries only on a specific commit. To do this you could borrow from the [Travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
 
     COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
     if [[ ${COMMIT_MESSAGE} =~ "[publish binary]" ]]; then node-pre-gyp publish; fi;
@@ -561,7 +560,7 @@ Or, if you don't have any changes to make simply run:
 
     git commit --allow-empty -m "[publish binary]"
 
-Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on travis see http://about.travis-ci.org/docs/user/deployment/npm/
+Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on Travis see http://about.travis-ci.org/docs/user/deployment/npm/
 
 # Versioning
 

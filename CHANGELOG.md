@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.12
+
+ - Added support for [Electron](http://electron.atom.io/). Just pass the `--runtime=electron` flag when building/installing. Thanks @zcbenz
+
 ## 0.6.11
 
  - Added known node and io.js versions including more 3.x and 4.x versions

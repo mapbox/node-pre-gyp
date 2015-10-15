@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.13
+
+ - Added more knonwn node 4.x versions
+
 ## 0.6.12
 
  - Added support for [Electron](http://electron.atom.io/). Just pass the `--runtime=electron` flag when building/installing. Thanks @zcbenz

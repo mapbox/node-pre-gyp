@@ -2,7 +2,7 @@
 
 ## 0.6.13
 
- - Added more knonwn node 4.x versions
+ - Added more known node 4.x versions
 
 ## 0.6.12
 

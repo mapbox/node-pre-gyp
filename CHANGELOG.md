@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.14
+
+ - Added node 5.x version
+
 ## 0.6.13
 
  - Added more known node 4.x versions

@@ -455,17 +455,7 @@ Just put `node-pre-gyp package publish` in your `.travis.yml` after `npm install
 
 ##### OS X publishing
 
-If you want binaries for OS X in addition to linux you have two options:
-
-1) [Enabling multi-OS](#enabling-multi-os)
-
-2) [Using `language: objective-c` in a git branch](#using-language-objective-c).
-
-##### Enabling multi-OS
-
-This requires emailing a request to `support@travis-ci.com` for each repo you wish to have enabled. More details at <http://docs.travis-ci.com/user/multi-os/>.
-
-Next you need to tweak the `.travis.yml` to ensure it is cross platform.
+If you want binaries for OS X in addition to linux you can enable [multi-os for travis](http://docs.travis-ci.com/user/multi-os/#Setting-.travis.yml)
 
 Use a configuration like:
 
@@ -491,7 +481,6 @@ before_install:
 
 See [Travis OS X Gochas](#travis-os-x-gochas) for why we replace `language: node_js` and `node_js:` sections with `language: cpp` and a custom matrix.
 
-
 Also create platform specific sections for any deps that need install. For example if you need libpng:
 
 ```yml
@@ -500,18 +489,6 @@ Also create platform specific sections for any deps that need install. For examp
 ```
 
 For detailed multi-OS examples see [node-mapnik](https://github.com/mapnik/node-mapnik/blob/master/.travis.yml) and [node-sqlite3](https://github.com/mapbox/node-sqlite3/blob/master/.travis.yml).
-
-##### Using `language: objective-c`
-
-If your repo does not have multi-OS enabled, an alternative method for building for OS X is to tweak your `.travis.yml` to use:
-
-```yml
-language: objective-c
-```
-
-Keep that change in a different git branch and sync that when you want binaries published.
-
-Next learn about a few [Travis OS X Gochas](#travis-os-x-gochas).
 
 ##### Travis OS X Gochas
 

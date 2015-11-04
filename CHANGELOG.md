@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 0.6.15
+
+ - Upgraded tar-pack (https://github.com/mapbox/node-pre-gyp/issues/182)
+ - Support custom binary hosting mirror (https://github.com/mapbox/node-pre-gyp/pull/170)
+ - Added known version in crosswalk for 4.2.2.
+
 ## 0.6.14
 
  - Added node 5.x version

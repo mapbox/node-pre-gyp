@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.16
+
+ - Added known version in crosswalk for 5.1.0.
+
 ## 0.6.15
 
  - Upgraded tar-pack (https://github.com/mapbox/node-pre-gyp/issues/182)

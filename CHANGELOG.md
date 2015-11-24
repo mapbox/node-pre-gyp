@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.17
+
+ - Re-tagged to fix packaging problem of `Error: Cannot find module 'isarray'`
+
 ## 0.6.16
 
  - Added known version in crosswalk for 5.1.0.

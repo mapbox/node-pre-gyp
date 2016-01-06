@@ -28,7 +28,7 @@
     "tar-pack": "~3.1.0",
     "mkdirp": "~0.5.0",
     "rc": "~1.1.0",
-    "rimraf": "~2.4.0"
+    "rimraf": "~2.5.0"
   },
   "bundledDependencies":[
     "nopt",

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.19
+
+ - Add known node version for 4.2.4
+
 ## 0.6.18
 
  - Add new known node versions for 0.10.x, 0.12.x, 4.x, and 5.x

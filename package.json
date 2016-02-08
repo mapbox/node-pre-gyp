@@ -42,10 +42,10 @@
     "rimraf"
   ],
   "devDependencies": {
-    "aws-sdk":"*",
-    "mocha": "1.x",
-    "retire": "0.3.x",
-    "jshint": "^2.5.10"
+    "aws-sdk":"2.x",
+    "mocha": "2.x",
+    "retire": "1.x",
+    "jshint": "2.x"
   },
   "jshintConfig": {
     "node": true,
@@ -54,10 +54,6 @@
     "unused": true,
     "noarg": true,
     "mocha": true
-  },
-  "engineStrict": true,
-  "engines": {
-    "node": ">= 0.8.0"
   },
   "scripts": {
     "prepublish":"retire -n && npm ls && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",

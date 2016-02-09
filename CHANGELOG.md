@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.21
+
+ - Add known node version for 0.10.42, 0.12.10, 4.3.0, and 5.6.0.
+
 ## 0.6.20
 
  - Add known node version for 4.2.5, 4.2.6, 5.4.0, 5.4.1,and 5.5.0.

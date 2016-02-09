@@ -39,7 +39,7 @@ install:
 
 before_script:
 - npm test
-- if [[ ${RETIRE:-false} == true ]]; then npm install retire@2.x && ./node_modules/.bin/retire -n; fi;
+- if [[ ${RETIRE:-false} == true ]]; then npm install retire@1.x && ./node_modules/.bin/retire -n; fi;
 # test node-webkit usage
 - ./scripts/test-node-webkit.sh
 

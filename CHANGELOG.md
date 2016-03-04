@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.23
+
+ - Add known node version for 0.10.43, 0.12.11, 4.3.2, and 5.7.1.
+
 ## 0.6.22
 
  - Add known node version for 4.3.1, and 5.7.0.

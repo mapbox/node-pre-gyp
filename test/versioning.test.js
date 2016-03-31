@@ -60,6 +60,25 @@ describe('versioning', function() {
         assert.equal(versioning.get_runtime_abi('node','0.8.0'),versioning.get_node_abi('node',mock_process_versions2));
     });
 
+    it('should detect runtime for node-webkit and electron', function() {
+        var mock_process_versions = {
+            "electron": '0.37.3',
+        };
+        assert.equal(versioning.get_process_runtime(mock_process_versions),'electron');
+        var mock_process_versions2 = {
+            "node": '0.8.0',
+        };
+        assert.equal(versioning.get_process_runtime(mock_process_versions2),'node');
+        var mock_process_versions3 = {
+            "node-webkit": '0.37.3',
+        };
+        assert.equal(versioning.get_process_runtime(mock_process_versions3),'node-webkit');
+    });
+
+    it('should detect abi for electron runtime', function() {
+        assert.equal(versioning.get_runtime_abi('electron','0.37.3'),versioning.get_electron_abi('electron','0.37.3'));
+    });
+
     it('should detect abi for node-webkit runtime', function() {
         assert.equal(versioning.get_runtime_abi('node-webkit','0.10.5'),versioning.get_node_webkit_abi('node-webkit','0.10.5'));
     });

@@ -11,7 +11,7 @@
     "bindings",
     "binary"
   ],
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "author": "Dane Springmeyer <dane@mapbox.com>",
   "repository": {
     "type": "git",

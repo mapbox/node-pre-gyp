@@ -3,6 +3,7 @@
 ## 0.6.25
 
  - Improved support for auto-detection of electron runtime in `node-pre-gyp.find()`
+   - Pull request from @enlight - https://github.com/mapbox/node-pre-gyp/pull/187
  - Add known node version for 4.4.1 and 5.9.1
 
 ## 0.6.24

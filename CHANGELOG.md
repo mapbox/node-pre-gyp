@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.26
+
+ - Skip validation for nw runtime (https://github.com/mapbox/node-pre-gyp/pull/181) via @fleg
+
 ## 0.6.25
 
  - Improved support for auto-detection of electron runtime in `node-pre-gyp.find()`

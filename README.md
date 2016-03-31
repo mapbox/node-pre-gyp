@@ -526,7 +526,7 @@ node_js:
 
 You might wish to publish binaries only on a specific commit. To do this you could borrow from the [Travis.ci idea of commit keywords](http://about.travis-ci.org/docs/user/how-to-skip-a-build/) and add special handling for commit messages with `[publish binary]`:
 
-    COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+    COMMIT_MESSAGE=$(git log --format=%B --no-merges -n 1 | tr -d '\n')
     if [[ ${COMMIT_MESSAGE} =~ "[publish binary]" ]]; then node-pre-gyp publish; fi;
 
 Then you can trigger new binaries to be built like:
@@ -536,6 +536,8 @@ Then you can trigger new binaries to be built like:
 Or, if you don't have any changes to make simply run:
 
     git commit --allow-empty -m "[publish binary]"
+
+WARNING: if you are working in a pull request and publishing binaries from there then you will want to avoid double publishing when Travis.ci builds both the `push` and `pr`. You only want to run the publish on the `push` commit. See https://github.com/Project-OSRM/node-osrm/blob/8eb837abe2e2e30e595093d16e5354bc5c573575/scripts/is_pr_merge.sh which is called from https://github.com/Project-OSRM/node-osrm/blob/8eb837abe2e2e30e595093d16e5354bc5c573575/scripts/publish.sh for an example of how to do this.
 
 Remember this publishing is not the same as `npm publish`. We're just talking about the binary module here and not your entire npm package. To automate the publishing of your entire package to npm on Travis see http://about.travis-ci.org/docs/user/deployment/npm/
 

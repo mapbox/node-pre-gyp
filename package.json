@@ -30,17 +30,6 @@
     "rc": "~1.1.0",
     "rimraf": "~2.5.0"
   },
-  "bundledDependencies":[
-    "nopt",
-    "npmlog",
-    "request",
-    "semver",
-    "tar",
-    "tar-pack",
-    "mkdirp",
-    "rc",
-    "rimraf"
-  ],
   "devDependencies": {
     "aws-sdk":"2.x",
     "mocha": "2.x",

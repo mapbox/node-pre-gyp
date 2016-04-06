@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 0.6.27
+
+ - Stopped bundling dependencies
+ - Documented method for module authors to avoid bundling node-pre-gyp
+   - See https://github.com/mapbox/node-pre-gyp/tree/master#configuring for details
+
 ## 0.6.26
 
  - Skip validation for nw runtime (https://github.com/mapbox/node-pre-gyp/pull/181) via @fleg

@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version" : "0.6.25",
+  "version": "0.7.0",
   "keywords": [
     "native",
     "addon",
@@ -20,29 +20,18 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
+    "mkdirp": "~0.5.0",
     "nopt": "~3.0.1",
     "npmlog": "~2.0.0",
+    "rc": "~1.1.0",
     "request": "2.x",
+    "rimraf": "~2.5.0",
     "semver": "~5.1.0",
     "tar": "~2.2.0",
-    "tar-pack": "~3.1.0",
-    "mkdirp": "~0.5.0",
-    "rc": "~1.1.0",
-    "rimraf": "~2.5.0"
+    "tar-pack": "~3.1.0"
   },
-  "bundledDependencies":[
-    "nopt",
-    "npmlog",
-    "request",
-    "semver",
-    "tar",
-    "tar-pack",
-    "mkdirp",
-    "rc",
-    "rimraf"
-  ],
   "devDependencies": {
-    "aws-sdk":"2.x",
+    "aws-sdk": "2.x",
     "mocha": "2.x",
     "retire": "1.x",
     "jshint": "2.x"
@@ -56,8 +45,8 @@
     "mocha": true
   },
   "scripts": {
-    "prepublish":"retire -n && npm ls && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",
-    "update-crosswalk":"node scripts/abi_crosswalk.js",
-    "test":"jshint lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 500000"
+    "prepublish": "retire -n && npm ls && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",
+    "update-crosswalk": "node scripts/abi_crosswalk.js",
+    "test": "jshint lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 500000"
   }
 }

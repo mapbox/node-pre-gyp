@@ -117,7 +117,7 @@ This looks like:
     }
 ```
 
-For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/package.json#L11-L22).
+For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/master/package.json).
 
 ##### The `binary` object has three required properties
 

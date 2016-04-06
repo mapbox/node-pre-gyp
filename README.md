@@ -101,7 +101,7 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "0.7.x"
+      "node-pre-gyp": "0.6.x"
     },
     "devDependencies": {
       "aws-sdk": "2.x"

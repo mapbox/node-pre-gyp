@@ -1,6 +1,6 @@
 # node-pre-gyp changelog
 
-## 0.7.0
+## 0.6.27
 
  - Stopped bundling dependencies
  - Documented method for module authors to avoid bundling node-pre-gyp

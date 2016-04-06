@@ -71,6 +71,7 @@ Options include:
 
  - `-C/--directory`: run the command in this directory
  - `--build-from-source`: build from source instead of using pre-built binary
+ - `--update-binary`: reinstall by replacing previously installed local binary with remote binary
  - `--runtime=node-webkit`: customize the runtime: `node`, `electron` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
  - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
@@ -91,7 +92,7 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` to `bundledDependencies`
+ - Add `node-pre-gyp` to `dependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
@@ -100,14 +101,14 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "0.5.x"
+      "node-pre-gyp": "0.7.x"
     },
-    "bundledDependencies":["node-pre-gyp"],
     "devDependencies": {
-      "aws-sdk": "~2.0.0-rc.15"
+      "aws-sdk": "2.x"
     }
     "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build",
+        "preinstall": "npm install node-pre-gyp",
+        "install": "node-pre-gyp install --fallback-to-build"
     },
     "binary": {
         "module_name": "your_module",

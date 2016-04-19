@@ -1,5 +1,67 @@
 # node-pre-gyp changelog
 
+## 0.6.27
+
+ - Stopped bundling dependencies
+ - Documented method for module authors to avoid bundling node-pre-gyp
+   - See https://github.com/mapbox/node-pre-gyp/tree/master#configuring for details
+
+## 0.6.26
+
+ - Skip validation for nw runtime (https://github.com/mapbox/node-pre-gyp/pull/181) via @fleg
+
+## 0.6.25
+
+ - Improved support for auto-detection of electron runtime in `node-pre-gyp.find()`
+   - Pull request from @enlight - https://github.com/mapbox/node-pre-gyp/pull/187
+ - Add known node version for 4.4.1 and 5.9.1
+
+## 0.6.24
+
+ - Add known node version for 5.8.0, 5.9.0, and 4.4.0.
+
+## 0.6.23
+
+ - Add known node version for 0.10.43, 0.12.11, 4.3.2, and 5.7.1.
+
+## 0.6.22
+
+ - Add known node version for 4.3.1, and 5.7.0.
+
+## 0.6.21
+
+ - Add known node version for 0.10.42, 0.12.10, 4.3.0, and 5.6.0.
+
+## 0.6.20
+
+ - Add known node version for 4.2.5, 4.2.6, 5.4.0, 5.4.1,and 5.5.0.
+
+## 0.6.19
+
+ - Add known node version for 4.2.4
+
+## 0.6.18
+
+ - Add new known node versions for 0.10.x, 0.12.x, 4.x, and 5.x
+
+## 0.6.17
+
+ - Re-tagged to fix packaging problem of `Error: Cannot find module 'isarray'`
+
+## 0.6.16
+
+ - Added known version in crosswalk for 5.1.0.
+
+## 0.6.15
+
+ - Upgraded tar-pack (https://github.com/mapbox/node-pre-gyp/issues/182)
+ - Support custom binary hosting mirror (https://github.com/mapbox/node-pre-gyp/pull/170)
+ - Added known version in crosswalk for 4.2.2.
+
+## 0.6.14
+
+ - Added node 5.x version
+
 ## 0.6.13
 
  - Added more known node 4.x versions

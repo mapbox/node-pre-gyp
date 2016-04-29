@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.28
+
+ - Add known node version for node v6
+
 ## 0.6.27
 
  - Stopped bundling dependencies

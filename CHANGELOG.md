@@ -1,11 +1,8 @@
 # node-pre-gyp changelog
 
-## 0.6.28
-
- - Add known node version for node v6
-
 ## 0.6.27
 
+ - Add known node version for node v6
  - Stopped bundling dependencies
  - Documented method for module authors to avoid bundling node-pre-gyp
    - See https://github.com/mapbox/node-pre-gyp/tree/master#configuring for details

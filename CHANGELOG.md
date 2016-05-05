@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.6.28
+
+ - Now more verbose when remote binaries are not available. This is needed since npm is increasingly more quiet by default
+   and users need to know why builds are falling back to source compiles that might then error out.
+
 ## 0.6.27
 
  - Add known node version for node v6

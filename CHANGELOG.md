@@ -1,7 +1,17 @@
 # node-pre-gyp changelog
 
+## 0.6.29
+
+ - Add known node versions for v0.10.45, v0.12.14, v4.4.4, v5.11.1, and v6.1.0
+
+## 0.6.28
+
+ - Now more verbose when remote binaries are not available. This is needed since npm is increasingly more quiet by default
+   and users need to know why builds are falling back to source compiles that might then error out.
+
 ## 0.6.27
 
+ - Add known node version for node v6
  - Stopped bundling dependencies
  - Documented method for module authors to avoid bundling node-pre-gyp
    - See https://github.com/mapbox/node-pre-gyp/tree/master#configuring for details

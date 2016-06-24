@@ -147,6 +147,8 @@ It is highly recommended that you use Amazon S3. The reasons are:
 
 Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a github repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
 
+It should also be mentioned that there is an optional and entirely seperate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-githib publish```.
+
 ##### The `binary` object has two optional properties
 
 ###### remote_path

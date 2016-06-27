@@ -500,7 +500,7 @@ First, unlike the Travis linux machines the OS X machines do not put `node-pre-g
 export PATH=$(pwd)/node_modules/.bin:${PATH}
 ```
 
-Second, the OS X machines doe not support using a matrix for installing node.js different versions. So you need to bootstrap the installation of node.js in a cross platform way.
+Second, the OS X machines do not support using a matrix for installing different node.js versions. So you need to bootstrap the installation of node.js in a cross platform way.
 
 By doing:
 

@@ -6,6 +6,7 @@
        "type" : "git",
        "url"  : "git://github.com/mapbox/node-pre-gyp.git"
     },
+    "license": "BSD-3-Clause",
     "version": "0.1.0-dev.4",
     "main": "./index.js",
     "binary": {

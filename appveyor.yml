@@ -28,10 +28,11 @@ install:
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
   - npm config set -g cafile=package.json
   - npm config set -g strict-ssl=false
-  - SET PATH=%APPDATA%\npm;%PATH%
+  #- SET PATH=%APPDATA%\npm;%PATH%
+  - npm install -g node-gyp
   - node -e "console.log(process.arch);"
-  - IF "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
-  - IF "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
+  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
+  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
   - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
   - npm install

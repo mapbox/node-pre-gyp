@@ -28,7 +28,7 @@ function run(prog,command,args,app,opts,cb) {
     // flag that nodejs gyp scripts add and clang does not know about
     final_cmd += ' --clang=1';
     if (process.platform === 'win32') {
-        final_cmd += ' --msvs_version=2013 ';
+        final_cmd += ' --msvs_version=2015 ';
     }
     final_cmd += ' ' + app.args;
     final_cmd += ' ' + args;

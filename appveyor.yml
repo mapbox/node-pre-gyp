@@ -26,7 +26,8 @@ install:
   - node --version
   - npm --version
   #- SET PATH=%APPDATA%\npm;%PATH%
-  - npm install -g node-gyp
+  #- npm install -g node-gyp
+  - npm install -g node-gyp@3.2.1
   - node -e "console.log(process.arch);"
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%

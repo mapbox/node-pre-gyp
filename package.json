@@ -33,7 +33,7 @@
   "devDependencies": {
     "aws-sdk": "2.x",
     "mocha": "2.x",
-    "retire": "1.x",
+    "retire": "1.1.2",
     "jshint": "2.x"
   },
   "jshintConfig": {

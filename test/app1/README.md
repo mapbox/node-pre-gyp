@@ -1,3 +1,3 @@
 # Test app
 
-Demostrates a simple configuration that uses node-pre-gyp.
+Demonstrates a simple configuration that uses node-pre-gyp.

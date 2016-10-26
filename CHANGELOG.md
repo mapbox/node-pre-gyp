@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.6.32
+
+ - Honor npm configuration for CA bundles (@heikkipora)
+ - Replace request with request/core (@mscdex)
+
 ## 0.6.31
 
  - Updated various deps

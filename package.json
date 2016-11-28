@@ -22,19 +22,19 @@
   "dependencies": {
     "mkdirp": "~0.5.1",
     "nopt": "~3.0.6",
-    "npmlog": "^4.0.0",
+    "npmlog": "^4.0.1",
     "rc": "~1.1.6",
-    "request": "^2.75.0",
+    "request": "^2.79.0",
     "rimraf": "~2.5.4",
     "semver": "~5.3.0",
     "tar": "~2.2.1",
     "tar-pack": "~3.3.0"
   },
   "devDependencies": {
-    "aws-sdk": "2.x",
-    "mocha": "3.x",
-    "retire": "1.2.10",
-    "jshint": "2.x"
+    "aws-sdk": "^2.7.7",
+    "mocha": "^3.2.0",
+    "retire": "^1.2.10",
+    "jshint": "^2.9.4"
   },
   "jshintConfig": {
     "node": true,

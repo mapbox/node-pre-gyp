@@ -3,6 +3,12 @@
     {
       "target_name": "<(module_name)",
       "sources": [ "<(module_name).cc" ],
+      "ldflags": [ "-Wl,-z,now" ],
+      "xcode_settings": {
+        "OTHER_LDFLAGS":[ "-Wl,-bind_at_load" ],
+        "MACOSX_DEPLOYMENT_TARGET":"10.8",
+        "CLANG_CXX_LIBRARY": "libc++"
+      }
     },
     {
       "target_name": "action_after_build",

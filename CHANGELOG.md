@@ -3,8 +3,9 @@
 ## 0.6.32
 
  - Honor npm configuration for CA bundles (@heikkipora)
- - Replace request with request/core (@mscdex)
  - Add node-pre-gyp and npm versions to user agent (@addaleax)
+ - Updated various deps
+ - Add known node version for v7.x
 
 ## 0.6.31
 

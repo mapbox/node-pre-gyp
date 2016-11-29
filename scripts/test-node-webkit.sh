@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -u
+set -eu
+set -o pipefail
 
 # put local copy of node-pre-gyp on NODE_PATH/PATH
 export NODE_PATH=`pwd`/lib
@@ -32,13 +33,13 @@ npm install nw-gyp
 export PATH=${BASE}/node_modules/.bin:${PATH}
 
 cd test/app1
-node-pre-gyp clean build --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+node-pre-gyp rebuild --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 node-pre-gyp package --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
 
 # now test publishing and installing from remote
 if [[ "${node_pre_gyp_accessKeyId:-false}" != false ]] || [[ -f $HOME/.node_pre_gyprc ]] ; then
-    node-pre-gyp publish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
+    node-pre-gyp unpublish publish --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
     node-pre-gyp clean --runtime=node-webkit --target=${NODE_WEBKIT_VERSION}
     rm -rf build/
     rm -rf lib/binding/

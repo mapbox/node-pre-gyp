@@ -30,7 +30,7 @@ function on_error(err,stdout,stderr) {
     throw new Error(msg);
 }
 
-describe('caching', function() {
+(/^v0.10/.test(process.version) ? describe.skip : describe)('caching', function() {
     before(function (done) {
         // cleanup
         fs.mkdir(cache_dir, function(err) {

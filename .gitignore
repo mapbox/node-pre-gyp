@@ -5,3 +5,4 @@ node-webkit*.zip
 credits.html
 node-webkit.app
 npm-debug.log
+/test/cache/

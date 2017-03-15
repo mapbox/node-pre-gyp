@@ -47,6 +47,6 @@
   "scripts": {
     "prepublish": "retire -n && npm ls && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "jshint lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 500000"
+    "test": "jshint test/*.js lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 500000"
   }
 }

@@ -2,9 +2,10 @@ language: cpp
 
 os:
   - linux
+    sudo: false
   - osx
-
-sudo: false
+    # https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
+    osx_image: xcode8.2
 
 addons:
   apt:

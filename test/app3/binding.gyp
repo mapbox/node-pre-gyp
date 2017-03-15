@@ -5,18 +5,11 @@
       "sources": [ "<(module_name).cc" ],
       "dependencies": [
         "deps/mylib.gyp:mylib"
-      ]
-    },
-    {
-      "target_name": "action_after_build",
-      "type": "none",
-      "dependencies": [ "<(module_name)" ],
-      "copies": [
-        {
-          "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
-          "destination": "<(module_path)/"
-        }
-      ]
+      ],
+      'product_dir': '<(module_path)',
+      "xcode_settings": {
+        "MACOSX_DEPLOYMENT_TARGET":"10.9"
+      }
     }
   ]
 }

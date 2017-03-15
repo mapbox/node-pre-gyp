@@ -5,7 +5,10 @@
       "sources": [ "<(module_name).cpp" ],
       "dependencies": [
         "deps/mylib.gyp:mylib"
-      ]
+      ],
+      "xcode_settings": {
+        "MACOSX_DEPLOYMENT_TARGET":"10.9"
+      }
     },
     {
       "target_name": "action_after_build",

@@ -12,6 +12,10 @@
             ],
             'direct_dependent_settings': {
               'include_dirs': [ 'include/' ],
+            },
+            "xcode_settings": {
+                "MACOSX_DEPLOYMENT_TARGET":"10.9",
+                "CLANG_CXX_LIBRARY": "libc++"
             }
         }
     ]

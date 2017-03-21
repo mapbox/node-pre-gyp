@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.34
+
+ - Upgraded deps to latest versions, started using `^` instead of `~` for all deps.
+
 ## 0.6.33
 
  - Improved support for yarn

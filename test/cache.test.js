@@ -177,4 +177,55 @@ function on_error(err,stdout,stderr) {
             });
         });
     });
+
+    describe('clean', function() {
+        it('can clean the cache', function(done) {
+            install(function(err,stdout,stderr) {
+                if(err) return on_error(err,stdout,stderr);
+                fs.readdir(cache_dir, function(err, files) {
+                    if(err) throw err;
+                    assert.equal(files.length, 1);
+                    run(binPath + ' cache-clean', function(err,stdout,stderr) {
+                        if(err) return on_error(err,stdout,stderr);
+                        fs.readdir(cache_dir, function(err, files) {
+                            if(err) throw err;
+                            assert.equal(files.length, 0);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+        it('doesn\'t remove non-tarballs from the cache', function(done) {
+            install(function(err,stdout,stderr) {
+                if(err) return on_error(err,stdout,stderr);
+                fs.writeFileSync(path.join(cache_dir, 'blah'), 'something');
+                if(err) throw err;
+                run(binPath + ' cache-clean', function(err,stdout,stderr) {
+                    if(err) return on_error(err,stdout,stderr);
+                    fs.readdir(cache_dir, function(err, files) {
+                        if(err) throw err;
+                        assert.equal(files.length, 1);
+                        done();
+                    });
+                });
+            });
+        });
+
+        it('can be told to remove everything from the cache', function(done) {
+            install(function(err,stdout,stderr) {
+                if(err) return on_error(err,stdout,stderr);
+                fs.writeFileSync(path.join(cache_dir, 'blah'), 'something');
+                run(binPath + ' cache-clean --all', function(err,stdout,stderr) {
+                    if(err) return on_error(err,stdout,stderr);
+                    fs.readdir(cache_dir, function(err, files) {
+                        if(err) throw err;
+                        assert.equal(files.length, 0);
+                        done();
+                    });
+                });
+            });
+        });
+    });
 });

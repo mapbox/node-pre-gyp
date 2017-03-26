@@ -50,6 +50,7 @@ View all possible commands:
 
     node-pre-gyp --help
 
+- cache-clean - Remove cache objects from the node-pre-gyp cache directory
 - clean - Remove the entire folder containing the compiled .node module
 - install - Install pre-built binary for module
 - reinstall - Run "clean" and "install" at once

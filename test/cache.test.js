@@ -106,7 +106,7 @@ function on_error(err,stdout,stderr) {
             fs.readdir(cache_dir, function(err, files) { // populate cache
                 if(err) throw err;
                 var mtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
-                install(install_cmd + ' --ignore-cache', function(err,stdout,stderr) {
+                install(install_cmd + ' --ignore-node-pre-gyp-cache', function(err,stdout,stderr) {
                     if(err) return on_error(err,stdout,stderr);
                     assert.equal(stderr.indexOf('from cache'), -1);
                     assert.ok(fs.statSync(path.join(cache_dir,files[0])).mtime.getTime() > mtime.getTime(), 'cache value was not used, but was instead updated');
@@ -122,7 +122,7 @@ function on_error(err,stdout,stderr) {
             fs.readdir(cache_dir, function(err, files) { // populate cache
                 if(err) throw err;
                 var mtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
-                install(install_cmd + ' --ignore-cache --skip-cache', function(err,stdout,stderr) {
+                install(install_cmd + ' --ignore-node-pre-gyp-cache --skip-node-pre-gyp-cache', function(err,stdout,stderr) {
                     if(err) return on_error(err,stdout,stderr);
                     assert.equal(stderr.indexOf('from cache'), -1);
                     assert.equal(fs.statSync(path.join(cache_dir,files[0])).mtime.getTime(), mtime.getTime(), 'cache value was not updated');
@@ -152,7 +152,7 @@ function on_error(err,stdout,stderr) {
     });
 
     it('doesn\'t write to the cache when told not to', function(done) {
-        run(binPath + ' rebuild --fallback-to-build --loglevel=error --skip-cache', function(err,stdout,stderr) {
+        run(binPath + ' rebuild --fallback-to-build --loglevel=error --skip-node-pre-gyp-cache', function(err,stdout,stderr) {
             if(err) return on_error(err,stdout,stderr);
             fs.readdir(cache_dir, function(err, files) {
                 if(err) throw err;

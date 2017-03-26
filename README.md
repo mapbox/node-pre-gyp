@@ -78,8 +78,8 @@ Options include:
  - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
- - `--ignore-cache`: Don't read from the internal node-pre-gyp cache
- - `--skip-cache`: Don't read from or update (ie write to) the internal node-pre-gyp cache
+ - `--ignore-node-pre-gyp-cache`: Don't read from the internal node-pre-gyp cache
+ - `--skip-node-pre-gyp-cache`: Don't read from or update (ie write to) the internal node-pre-gyp cache
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 

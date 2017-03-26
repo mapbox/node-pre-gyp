@@ -132,6 +132,22 @@ function on_error(err,stdout,stderr) {
         });
     });
 
+    it('ignores the cache and doesn\'t update it if told to via npm', function(done) {
+        install(function(err,stdout,stderr) {
+            if(err) return on_error(err,stdout,stderr);
+            fs.readdir(cache_dir, function(err, files) { // populate cache
+                if(err) throw err;
+                var mtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
+                install(install_cmd, { npm_config_node_pre_gyp_cache: 'false' }, function(err,stdout,stderr) {
+                    if(err) return on_error(err,stdout,stderr);
+                    assert.equal(stderr.indexOf('from cache'), -1);
+                    assert.equal(fs.statSync(path.join(cache_dir,files[0])).mtime.getTime(), mtime.getTime(), 'cache value was not updated');
+                    done();
+                });
+            });
+        });
+    });
+
     it('proceeds even when the cache dir can\'t be accessed/created', function(done) {
         install(install_cmd + ' --loglevel=verbose', { NODE_PRE_GYP_CACHE: path.join(cache_dir, 'x', 'x') }, function(err,stdout,stderr) {
             if(err) return on_error(err,stdout,stderr);
@@ -153,6 +169,17 @@ function on_error(err,stdout,stderr) {
 
     it('doesn\'t write to the cache when told not to', function(done) {
         run(binPath + ' rebuild --fallback-to-build --loglevel=error --skip-node-pre-gyp-cache', function(err,stdout,stderr) {
+            if(err) return on_error(err,stdout,stderr);
+            fs.readdir(cache_dir, function(err, files) {
+                if(err) throw err;
+                assert.equal(files.length, 0);
+                done();
+            });
+        });
+    });
+
+    it('doesn\'t write to the cache when told not to by npm', function(done) {
+        run(binPath + ' rebuild --fallback-to-build --loglevel=error', { npm_config_node_pre_gyp_cache: 'false' }, function(err,stdout,stderr) {
             if(err) return on_error(err,stdout,stderr);
             fs.readdir(cache_dir, function(err, files) {
                 if(err) throw err;

@@ -89,6 +89,13 @@ For example: `npm install --build-from-source=myapp`. This is useful if:
  - The larger app also depends on other modules installed with `node-pre-gyp`
  - You only want to trigger a source compile for `myapp` and the other modules.
 
+#### NPM config
+
+The following npm config options will affect node-pre-gyp (when run via npm, eg
+`npm install`).
+
+  - `node_pre_gyp_cache` -> `false` -> don't use the node-pre-gyp caching functionality (eg. `npm set config node_pre_gyp_cache false` will disable the node-pre-gyp cache when node-pre-gyp is invoked via npm)
+
 ### Configuring
 
 This is a guide to configuring your module to use node-pre-gyp.

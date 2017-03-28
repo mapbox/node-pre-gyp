@@ -4,7 +4,7 @@ var assert = require('assert');
 var cp = require('child_process');
 var path = require('path');
 var existsSync = require('fs').existsSync || require('path').existsSync;
-var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
+var crosswalk = require('../lib/util/crosswalk');
 var os = require('os');
 var fs = require('fs');
 var rm = require('rimraf');
@@ -73,19 +73,15 @@ function detectIOJS(current_version) {
 var is_iojs = detectIOJS(process.version.replace('v',''));
 
 function getPreviousVersion(current_version) {
-    var current_parts = current_version.split('.').map(function(i) { return +i; });
-    var major = current_parts[0];
-    var minor = current_parts[1];
-    var patch = current_parts[2];
-    while (patch > 0) {
-        --patch;
-        var new_target = '' + major + '.' + minor + '.' + patch;
-        if (new_target == current_version) {
-            break;
-        }
-        if (abi_crosswalk[new_target]) {
-            return new_target;
-        }
+    var abi_crosswalk = crosswalk.get_crosswalk();
+    var abi_version = current_version;
+    var index = abi_crosswalk.findIndex(function(release) {
+        return release.version === abi_version;
+    });
+    if(index === -1) return null;
+    var previous_version = abi_crosswalk[index + 1];
+    if(previous_version && previous_version.modules === abi_crosswalk[index].modules) {
+        return previous_version;
     }
     // failed to find suitable future version that we expect is ABI compatible
     return undefined;
@@ -98,15 +94,16 @@ function on_error(err,stdout,stderr) {
     throw new Error(msg);
 }
 
-var current_version = process.version.replace('v','');
-var previous_version = getPreviousVersion(current_version);
+var current_version = process.version;
+var previous_version_obj = getPreviousVersion(current_version);
+var previous_version;
 var target_abi;
 var testing_crosswalk;
-if (previous_version !== undefined && previous_version !== current_version) {
-    target_abi = {};
-    target_abi[previous_version] = abi_crosswalk[previous_version];
+if (previous_version_obj !== undefined && previous_version_obj.version !== current_version) {
+    target_abi = [ previous_version_obj ];
     testing_crosswalk = path.join(os.tmpdir(),'fake_abi_crosswalk.json');
     fs.writeFileSync(testing_crosswalk,JSON.stringify(target_abi));
+    previous_version = previous_version_obj.version.replace('v','');
 }
 
 describe('simple build and test', function() {

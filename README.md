@@ -355,7 +355,7 @@ Another way is to use your environment:
     export node_pre_gyp_accessKeyId=xxx
     export node_pre_gyp_secretAccessKey=xxx
 
-You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
+You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value. However if you are using a custom domain and the bucket can't be derived from the host, you need to specify it. Note that case is taken into account when reading environment variable keys, so be sure to use them verbatim.
 
 #### 4) Package and publish your build
 

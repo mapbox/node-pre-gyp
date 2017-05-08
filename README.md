@@ -95,6 +95,8 @@ The following npm config options will affect node-pre-gyp (when run via npm, eg
 `npm install`).
 
   - `node_pre_gyp_cache` -> `false` -> don't use the node-pre-gyp caching functionality (eg. `npm set config node_pre_gyp_cache false` will disable the node-pre-gyp cache when node-pre-gyp is invoked via npm)
+  - `node_pre_gyp_cache_dir` -> directory to use as the node-pre-gyp cache (defaults to `path.join(os.homedir(), '.node-pre-gyp')` which on unix-like oses is `~/.node-pre-gyp`)
+    * If a NODE_PRE_GYP_CACHE environment variable is set it will be used in preference to this
 
 ### Configuring
 

@@ -79,7 +79,7 @@ Options include:
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
  - `--ignore-node-pre-gyp-cache`: Don't read from the internal node-pre-gyp cache
- - `--skip-node-pre-gyp-cache`: Don't read from or update (ie write to) the internal node-pre-gyp cache
+ - `--skip-node-pre-gyp-cache`: Don't update (ie write to) the internal node-pre-gyp cache
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 
@@ -95,7 +95,7 @@ The following npm config options will affect node-pre-gyp (when run via npm, eg
 `npm install`).
 
   - `node_pre_gyp_cache` -> `false` -> don't use the node-pre-gyp caching functionality (eg. `npm set config node_pre_gyp_cache false` will disable the node-pre-gyp cache when node-pre-gyp is invoked via npm)
-  - `node_pre_gyp_cache_dir` -> directory to use as the node-pre-gyp cache (defaults to `path.join(os.homedir(), '.node-pre-gyp')` which on unix-like oses is `~/.node-pre-gyp`)
+  - `node_pre_gyp_cache_dir` -> directory to use as the node-pre-gyp cache (defaults to `path.join(os.homedir(), '.node-pre-gyp')` which on unix-like OSes is `~/.node-pre-gyp`)
     * If a NODE_PRE_GYP_CACHE environment variable is set it will be used in preference to this
 
 ### Configuring

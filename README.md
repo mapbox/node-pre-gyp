@@ -108,7 +108,6 @@ This looks like:
     }
     "bundledDependencies":["node-pre-gyp"],
     "scripts": {
-        "prepublish": "npm ls",
         "install": "node-pre-gyp install --fallback-to-build"
     },
     "binary": {

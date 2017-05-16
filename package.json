@@ -28,7 +28,8 @@
     "rimraf": "^2.6.1",
     "semver": "^5.3.0",
     "tar": "^2.2.1",
-    "tar-pack": "^3.4.0"
+    "tar-pack": "^3.4.0",
+    "which": "^1.2.14"
   },
   "devDependencies": {
     "aws-sdk": "^2.28.0",

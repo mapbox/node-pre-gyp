@@ -1,9 +1,17 @@
 # node-pre-gyp changelog
 
-## 0.6.34
+
+## 0.6.36
+
+ - Fixed regression in v0.6.35 for electron installs (now skipping binary validation which is not yet supported for electron)
+
+## 0.6.35
 
  - No longer recommending `npm ls` in `prepublish` (#291)
  - Fixed testbinary command (#283) @szdavid92
+
+## 0.6.34
+
  - Added new node versions to crosswalk, including v8
  - Upgraded deps to latest versions, started using `^` instead of `~` for all deps.
 

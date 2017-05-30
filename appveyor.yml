@@ -15,9 +15,8 @@ shallow_clone: true
 install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
-  - npm install --global --production npm-windows-upgrade
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
-  - npm-windows-upgrade --npm-version 2.15.9 --no-dns-check --no-prompt
+  - npm install --production node-gyp
   - node --version
   - npm --version
   #- SET PATH=%APPDATA%\npm;%PATH%

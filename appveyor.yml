@@ -1,10 +1,6 @@
 os: Visual Studio 2015
 
 environment:
-  AWS_ACCESS_KEY_ID:
-    secure: "VVcArESQA6N2JeG/SkeMYVnHn5DMEuiwbsKHez3fzuA="
-  AWS_SECRET_ACCESS_KEY:
-    secure: "7lqDDrORt+VRTfVZh1ZcK5P3bAhFuiND9WmbDedehxLoqqdSiy8SBKWuKE2qVKyI"
   matrix:
     - nodejs_version: 0.10
     - nodejs_version: 4

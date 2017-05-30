@@ -2,6 +2,9 @@
 
 ## 0.6.34
 
+ - No longer recommending `npm ls` in `prepublish` (#291)
+ - Fixed testbinary command (#283) @szdavid92
+ - Added new node versions to crosswalk, including v8
  - Upgraded deps to latest versions, started using `^` instead of `~` for all deps.
 
 ## 0.6.33

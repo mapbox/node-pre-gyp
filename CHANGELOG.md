@@ -1,8 +1,8 @@
 # node-pre-gyp changelog
 
-
 ## 0.6.36
 
+ - Removed the running of `testbinary` during install. Because this was regressed for so long, it is too dangerous to re-enable by default. Developers needing validation can call `node-pre-gyp testbinary` directory.
  - Fixed regression in v0.6.35 for electron installs (now skipping binary validation which is not yet supported for electron)
 
 ## 0.6.35

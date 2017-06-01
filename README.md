@@ -30,7 +30,8 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v0.10.x
+ - Node.js >= node v0.10.x 
+ - Python >= 2.5.0  3.0.0 <
 
 ## Install
 

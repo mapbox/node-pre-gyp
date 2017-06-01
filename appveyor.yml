@@ -15,7 +15,12 @@ shallow_clone: true
 install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
-  # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
+  # make node@4.x x86 builds work
+  # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
+  - npm config set -g cafile=package.json
+  - npm config set -g strict-ssl=false
+  # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
+  - https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   - npm install --production node-gyp
   - node --version
   - npm --version

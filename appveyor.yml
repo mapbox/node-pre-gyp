@@ -20,7 +20,7 @@ install:
   - npm config set -g cafile=package.json
   - npm config set -g strict-ssl=false
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
-  - https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
+  # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   - npm install --production node-gyp
   - node --version
   - npm --version

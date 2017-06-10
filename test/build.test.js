@@ -32,7 +32,12 @@ function run(prog,command,args,app,opts,cb) {
     }
     final_cmd += ' ' + app.args;
     final_cmd += ' ' + args;
-    cp.exec('V=1 '+final_cmd,opts,function(err,stdout,stderr) {
+    // on unix display compile args
+    if (process.platform !== 'win32') {
+        final_cmd = 'V=1 ' + final_cmd;
+    }
+
+    cp.exec(final_cmd,opts,function(err,stdout,stderr) {
         if (err) {
             var error = new Error("Command failed '" + final_cmd + "'");
             error.stack = stderr;
@@ -145,10 +150,12 @@ apps.forEach(function(app) {
         test(app.name + ' builds ' + app.args, function(t) {
             run('node-pre-gyp', 'rebuild', '--fallback-to-build --loglevel=error', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
-                if (app.args.indexOf('--debug') > -1) {
-                    t.stringContains(stdout,'Debug/'+app.name+'.node');
-                } else {
-                    t.stringContains(stdout,'Release/'+app.name+'.node');
+                if (process.platform !== 'win32') {
+                    if (app.args.indexOf('--debug') > -1) {
+                        t.stringContains(stdout,'Debug/'+app.name+'.node');
+                    } else {
+                        t.stringContains(stdout,'Release/'+app.name+'.node');
+                    }
                 }
                 t.end();
             });

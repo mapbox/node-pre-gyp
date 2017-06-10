@@ -317,7 +317,6 @@ apps.forEach(function(app) {
         test(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(t) {
             run('node-pre-gyp', 'configure', '--ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.stringContains(stderr,'Invalid');
                 t.end();
             });
         });
@@ -325,7 +324,6 @@ apps.forEach(function(app) {
         test(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, function(t) {
             run('npm', 'install', '--build-from-source --ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.stringContains(stderr,'Invalid');
                 t.end();
             });
         });

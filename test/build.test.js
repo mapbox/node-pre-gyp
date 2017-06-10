@@ -180,9 +180,9 @@ apps.forEach(function(app) {
                 if (app.name == 'app2') {
                     console.log(stdout);
                     if (app.args.indexOf('--debug') > -1) {
-                        t.ok(stdout.indexOf('Loaded Debug build') > -1);
+                        t.stringContains(stdout,'Loaded Debug build');
                     } else {
-                        t.ok(stdout.indexOf('Loaded Release build') > -1);
+                        t.stringContains(stdout,'Loaded Release build');
                     }
                 } else {
                     // we expect some npm output
@@ -281,7 +281,7 @@ apps.forEach(function(app) {
         test(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.args, function(t) {
             run('node-pre-gyp', 'configure', '--nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.ok(stderr.indexOf('common.gypi not found' > -1));
+                t.stringContains(stderr,"common.gypi not found");
                 t.end();
             });
         });
@@ -289,7 +289,7 @@ apps.forEach(function(app) {
         test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(t) {
             run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.ok(stderr.indexOf('common.gypi not found' > -1));
+                t.stringContains(stderr,"common.gypi not found");
                 t.end();
             });
         });
@@ -299,7 +299,7 @@ apps.forEach(function(app) {
             test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
                 run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
                     t.ok(err);
-                    t.ok(stderr.indexOf("Can't find Python executable" > -1));
+                    t.stringContains(stderr,"Can't find Python executable");
                     t.end();
                 });
             });
@@ -307,7 +307,7 @@ apps.forEach(function(app) {
             test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
                 run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
                     t.ok(err);
-                    t.ok(stderr.indexOf("Can't find Python executable" > -1));
+                    t.stringContains(stderr,"Can't find Python executable");
                     t.end();
                 });
             });
@@ -317,7 +317,7 @@ apps.forEach(function(app) {
         test(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(t) {
             run('node-pre-gyp', 'configure', '--ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.ok(stderr.indexOf('Invalid protocol: null' > -1));
+                t.stringContains(stderr,'Invalid');
                 t.end();
             });
         });
@@ -325,7 +325,7 @@ apps.forEach(function(app) {
         test(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, function(t) {
             run('npm', 'install', '--build-from-source --ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
                 t.ok(err);
-                t.ok(stderr.indexOf('Invalid protocol: null' > -1));
+                t.stringContains(stderr,'Invalid');
                 t.end();
             });
         });

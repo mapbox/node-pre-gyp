@@ -19,14 +19,15 @@ install:
   - npm config get
   # make node >= 4.x x86 builds work
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
-  - IF /I "%PLATFORM%" == "x86" npm config set -g cafile=package.json
-  - IF /I "%PLATFORM%" == "x86" npm config set -g strict-ssl=false
+  #- IF /I "%PLATFORM%" == "x86" npm config set -g cafile=package.json
+  #- IF /I "%PLATFORM%" == "x86" npm config set -g strict-ssl=false
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   - IF "%nodejs_version:~0,1%"=="0" npm install node-gyp@3.x
   # downgrade npm with node v6 to dodge npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp
   # https://github.com/mapbox/node-pre-gyp/issues/300
-  - IF "%nodejs_version:~0,1%"=="6" npm install npm@2.x -g
+  #- IF "%nodejs_version:~0,1%"=="6" npm install npm@2.x -g
+  - npm install npm@2.x -g
   - node --version
   - npm --version
   - node -e "console.log(process.arch);"

@@ -25,8 +25,9 @@ install:
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
   - IF "%nodejs_version:~0,1%"=="4" npm install node-gyp@3.x
   # downgrade npm to avoid multiple npm bugs:
-  # for node v6/v8 this dodges npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp (https://github.com/mapbox/node-pre-gyp/issues/300)
+  # for node v6 this dodges npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp (https://github.com/mapbox/node-pre-gyp/issues/300)
   # for all node x86 versions this dodges a mysterious ELIFECYCLE error: https://ci.appveyor.com/project/Mapbox/node-pre-gyp/build/1.0.582/job/b8q2nud6vkj0s6qo#L233
+  # for node v8 this dodges https://github.com/mapbox/node-pre-gyp/issues/302
   - npm install npm@2.x -g
   - node --version
   - npm --version

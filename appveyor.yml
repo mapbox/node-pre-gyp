@@ -16,6 +16,7 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - npm config get
+  - npm config ls -l
   # make node@4.x x86 builds work
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
   #- npm config set -g cafile=package.json

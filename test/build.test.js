@@ -66,23 +66,22 @@ test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, functio
 });
 
 // TODO - for some reason these do not error on windows
-if (process.platform !== 'win32') {
-    test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
-        run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
-            t.ok(err, 'Expected command to fail');
-            t.stringContains(stderr,"Can't find Python executable");
-            t.end();
-        });
+test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
+    run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
+        t.ok(err, 'Expected command to fail');
+        t.stringContains(stderr,"Can't find Python executable");
+        t.end();
     });
+});
 
-    test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
-        run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
-            t.ok(err, 'Expected command to fail');
-            t.stringContains(stderr,"Can't find Python executable");
-            t.end();
-        });
+test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
+    run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
+        t.ok(err, 'Expected command to fail');
+        t.stringContains(stderr,"Can't find Python executable");
+        t.end();
     });
-}
+});
+
 // note: --ensure=false tells node-gyp to attempt to re-download the node headers
 // even if they already exist on disk at ~/.node-gyp/{version}
 test(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(t) {

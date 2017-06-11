@@ -24,6 +24,7 @@ install:
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   - npm install node-gyp@3.x
+  - npm install npm@2.x -g
   - node --version
   - npm --version
   - node -e "console.log(process.arch,process.env.node_pre_gyp_accessKeyId);"

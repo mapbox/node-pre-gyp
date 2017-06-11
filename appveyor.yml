@@ -5,6 +5,7 @@ environment:
     - nodejs_version: 0.10
     - nodejs_version: 4
     - nodejs_version: 6
+    - nodejs_version: 8
 
 platform:
   - x64
@@ -16,18 +17,14 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - npm config get
-  - npm config ls -l
-  # make node@4.x x86 builds work
-  # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
-  #- npm config set -g cafile=package.json
-  #- npm config set -g strict-ssl=false
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
-  - npm install node-gyp@3.x
-  - npm install npm@2.x -g
+  - IF "%nodejs_version:~0,1%"=="0" npm install node-gyp@3.x
+  # downgrade npm with node v6 to dodge npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp
+  - IF "%nodejs_version:~0,1%"=="6" npm install npm@2.x -g
   - node --version
   - npm --version
-  - node -e "console.log(process.arch,process.env.node_pre_gyp_accessKeyId);"
+  - node -e "console.log(process.arch);"
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
   - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64

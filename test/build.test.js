@@ -57,6 +57,7 @@ test(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.arg
     });
 });
 
+// NOTE: currently fails with npm v3.x on windows (hench downgrade in appveyor.yml)
 test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(t) {
     run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
         t.ok(err, 'Expected command to fail');
@@ -65,23 +66,25 @@ test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, functio
     });
 });
 
-// TODO - for some reason these do not error on windows
-test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
-    run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
-        t.ok(err, 'Expected command to fail');
-        t.stringContains(stderr,"Can't find Python executable");
-        t.end();
+// these will not fail on windows because node-gyp falls back to the python launcher instead of erroring out:
+// https://github.com/nodejs/node-gyp/blob/c84a54194781410743efe353d18ca7d20fc9d3a3/lib/configure.js#L396-L397
+if (process.platform !== 'win32') {
+    test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
+        run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
+            t.ok(err, 'Expected command to fail');
+            t.stringContains(stderr,"Can't find Python executable");
+            t.end();
+        });
     });
-});
 
-test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
-    run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
-        t.ok(err, 'Expected command to fail');
-        t.stringContains(stderr,"Can't find Python executable");
-        t.end();
+    test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
+        run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
+            t.ok(err, 'Expected command to fail');
+            t.stringContains(stderr,"Can't find Python executable");
+            t.end();
+        });
     });
-});
-
+}
 // note: --ensure=false tells node-gyp to attempt to re-download the node headers
 // even if they already exist on disk at ~/.node-gyp/{version}
 test(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.args, function(t) {

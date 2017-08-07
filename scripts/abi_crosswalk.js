@@ -53,6 +53,24 @@ https.get('https://nodejs.org/download/release/index.json', function(res) {
   });
 });
 
+https.get('https://nodejs.org/download/chakracore-release/index.json', function(res) {
+  if (res.statusCode != 200 ) {
+    throw new Error("server returned " + res.statusCode + ' for nodejs.org (chakracore)');
+  }
+  res.setEncoding('utf8');
+  var body = '';
+  res.on('data', function (chunk) {
+    body += chunk;
+  });
+  res.on('end',function(err) {
+    if (err) throw err;
+    var releases = JSON.parse(body);
+    releases.forEach(function(release) {
+        cross[release.version.replace('v','')+'-chakracore'] = {node_abi:+release.modules,v8:release.v8.split('.').slice(0,2).join('.')};
+    });
+  });
+});
+
 var sortObjectByKey = function(obj){
     var keys = [];
     var sorted_obj = {};

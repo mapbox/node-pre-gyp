@@ -19,6 +19,8 @@ if (process.platform === 'win32') {
 process.env.PATH = cmd_path + sep + process.env.PATH;
 process.env.NODE_PATH = path.join(__dirname,'../lib/');
 
+var jsEngine = process.jsEngine ? '-' + process.jsEngine : '';
+
 function run(prog,command,args,app,opts,cb) {
     var final_cmd = prog + ' ' + command;
     if (!opts.cwd) {
@@ -77,14 +79,16 @@ function getPreviousVersion(current_version) {
     var major = current_parts[0];
     var minor = current_parts[1];
     var patch = current_parts[2];
+    
     while (patch > 0) {
         --patch;
         var new_target = '' + major + '.' + minor + '.' + patch;
         if (new_target == current_version) {
             break;
         }
-        if (abi_crosswalk[new_target]) {
-            return new_target;
+        
+        if (abi_crosswalk[new_target+jsEngine]) {
+            return new_target+jsEngine;
         }
     }
     // failed to find suitable future version that we expect is ABI compatible
@@ -98,7 +102,7 @@ function on_error(err,stdout,stderr) {
     throw new Error(msg);
 }
 
-var current_version = process.version.replace('v','');
+var current_version = process.version.replace('v','').replace(jsEngine, '');
 var previous_version = getPreviousVersion(current_version);
 var target_abi;
 var testing_crosswalk;

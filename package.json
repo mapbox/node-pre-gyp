@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version" : "0.6.36",
+  "version": "0.6.36",
   "keywords": [
     "native",
     "addon",
@@ -45,7 +45,7 @@
     "mocha": true
   },
   "scripts": {
-    "pretest": "retire -n && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",
+    "pretest": "retire -np && jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "test": "jshint lib lib/util scripts bin/node-pre-gyp && mocha -R spec --timeout 500000"
   }

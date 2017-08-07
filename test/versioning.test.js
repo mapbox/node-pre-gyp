@@ -3,6 +3,7 @@
 var path = require('path');
 var versioning = require('../lib/util/versioning.js');
 var assert = require('assert');
+var jsEngine = process.jsEngine ? '-' + process.jsEngine : '';
 
 describe('versioning', function() {
     it('should normalize double slash', function() {
@@ -34,7 +35,7 @@ describe('versioning', function() {
             modules: '11',
         };
         var abi = versioning.get_node_abi('node',mock_process_versions);
-        assert.equal(abi,'node-v11');
+        assert.equal(abi,'node-v11' + jsEngine);
         assert.equal(versioning.get_runtime_abi('node',undefined),versioning.get_node_abi('node',process.versions));
     });
 
@@ -49,15 +50,23 @@ describe('versioning', function() {
 
     it('should detect abi for custom node target', function() {
         var mock_process_versions = {
-            "node": '0.10.0',
-            "modules": '11',
+            "node": (jsEngine) ? '8.1.2' : '0.10.0',
+            "modules": (jsEngine) ? '57' : '11',
         };
-        assert.equal(versioning.get_runtime_abi('node','0.10.0'),versioning.get_node_abi('node',mock_process_versions));
-        var mock_process_versions2 = {
-            "node": '0.8.0',
-            "v8": "3.11"
-        };
-        assert.equal(versioning.get_runtime_abi('node','0.8.0'),versioning.get_node_abi('node',mock_process_versions2));
+        
+        if (jsEngine) {
+            assert.equal(versioning.get_runtime_abi('node','8.1.2'),versioning.get_node_abi('node',mock_process_versions));
+        } else {
+            assert.equal(versioning.get_runtime_abi('node','0.10.0'),versioning.get_node_abi('node',mock_process_versions));
+        }
+       
+        if (!jsEngine) {
+            var mock_process_versions2 = {
+                "node": '0.8.0',
+                "v8": "3.11"
+            };
+            assert.equal(versioning.get_runtime_abi('node','0.8.0'),versioning.get_node_abi('node',mock_process_versions2));
+        }
     });
 
     it('should detect runtime for node-webkit and electron', function() {

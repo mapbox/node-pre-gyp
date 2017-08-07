@@ -4,13 +4,14 @@ var semver = require('semver');
 var data = require('../lib/util/abi_crosswalk.json');
 
 var targets = {};
+var jsEngine = process.jsEngine ? '-chakracore' : '';
 Object.keys(data).forEach(function(v) {
     var o = data[v];
     var abi;
     if (o.node_abi == 1) {
         abi = 'v8-'+o.v8;
     } else {
-        abi = 'node-v'+o.node_abi;
+        abi = 'node-v'+o.node_abi+jsEngine;
     }
     if (targets[abi] === undefined) {
         targets[abi] = v;

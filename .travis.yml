@@ -23,12 +23,23 @@ env:
    - NODE_VERSION="5"
    - NODE_VERSION="6"
    - NODE_VERSION="7"
+   - NODE_VERSION="8"
+   - NODE_VERSION="8-chakracore"
 
 before_install:
 - if [[ $(uname -s) == 'Linux' ]]; then
      export CXX="g++-4.8";
   fi;
-- source ./scripts/install_node.sh ${NODE_VERSION}
+- if [[ $NODE_VERSION == *chakracore* ]]; then
+    export NODE_VERSION=8.1.2;
+    curl -sSL https://nodejs.org/download/chakracore-release/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.gz -o /usr/local/node-$NODE_VERSION.tar.gz;
+    cd /usr/local/;
+    tar --strip-components 1 -xf node-$NODE_VERSION.tar.gz;
+    rm -f node-$NODE_VERSION.tar.gz;
+    cd -;
+  else
+    source ./scripts/install_node.sh ${NODE_VERSION};
+  fi
 - npm config set loglevel=error
 
 install:

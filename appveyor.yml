@@ -3,7 +3,7 @@ os: Visual Studio 2015
 environment:
   NVS_VERSION: 1.4.0
   matrix:
-    - NODEJS_VERSION: iojs/0.10
+    - NODEJS_VERSION: node/0.10
     - NODEJS_VERSION: node/4
     - NODEJS_VERSION: node/6
     - NODEJS_VERSION: chakracore/8.1.2

@@ -11,7 +11,6 @@ environment:
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - git clone --branch v%NVS_VERSION% --depth 1 https://github.com/jasongin/nvs %LOCALAPPDATA%\nvs
   - set PATH=%LOCALAPPDATA%\nvs;%PATH%

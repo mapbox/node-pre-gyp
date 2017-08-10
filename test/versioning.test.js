@@ -3,7 +3,7 @@
 var path = require('path');
 var versioning = require('../lib/util/versioning.js');
 var assert = require('assert');
-var jsEngine = process.jsEngine ? '-' + process.jsEngine : '';
+var jsEngine = process.jsEngine === 'chakracore' ? '-' + process.jsEngine : '';
 
 describe('versioning', function() {
     it('should normalize double slash', function() {

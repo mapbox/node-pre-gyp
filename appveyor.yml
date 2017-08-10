@@ -1,10 +1,12 @@
 os: Visual Studio 2015
 
 environment:
+  NVS_VERSION: 1.4.0
   matrix:
-    - nodejs_version: 0.10
-    - nodejs_version: 4
-    - nodejs_version: 6
+    - NODEJS_VERSION: iojs/0.10
+    - NODEJS_VERSION: node/4
+    - NODEJS_VERSION: node/6
+    - NODEJS_VERSION: chakracore/8.1.2
 
 platform:
   - x64
@@ -15,8 +17,12 @@ shallow_clone: true
 install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+  - git clone --branch v%NVS_VERSION% --depth 1 https://github.com/jasongin/nvs %LOCALAPPDATA%\nvs
+  - set PATH=%LOCALAPPDATA%\nvs;%PATH%
   # make node@4.x x86 builds work
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
+  - nvs add %NDOEJS_VERSION%
+  - nvs use %NODEJS_VERSION%
   - npm config set -g cafile=package.json
   - npm config set -g strict-ssl=false
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10

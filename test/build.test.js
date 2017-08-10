@@ -19,7 +19,7 @@ if (process.platform === 'win32') {
 process.env.PATH = cmd_path + sep + process.env.PATH;
 process.env.NODE_PATH = path.join(__dirname,'../lib/');
 
-var jsEngine = process.jsEngine ? '-' + process.jsEngine : '';
+var jsEngine = process.jsEngine === 'chakracore' ? '-' + process.jsEngine : '';
 
 function run(prog,command,args,app,opts,cb) {
     var final_cmd = prog + ' ' + command;

@@ -4,7 +4,7 @@ var semver = require('semver');
 var data = require('../lib/util/abi_crosswalk.json');
 
 var targets = {};
-var jsEngine = process.jsEngine ? '-chakracore' : '';
+var jsEngine = process.jsEngine === 'chakracore' ? '-chakracore' : '';
 Object.keys(data).forEach(function(v) {
     var o = data[v];
     var abi;

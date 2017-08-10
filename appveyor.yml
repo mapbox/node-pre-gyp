@@ -23,16 +23,16 @@ install:
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   - npm install node-gyp@3.x
-  - node --version
-  - npm --version
   - node -e "console.log(process.arch);"
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
   - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
   - npm install
-  - npm test
 
 build: off
-test: off
+test_script:
+  - node --version
+  - npm --version
+  - npm test 
 deploy: off

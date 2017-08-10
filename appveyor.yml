@@ -8,10 +8,6 @@ environment:
     - NODEJS_VERSION: node/6
     - NODEJS_VERSION: chakracore/8.1.2
 
-platform:
-  - x64
-  - x86
-
 shallow_clone: true
 
 install:

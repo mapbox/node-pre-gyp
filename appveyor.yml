@@ -18,6 +18,7 @@ install:
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
   - nvs add %NODEJS_VERSION%
   - nvs use %NODEJS_VERSION%
+  - IF /I "%NODEJS_VERSION%" == "node/0.10" npm set ca null
   - npm config set -g cafile=package.json
   - npm config set -g strict-ssl=false
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10

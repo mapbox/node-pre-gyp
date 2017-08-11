@@ -3,11 +3,9 @@
 var s3_setup = require('../lib/util/s3_setup.js');
 var assert = require('assert');
 
-var protocol = /^win/.test(process.platform) ? 'http' : 'https';
-
 describe('s3_setup', function() {
     it('should propertly detect s3 bucket and prefix', function() {
-        var url = protocol + "://node-pre-gyp-tests.s3-us-west-1.amazonaws.com";
+        var url = "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com";
         var result = {};
         s3_setup.detect(url, result);
         assert.equal(result.prefix,'');
@@ -15,7 +13,7 @@ describe('s3_setup', function() {
     });
 
     it('should propertly detect s3 bucket and prefix with dots', function() {
-        var url = protocol + "://bucket.with.dots.s3.amazonaws.com/prefix";
+        var url = "https://bucket.with.dots.s3.amazonaws.com/prefix";
         var result = {};
         s3_setup.detect(url, result);
         assert.equal(result.prefix,'prefix');

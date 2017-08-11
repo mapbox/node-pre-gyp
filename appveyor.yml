@@ -30,10 +30,10 @@ install:
   - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
   - npm install
-
-build: off
-test_script:
   - node --version
   - npm --version
   - npm test 
+
+build: off
+test: off
 deploy: off

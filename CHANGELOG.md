@@ -2,7 +2,11 @@
 
 ## 0.6.37
 
+ - Solved one part of #276: now now deduce the node ABI from the major version for node >= 2 even when not stored in the abi_crosswalk.json
+ - Fixed docs to avoid mentioning the deprecated and dangerous `prepublish` in package.json (#291)
  - Add new node versions to crosswalk
+ - Ported tests to use tape instead of mocha
+ - Got appveyor tests passing by downgrading npm and node-gyp
 
 ## 0.6.36
 

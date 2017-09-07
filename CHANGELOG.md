@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.37
+
+ - Add new node versions to crosswalk
+
 ## 0.6.36
 
  - Removed the running of `testbinary` during install. Because this was regressed for so long, it is too dangerous to re-enable by default. Developers needing validation can call `node-pre-gyp testbinary` directory.

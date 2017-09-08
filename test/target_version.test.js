@@ -6,9 +6,9 @@ var abi_crosswalk = require('../lib/util/abi_crosswalk.json');
 var os = require('os');
 var fs = require('fs');
 var path = require('path');
-var test = require('tape');
+var t = require('tap');
 
-test('should properly calculate previous version', function(t) {
+t.test('should properly calculate previous version', function(t) {
     t.equal(getPrevious('1.0.0',abi_crosswalk),undefined);
     t.equal(getPrevious('1.0.1',abi_crosswalk),'1.0.0');
     t.equal(getPrevious('1.0.2',abi_crosswalk),'1.0.1');
@@ -38,7 +38,7 @@ Object.keys(abi_crosswalk).forEach(function(v) {
     }
 });
 
-test('every major version should have a unique ABI that is consistent across all major versions', function(t) {
+t.test('every major version should have a unique ABI that is consistent across all major versions', function(t) {
     var abis = {};
     Object.keys(abi_crosswalk).forEach(function(v) {
        var major = +v.split('.')[0];
@@ -58,7 +58,7 @@ var found = false;
 var current_version = process.versions.node;
 var major = +(current_version.split('.')[0]);
 
-test('ensure crosswalk has major version of current node', function(t) {
+t.test('ensure crosswalk has major version of current node', function(t) {
     found = versions.indexOf(major) > -1;
     t.ok(found);
     t.end();
@@ -83,7 +83,7 @@ if (previous_patch_version && previous_patch_version !== current_version) {
 
     var app = {'name': 'app1', 'args': '' };
 
-    test(app.name + ' builds with custom --target='+previous_patch_version+' that is greater than known version in ABI crosswalk ' + app.args, function(t) {
+    t.test(app.name + ' builds with custom --target='+previous_patch_version+' that is greater than known version in ABI crosswalk ' + app.args, function(t) {
         if (found) {
             // construct a mock abi_crosswalk that contains only the previous node version
             // and not the current node version

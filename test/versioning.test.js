@@ -2,9 +2,9 @@
 
 var path = require('path');
 var versioning = require('../lib/util/versioning.js');
-var test = require('tape');
+var t = require('tap');
 
-test('should normalize double slash', function(t) {
+t.test('should normalize double slash', function(t) {
     var mock_package_json = {
         "name"   : "test",
         "main"   : "test.js",
@@ -27,7 +27,7 @@ test('should normalize double slash', function(t) {
     t.end();
 });
 
-test('should detect abi for node process', function(t) {
+t.test('should detect abi for node process', function(t) {
     var mock_process_versions = {
         node: '0.10.33',
         v8: '3.14.5.9',
@@ -39,7 +39,7 @@ test('should detect abi for node process', function(t) {
     t.end();
 });
 
-test('should detect abi for odd node target', function(t) {
+t.test('should detect abi for odd node target', function(t) {
     var mock_process_versions = {
         node: '0.11.1000000',
         modules: 'bogus',
@@ -49,7 +49,7 @@ test('should detect abi for odd node target', function(t) {
     t.end();
 });
 
-test('should detect abi for custom node target', function(t) {
+t.test('should detect abi for custom node target', function(t) {
     var mock_process_versions = {
         "node": '0.10.0',
         "modules": '11',
@@ -63,7 +63,7 @@ test('should detect abi for custom node target', function(t) {
     t.end();
 });
 
-test('should detect runtime for node-webkit and electron', function(t) {
+t.test('should detect runtime for node-webkit and electron', function(t) {
     var mock_process_versions = {
         "electron": '0.37.3',
     };
@@ -79,17 +79,17 @@ test('should detect runtime for node-webkit and electron', function(t) {
     t.end();
 });
 
-test('should detect abi for electron runtime', function(t) {
+t.test('should detect abi for electron runtime', function(t) {
     t.equal(versioning.get_runtime_abi('electron','0.37.3'),versioning.get_electron_abi('electron','0.37.3'));
     t.end();
 });
 
-test('should detect abi for node-webkit runtime', function(t) {
+t.test('should detect abi for node-webkit runtime', function(t) {
     t.equal(versioning.get_runtime_abi('node-webkit','0.10.5'),versioning.get_node_webkit_abi('node-webkit','0.10.5'));
     t.end();
 });
 
-test('should detect custom binary host from env', function(t) {
+t.test('should detect custom binary host from env', function(t) {
     var mock_package_json = {
         "name"   : "test",
         "main"   : "test.js",

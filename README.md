@@ -576,10 +576,14 @@ The options are visible in the code at <https://github.com/mapbox/node-pre-gyp/b
 
 S3 is broken in China for the well known reason.
 
-Using the `npm` config argument: `--{module_name}_binary_host_mirror` can download binary files through a mirror.
+Using the `npm` config argument: `--{module_name}_binary_host_mirror` can download binary files through a mirror, or `--binary_host_mirror` to specify the mirror for all pachages. 
 
 e.g.: Install [v8-profiler](https://www.npmjs.com/package/v8-profiler) from `npm`.
 
 ```bash
 $ npm install v8-profiler --profiler_binary_host_mirror=https://npm.taobao.org/mirrors/node-inspector/
+```
+or omit the package name:
+```bash
+$ npm install v8-profile --binary_host_mirror=https://npm.taobao.org/mirrors
 ```

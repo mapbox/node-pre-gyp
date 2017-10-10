@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.38
+
+ - Maintaining compatibility (for v0.6.x series) with node v0.10.x
+
 ## 0.6.37
 
  - Solved one part of #276: now now deduce the node ABI from the major version for node >= 2 even when not stored in the abi_crosswalk.json

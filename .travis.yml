@@ -23,6 +23,7 @@ env:
    - NODE_VERSION="5"
    - NODE_VERSION="7"
    - NODE_VERSION="8"
+   - NODE_VERSION="9"
 
 before_install:
 - if [[ $(uname -s) == 'Linux' ]]; then

@@ -562,6 +562,7 @@ The `binary` properties of `module_path`, `remote_path`, and `package_name` supp
  - `node_abi`: The node C++ `ABI` number. This value is available in Javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
  - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32` unless the user passed the `--target_platform` option to override.
  - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
+ - `libc` matches `require('detect-libc').family` like `glibc` or `musl` unless the user passes the `--target_libc` option to override.
  - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.
  - `module_name` - the `binary.module_name` attribute from `package.json`.
  - `version` - the semver `version` value for your module from `package.json` (NOTE: ignores the `semver.build` property).

@@ -3,6 +3,7 @@
 var path = require('path');
 var versioning = require('../lib/util/versioning.js');
 var test = require('tape');
+var detect_libc = require('detect-libc');
 
 test('should normalize double slash', function(t) {
     var mock_package_json = {
@@ -110,3 +111,26 @@ test('should detect custom binary host from env', function(t) {
     t.end();
 });
 
+test('should detect libc', function(t) {
+    var mock_package_json = {
+        "name"   : "test",
+        "main"   : "test.js",
+        "version": "0.1.0",
+        "binary" : {
+            "module_name" : "test",
+            "module_path" : "./lib/binding/{name}-{libc}",
+            "remote_path" : "./{name}/{libc}/",
+            "package_name": "{module_name}-{libc}.tar.gz",
+            "host"        : "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+        }
+    };
+    var opts = versioning.evaluate(mock_package_json, { module_root: '/root' });
+    var expected_libc_token = detect_libc.family || 'unknown';
+    t.comment('performing test with the following libc token: ' + expected_libc_token);
+    t.equal(opts.module_path, path.normalize("/root/lib/binding/test-" + expected_libc_token));
+    t.equal(opts.module, path.normalize("/root/lib/binding/test-" + expected_libc_token + '/test.node'));
+    t.equal(opts.remote_path, "./test/" + expected_libc_token + "/");
+    t.equal(opts.package_name, "test-" + expected_libc_token + ".tar.gz");
+    t.equal(opts.hosted_tarball, "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/test/" + expected_libc_token + "/test-" + expected_libc_token + ".tar.gz");
+    t.end();
+});

@@ -113,10 +113,11 @@ function on_error(err,stdout,stderr) {
                     install(install_cmd + ' --ignore-node-pre-gyp-cache', function(err,stdout,stderr) {
                         if(err) return on_error(err,stdout,stderr);
                         t.equal(stderr.indexOf('from cache'), -1);
-                        t.ok(fs.statSync(path.join(cache_dir,files[0])).mtime.getTime() > mtime.getTime(), 'cache value was not used, but was instead updated');
+                        var newMtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
+                        t.ok(newMtime.getTime() > mtime.getTime(), 'cache value was not used, but was instead updated: ' + newMtime.getTime() + ' > ' + mtime.getTime());
                         t.end();
                     });
-                }, 50);
+                }, 100);
             });
         });
     });

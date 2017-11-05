@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.6.40
+
+ - Improved error reporting if an install fails
+
 ## 0.6.39
 
  - Support for node v9

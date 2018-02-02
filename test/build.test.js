@@ -26,10 +26,14 @@ var apps = [
         'name': 'app3',
         'args': ''
     },
-    {
-        'name': 'app4',
-        'args': ''
-    }
+	{
+		'name': 'app4',
+		'args': ''
+	},
+	{
+		'name': 'app7',
+		'args': ''
+	}
 ];
 
 

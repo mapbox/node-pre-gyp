@@ -9,6 +9,7 @@ environment:
     - NODEJS_VERSION: node/8
     - NODEJS_VERSION: node/9
     - NODEJS_VERSION: chakracore/8.1.2
+    - NODEJS_VERSION: chakracore/8.9.4
 
 shallow_clone: true
 
@@ -27,11 +28,11 @@ install:
   # upgrade node-gyp to dodge 2013 compile issue present in the node gyp bundled with node v0.10
   # https://github.com/nodejs/node-gyp/issues/972#issuecomment-231055109
   # but we upgrade using my fork since 3.x upstream will now break node v0.10.x support
-  - IF "%nodejs_version:~0,1%"=="0" npm install https://github.com/springmeyer/node-gyp/tarball/v3.x
+  - IF /I "%NODEJS_VERSION%" == "node/0.10" npm install https://github.com/springmeyer/node-gyp/tarball/v3.x
   # upgrade node-gyp to dodge https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-307641388
   # and allow make node 4.x x86 builds work
   # https://github.com/mapbox/node-pre-gyp/issues/209#issuecomment-217690537
-  - IF "%nodejs_version:~0,1%"=="4" npm install node-gyp@3.x
+  - IF /I "%NODEJS_VERSION%" == "node/4" npm install node-gyp@3.x
   # downgrade npm to avoid multiple npm bugs:
   # for node v6 this dodges npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp (https://github.com/mapbox/node-pre-gyp/issues/300)
   # for all node x86 versions this dodges a mysterious ELIFECYCLE error: https://ci.appveyor.com/project/Mapbox/node-pre-gyp/build/1.0.582/job/b8q2nud6vkj0s6qo#L233

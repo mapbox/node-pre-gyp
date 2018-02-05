@@ -31,7 +31,7 @@ before_install:
      export CXX="g++-4.8";
   fi;
 - if [[ $NODE_VERSION == *chakracore* ]]; then
-    export NODE_VERSION=8.1.2;
+    export NODE_VERSION=8.9.4;
     curl -sSL https://nodejs.org/download/chakracore-release/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.gz -o /usr/local/node-$NODE_VERSION.tar.gz;
     cd /usr/local/;
     tar --strip-components 1 -xf node-$NODE_VERSION.tar.gz;

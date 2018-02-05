@@ -37,7 +37,7 @@ install:
   # for node v6 this dodges npm 3.10.10 bug whereby --nodedir/--dist-url is not passed to node-gyp (https://github.com/mapbox/node-pre-gyp/issues/300)
   # for all node x86 versions this dodges a mysterious ELIFECYCLE error: https://ci.appveyor.com/project/Mapbox/node-pre-gyp/build/1.0.582/job/b8q2nud6vkj0s6qo#L233
   # for node v8 this dodges https://github.com/mapbox/node-pre-gyp/issues/302
-  - npm install npm@2.x -g
+  - IF ("%NODEJS_VERSION%" == "node/4" -Or "%NODEJS_VERSION%" == "node/0.10") { npm install npm@2.x -g } Else { npm install npm@latest }
   - node --version
   - npm --version
   - node -e "console.log(process.arch);"

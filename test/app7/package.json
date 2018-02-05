@@ -21,7 +21,6 @@
         "napi_versions": [1,2]
     },
     "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build",
-        "test": "node index.js"
+        "install": "node-pre-gyp install --fallback-to-build"
     }
 }

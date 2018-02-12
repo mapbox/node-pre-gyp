@@ -179,8 +179,11 @@ apps.forEach(function(app) {
             run('node-pre-gyp', 'reveal', 'module_path --silent', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
                 var module_path = stdout.trim();
-                if (module_path.indexOf('\r') !== -1) module_path = module_path.substr(0,module_path.indexOf('\r')); // win32
-                else if (module_path.indexOf('\n') !== -1) module_path = module_path.substr(0,module_path.indexOf('\n'));
+                if (module_path.indexOf('\n') !== -1) { // take just the first line
+                    module_path = module_path.substr(0,module_path.indexOf('\n'));
+                } else if (module_path.indexOf('\\n') !== -1) { // win32 "anomaly"
+                    module_path = module_path.substr(0,module_path.indexOf('\\n'));
+                }
                 t.stringContains(module_path,app.name);
                 t.ok(existsSync(module_path),'is valid path to existing binary: '+ module_path);
                 var module_binary = path.join(module_path,app.name+'.node');

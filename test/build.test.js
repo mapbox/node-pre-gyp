@@ -181,8 +181,6 @@ apps.forEach(function(app) {
                 var module_path = stdout.trim();
                 if (module_path.indexOf('\n') !== -1) { // take just the first line
                     module_path = module_path.substr(0,module_path.indexOf('\n'));
-                } else if (module_path.indexOf('\\n') !== -1) { // win32 "anomaly"
-                    module_path = module_path.substr(0,module_path.indexOf('\\n'));
                 }
                 t.stringContains(module_path,app.name);
                 t.ok(existsSync(module_path),'is valid path to existing binary: '+ module_path);
@@ -238,6 +236,9 @@ apps.forEach(function(app) {
                 run('node-pre-gyp', 'reveal', 'package_name', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
                     var package_name = stdout.trim();
+                    if (package_name.indexOf('\n') !== -1) { // take just the first line
+                        package_name = package_name.substr(0,package_name.indexOf('\n'));
+                    }
                     run('node-pre-gyp', 'info', '', app, {}, function(err,stdout,stderr) {
                         t.ifError(err);
                         t.stringContains(stdout,package_name);

@@ -20,15 +20,17 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
+    "detect-libc": "^1.0.2",
+    "hawk": "^7.0.7",
     "mkdirp": "^0.5.1",
     "nopt": "^4.0.1",
     "npmlog": "^4.0.2",
     "rc": "^1.1.7",
     "request": "2.81.0",
     "hawk":"3.1.3",
+    "request": "^2.83.0",
     "rimraf": "^2.6.1",
     "semver": "^5.3.0",
-    "detect-libc": "^1.0.2",
     "tar": "^2.2.1",
     "tar-pack": "^3.4.0"
   },

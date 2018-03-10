@@ -17,7 +17,6 @@ addons:
 
 env:
   matrix:
-   - NODE_VERSION="0.10"
    - NODE_VERSION="6" RETIRE=true
    - NODE_VERSION="4"
    - NODE_VERSION="5"

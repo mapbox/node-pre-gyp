@@ -1,5 +1,18 @@
 # node-pre-gyp changelog
 
+## 0.7.1
+
+- Upgraded to tar v4.x
+
+## 0.7.0
+
+ - Updated request and hawk (#347)
+ - Dropped node v0.10.x support
+
+## 0.6.40
+
+ - Improved error reporting if an install fails
+
 ## 0.6.39
 
  - Support for node v9

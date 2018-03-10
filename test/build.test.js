@@ -7,6 +7,7 @@ var fs = require('fs');
 var rm = require('rimraf');
 var path = require('path');
 var getPrevious = require('./target_version.util.js');
+var napi = require ('../lib/util/napi.js');
 
 // The list of different sample apps that we use to test
 var apps = [
@@ -28,6 +29,10 @@ var apps = [
     },
     {
         'name': 'app4',
+        'args': ''
+    },
+    {
+        'name': 'app7',
         'args': ''
     }
 ];
@@ -106,6 +111,8 @@ test(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, funct
 
 apps.forEach(function(app) {
 
+        if (app.name === 'app7' && !napi.get_napi_version()) return;
+
         // clear out entire binding directory
         // to ensure no stale builds. This is needed
         // because "node-pre-gyp clean" only removes
@@ -172,6 +179,9 @@ apps.forEach(function(app) {
             run('node-pre-gyp', 'reveal', 'module_path --silent', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
                 var module_path = stdout.trim();
+                if (module_path.indexOf('\n') !== -1) { // take just the first line
+                    module_path = module_path.substr(0,module_path.indexOf('\n'));
+                }
                 t.stringContains(module_path,app.name);
                 t.ok(existsSync(module_path),'is valid path to existing binary: '+ module_path);
                 var module_binary = path.join(module_path,app.name+'.node');
@@ -226,6 +236,9 @@ apps.forEach(function(app) {
                 run('node-pre-gyp', 'reveal', 'package_name', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
                     var package_name = stdout.trim();
+                    if (package_name.indexOf('\n') !== -1) { // take just the first line
+                        package_name = package_name.substr(0,package_name.indexOf('\n'));
+                    }
                     run('node-pre-gyp', 'info', '', app, {}, function(err,stdout,stderr) {
                         t.ifError(err);
                         t.stringContains(stdout,package_name);

@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.7.1
+
+- Upgraded to tar v4.x
+
 ## 0.7.0
 
  - Updated request and hawk (#347)

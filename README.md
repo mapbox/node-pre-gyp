@@ -30,7 +30,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v0.10.x
+ - Node.js >= node v4.x
 
 ## Install
 
@@ -74,7 +74,7 @@ Options include:
  - `--update-binary`: reinstall by replacing previously installed local binary with remote binary
  - `--runtime=node-webkit`: customize the runtime: `node`, `electron` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
- - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
+ - `--target=0.4.0`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
 
@@ -482,8 +482,8 @@ os:
 
 env:
   matrix:
-    - NODE_VERSION="0.10"
-    - NODE_VERSION="0.11.14"
+    - NODE_VERSION="4"
+    - NODE_VERSION="6"
 
 before_install:
 - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
@@ -518,8 +518,8 @@ By doing:
 ```yml
 env:
   matrix:
-    - NODE_VERSION="0.10"
-    - NODE_VERSION="0.11.14"
+    - NODE_VERSION="4"
+    - NODE_VERSION="6"
 
 before_install:
  - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
@@ -532,8 +532,8 @@ You can easily recreate the previous behavior of this matrix:
 
 ```yml
 node_js:
-  - "0.10"
-  - "0.11.14"
+  - "4"
+  - "6"
 ```
 
 #### 4) Publish when you want

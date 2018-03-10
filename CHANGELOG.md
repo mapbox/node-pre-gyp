@@ -1,5 +1,20 @@
 # node-pre-gyp changelog
 
+## 0.7.0
+
+ - Updated request and hawk (#347)
+ - Dropped node v0.10.x support
+
+## 0.6.40
+
+ - Improved error reporting if an install fails
+
+## 0.6.39
+
+ - Support for node v9
+ - Support for versioning on `{libc}` to allow binaries to work on non-glic linux systems like alpine linux
+
+
 ## 0.6.38
 
  - Maintaining compatibility (for v0.6.x series) with node v0.10.x

@@ -30,7 +30,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v0.10.x
+ - Node.js >= node v4.x
 
 ## Install
 
@@ -74,7 +74,7 @@ Options include:
  - `--update-binary`: reinstall by replacing previously installed local binary with remote binary
  - `--runtime=node-webkit`: customize the runtime: `node`, `electron` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
- - `--target=0.10.25`: Pass the target node or node-webkit version to compile against
+ - `--target=0.4.0`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
 
@@ -482,8 +482,8 @@ os:
 
 env:
   matrix:
-    - NODE_VERSION="0.10"
-    - NODE_VERSION="0.11.14"
+    - NODE_VERSION="4"
+    - NODE_VERSION="6"
 
 before_install:
 - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
@@ -518,8 +518,8 @@ By doing:
 ```yml
 env:
   matrix:
-    - NODE_VERSION="0.10"
-    - NODE_VERSION="0.11.14"
+    - NODE_VERSION="4"
+    - NODE_VERSION="6"
 
 before_install:
  - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
@@ -532,8 +532,8 @@ You can easily recreate the previous behavior of this matrix:
 
 ```yml
 node_js:
-  - "0.10"
-  - "0.11.14"
+  - "4"
+  - "6"
 ```
 
 #### 4) Publish when you want
@@ -562,6 +562,7 @@ The `binary` properties of `module_path`, `remote_path`, and `package_name` supp
  - `node_abi`: The node C++ `ABI` number. This value is available in Javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
  - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32` unless the user passed the `--target_platform` option to override.
  - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
+ - `libc` matches `require('detect-libc').family` like `glibc` or `musl` unless the user passes the `--target_libc` option to override.
  - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.
  - `module_name` - the `binary.module_name` attribute from `package.json`.
  - `version` - the semver `version` value for your module from `package.json` (NOTE: ignores the `semver.build` property).

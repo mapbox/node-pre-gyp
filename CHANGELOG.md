@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.8.0
+
+- N-API support (@inspiredware)
+
 ## 0.7.1
 
 - Upgraded to tar v4.x

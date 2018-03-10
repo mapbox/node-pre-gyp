@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "keywords": [
     "native",
     "addon",

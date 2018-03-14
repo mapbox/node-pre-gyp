@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.9.0
+
+- Switched from using `request` to `needle` to reduce size of module deps (https://github.com/mapbox/node-pre-gyp/pull/350)
+
 ## 0.8.0
 
 - N-API support (@inspiredware)

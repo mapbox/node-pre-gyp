@@ -358,7 +358,7 @@ For those who need them in legacy projects, two additional configuration values 
 
 2. `node_abi_napi` If the value returned for `napi_version` is non empty, this value is `'napi'`. If the value returned for `napi_version` is empty, this value is the value returned for `node_abi`.
 
-These values are present for use in the `binding.gyp` file and may be used as `{napi_version}` and `{node_abi_napi}` for text substituion in the `package.json` file. 
+These values are present for use in the `binding.gyp` file and may be used as `{napi_version}` and `{node_abi_napi}` for text substituion in the `binary` properties of the `package.json` file. 
 
 ## S3 Hosting
 

@@ -289,7 +289,7 @@ If a a binary was not available for a given platform and `--fallback-to-build` w
 
 [N-API](https://nodejs.org/api/n-api.html#n_api_n_api) is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. N-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future. 
 
-Using `node-pre-gyp` with N-API projects requires a handful of additional congiguration values and imposes some additional requirements. 
+Using `node-pre-gyp` with N-API projects requires a handful of additional configuration values and imposes some additional requirements. 
 
 The most significant difference is that an N-API module can be coded to target multiple  N-API versions. Therefore, an N-API module must declare in its `package.json` file which N-API versions the module is designed to run against. In addition, since multiple builds may be required for a single module, path and file names must be specified in way that avoids naming conflicts. 
 
@@ -358,7 +358,7 @@ For those who need them in legacy projects, two additional configuration values 
 
 2. `node_abi_napi` If the value returned for `napi_version` is non empty, this value is `'napi'`. If the value returned for `napi_version` is empty, this value is the value returned for `node_abi`.
 
-These values are present for use in the `binding.gyp` file and may be used as `{napi_version}` and `{node_abi_napi}` for text substituion in the `package.json` file. 
+These values are present for use in the `binding.gyp` file and may be used as `{napi_version}` and `{node_abi_napi}` for text substituion in the `binary` properties of the `package.json` file. 
 
 ## S3 Hosting
 

@@ -10,7 +10,7 @@ test('should follow redirects', function(t) {
 
   // Mock an HTTP redirect
   var n = nock('https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com')
-      .get('/app1-v0.1.0-node-v48-darwin-x64.tar.gz')
+      .get(/\/app1-v0.1.0-node-v\d+-\S+.tar.gz/)
       .reply(302, '', {
         'Location': 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/otherapp.tar.gz'
       })

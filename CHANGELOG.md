@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.9.1
+
+- Fixed regression (in v0.9.0) with support for http redirects @allenluce (https://github.com/mapbox/node-pre-gyp/pull/361)
+
 ## 0.9.0
 
 - Switched from using `request` to `needle` to reduce size of module deps (https://github.com/mapbox/node-pre-gyp/pull/350)

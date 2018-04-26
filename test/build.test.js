@@ -12,34 +12,100 @@ var versioning = require('../lib/util/versioning.js');
 var tar = require('tar');
 
 var localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
-var SOEXT = process.platform === 'darwin' ? 'dylib': 'so';
+var SOEXT = {'darwin': 'dylib', 'linux': 'so', 'win32': 'dll'}[process.platform];
 
 // The list of different sample apps that we use to test
 var apps = [
     {
         'name': 'app1',
         'args': '',
-        'files': ['binding/app1.node']
+        'files': {
+            'base': ['binding/app1.node'],
+            'win32': {
+                'base': [
+                    'binding/app1.exp',
+                    'binding/app1.lib',
+                    'binding/app1.map',
+                    'binding/app1.node'
+                ],
+                'node-v59': [
+                    'binding/app1.exp',
+                    'binding/app1.iobj',
+                    'binding/app1.ipdb',
+                    'binding/app1.lib',
+                    'binding/app1.map',
+                    'binding/app1.node'
+                ]
+            }
+        }
     },
     {
         'name': 'app2',
         'args': '--custom_include_path=../include --debug',
-        'files': ['node-pre-gyp-test-app2/app2.node']
+        'files': {
+            'base': ['node-pre-gyp-test-app2/app2.node'],
+            'win32': [
+                'node-pre-gyp-test-app2/app2.exp',
+                'node-pre-gyp-test-app2/app2.ilk',
+                'node-pre-gyp-test-app2/app2.lib',
+                'node-pre-gyp-test-app2/app2.map',
+                'node-pre-gyp-test-app2/app2.node'
+            ]
+        }
     },
     {
         'name': 'app2',
         'args': '--custom_include_path=../include --toolset=cpp11',
-        'files': ['node-pre-gyp-test-app2/app2.node']
+        'files': {
+            'base': ['node-pre-gyp-test-app2/app2.node'],
+            'win32': {
+                'base': [
+                    'node-pre-gyp-test-app2/app2.exp',
+                    'node-pre-gyp-test-app2/app2.lib',
+                    'node-pre-gyp-test-app2/app2.map',
+                    'node-pre-gyp-test-app2/app2.node'
+                ],
+                'node-v59': [
+                    'node-pre-gyp-test-app2/app2.exp',
+                    'node-pre-gyp-test-app2/app2.iobj',
+                    'node-pre-gyp-test-app2/app2.ipdb',
+                    'node-pre-gyp-test-app2/app2.lib',
+                    'node-pre-gyp-test-app2/app2.map',
+                    'node-pre-gyp-test-app2/app2.node' 
+                ]
+            }
+        }
     },
     {
         'name': 'app3',
         'args': '',
-        'files': [path.join(localVer, 'app3.node')]
+        'files': {
+            'base': [[localVer, 'app3.node'].join('/')],
+            'win32': {
+                'base': [
+                    [localVer, 'app3.exp'].join('/'),
+                    [localVer, 'app3.lib'].join('/'),
+                    [localVer, 'app3.map'].join('/'),
+                    [localVer, 'app3.node'].join('/')
+                ],
+                'node-v59': [
+                    [localVer, 'app3.exp'].join('/'),
+                    [localVer, 'app3.iobj'].join('/'),
+                    [localVer, 'app3.ipdb'].join('/'),
+                    [localVer, 'app3.lib'].join('/'),
+                    [localVer, 'app3.map'].join('/'),
+                    [localVer, 'app3.node'].join('/'),
+                ]
+            }
+        }
     },
     {
         'name': 'app4',
         'args': '',
-        'files': [path.join(localVer, 'app4.node'), path.join(localVer, 'lib.target', 'mylib.' + SOEXT)]
+        'files': {
+            'base': [[localVer, 'app4.node'].join('/'), [localVer, 'lib.target', 'mylib.' + SOEXT].join('/')],
+            'win32': [[localVer, 'app4.node'].join('/'), [localVer, 'mylib.' + SOEXT].join('/')]
+        }
     },
     {
         'name': 'app7',
@@ -48,7 +114,25 @@ var apps = [
     {
         'name': 'app8',
         'args': '',
-        'files': ['lib/app8.node']
+        'files': {
+            'base': ['lib/app8.node'],
+            'win32': {
+                'base': [
+                    'lib/app8.exp',
+                    'lib/app8.lib',
+                    'lib/app8.map',
+                    'lib/app8.node'
+                ],
+                'node-v59': [
+                    'lib/app8.exp',
+                    'lib/app8.iobj',
+                    'lib/app8.ipdb',
+                    'lib/app8.lib',
+                    'lib/app8.map',
+                    'lib/app8.node'
+                ]
+            }
+        }
     }
 ];
 
@@ -247,7 +331,19 @@ apps.forEach(function(app) {
                             entries.push(entry.path);
                         }
                     });
-                    t.same(entries.sort(), app.files.sort(), 'staged tarball contains the right files');
+                    var files = app.files.base;
+                    var nodever = versioning.get_runtime_abi('node');
+                    // Look for a more specific choice
+                    if (app.files.hasOwnProperty(process.platform)) {
+                        if (app.files[process.platform].hasOwnProperty(nodever)) {
+                            files = app.files[process.platform][nodever];
+                        } else if (app.files[process.platform].hasOwnProperty('base')) {
+                            files = app.files[process.platform].base; 
+                        } else {
+                            files = app.files[process.platform];
+                        }
+                    }
+                    t.same(entries.sort(), files.sort(), 'staged tarball contains the right files');
                     t.end();
                 });
             });

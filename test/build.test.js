@@ -12,6 +12,8 @@ var versioning = require('../lib/util/versioning.js');
 var tar = require('tar');
 
 var localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
+var SOEXT = process.platform === 'darwin' ? 'dylib': 'so';
+
 // The list of different sample apps that we use to test
 var apps = [
     {
@@ -37,7 +39,7 @@ var apps = [
     {
         'name': 'app4',
         'args': '',
-        'files': [path.join(localVer, 'app4.node'), path.join(localVer, 'lib.target', 'mylib.dylib')]
+        'files': [path.join(localVer, 'app4.node'), path.join(localVer, 'lib.target', 'mylib.' + SOEXT)]
     },
     {
         'name': 'app7',

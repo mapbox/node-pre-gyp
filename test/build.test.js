@@ -8,32 +8,43 @@ var rm = require('rimraf');
 var path = require('path');
 var getPrevious = require('./target_version.util.js');
 var napi = require ('../lib/util/napi.js');
+var tar = require('tar');
 
 // The list of different sample apps that we use to test
 var apps = [
     {
         'name': 'app1',
-        'args': ''
-    },
-    {
-         'name': 'app2',
-         'args': '--custom_include_path=../include --debug'
+        'args': '',
+        'files': ['binding/app1.node']
     },
     {
         'name': 'app2',
-        'args': '--custom_include_path=../include --toolset=cpp11'
+        'args': '--custom_include_path=../include --debug',
+        'files': ['node-pre-gyp-test-app2/app2.node']
+    },
+    {
+        'name': 'app2',
+        'args': '--custom_include_path=../include --toolset=cpp11',
+        'files': ['node-pre-gyp-test-app2/app2.node']
     },
     {
         'name': 'app3',
-        'args': ''
+        'args': '',
+        'files': ['node-v48-darwin-x64/app3.node']
     },
     {
         'name': 'app4',
-        'args': ''
+        'args': '',
+        'files': ['node-v48-darwin-x64/app4.node', 'node-v48-darwin-x64/lib.target/mylib.dylib']
     },
     {
         'name': 'app7',
         'args': ''
+    },
+    {
+        'name': 'app8',
+        'args': '',
+        'files': ['lib/app8.node']
     }
 ];
 
@@ -211,7 +222,30 @@ apps.forEach(function(app) {
         test(app.name + ' packages ' + app.args, function(t) {
             run('node-pre-gyp', 'package', '', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
-                t.end();
+                // Make sure a tarball was created
+                run('node-pre-gyp', 'reveal', 'staged_tarball --silent', app, {}, function(err,stdout,stderr) {
+                    t.ifError(err);
+                    var staged_tarball = stdout.trim();
+                    if (staged_tarball.indexOf('\n') !== -1) { // take just the first line
+                        staged_tarball = staged_tarball.substr(0,staged_tarball.indexOf('\n'));
+                    }
+                    var tarball_path = path.join(__dirname, app.name, staged_tarball);
+                    t.ok(existsSync(tarball_path),'staged tarball is a valid file');
+                    if (!app.files) {
+                        return t.end();
+                    }
+                    // Make sure the package contains what we expect
+                    var entries = [];
+                    tar.t({
+                        file: tarball_path,
+                        sync: true,
+                        onentry: function (entry) {
+                            entries.push(entry.path);
+                        }
+                    });
+                    t.same(entries.sort(), app.files.sort(), 'staged tarball contains the right files');
+                    t.end();
+                });
             });
         });
 

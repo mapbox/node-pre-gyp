@@ -8,8 +8,10 @@ var rm = require('rimraf');
 var path = require('path');
 var getPrevious = require('./target_version.util.js');
 var napi = require ('../lib/util/napi.js');
+var versioning = require('../lib/util/versioning.js');
 var tar = require('tar');
 
+var localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 // The list of different sample apps that we use to test
 var apps = [
     {
@@ -30,12 +32,12 @@ var apps = [
     {
         'name': 'app3',
         'args': '',
-        'files': ['node-v48-darwin-x64/app3.node']
+        'files': [path.join(localVer, 'app3.node')]
     },
     {
         'name': 'app4',
         'args': '',
-        'files': ['node-v48-darwin-x64/app4.node', 'node-v48-darwin-x64/lib.target/mylib.dylib']
+        'files': [path.join(localVer, 'app4.node'), path.join(localVer, 'lib.target', 'mylib.dylib')]
     },
     {
         'name': 'app7',

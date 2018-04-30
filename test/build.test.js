@@ -35,6 +35,14 @@ var apps = [
                     'binding/app1.lib',
                     'binding/app1.map',
                     'binding/app1.node'
+                ],
+                'node-v64': [
+                    'binding/app1.exp',
+                    'binding/app1.iobj',
+                    'binding/app1.ipdb',
+                    'binding/app1.lib',
+                    'binding/app1.map',
+                    'binding/app1.node'
                 ]
             }
         }
@@ -71,7 +79,15 @@ var apps = [
                     'node-pre-gyp-test-app2/app2.ipdb',
                     'node-pre-gyp-test-app2/app2.lib',
                     'node-pre-gyp-test-app2/app2.map',
-                    'node-pre-gyp-test-app2/app2.node' 
+                    'node-pre-gyp-test-app2/app2.node'
+                ],
+                'node-v64': [
+                    'node-pre-gyp-test-app2/app2.exp',
+                    'node-pre-gyp-test-app2/app2.iobj',
+                    'node-pre-gyp-test-app2/app2.ipdb',
+                    'node-pre-gyp-test-app2/app2.lib',
+                    'node-pre-gyp-test-app2/app2.map',
+                    'node-pre-gyp-test-app2/app2.node'
                 ]
             }
         }
@@ -89,6 +105,14 @@ var apps = [
                     [localVer, 'app3.node'].join('/')
                 ],
                 'node-v59': [
+                    [localVer, 'app3.exp'].join('/'),
+                    [localVer, 'app3.iobj'].join('/'),
+                    [localVer, 'app3.ipdb'].join('/'),
+                    [localVer, 'app3.lib'].join('/'),
+                    [localVer, 'app3.map'].join('/'),
+                    [localVer, 'app3.node'].join('/'),
+                ],
+                'node-v64': [
                     [localVer, 'app3.exp'].join('/'),
                     [localVer, 'app3.iobj'].join('/'),
                     [localVer, 'app3.ipdb'].join('/'),
@@ -124,6 +148,14 @@ var apps = [
                     'lib/app8.node'
                 ],
                 'node-v59': [
+                    'lib/app8.exp',
+                    'lib/app8.iobj',
+                    'lib/app8.ipdb',
+                    'lib/app8.lib',
+                    'lib/app8.map',
+                    'lib/app8.node'
+                ],
+                'node-v64': [
                     'lib/app8.exp',
                     'lib/app8.iobj',
                     'lib/app8.ipdb',
@@ -338,7 +370,7 @@ apps.forEach(function(app) {
                         if (app.files[process.platform].hasOwnProperty(nodever)) {
                             files = app.files[process.platform][nodever];
                         } else if (app.files[process.platform].hasOwnProperty('base')) {
-                            files = app.files[process.platform].base; 
+                            files = app.files[process.platform].base;
                         } else {
                             files = app.files[process.platform];
                         }

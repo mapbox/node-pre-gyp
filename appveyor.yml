@@ -16,6 +16,10 @@ shallow_clone: true
 install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+  # workaround https://github.com/mapbox/node-pre-gyp/issues/300#issuecomment-328179994
+  - IF "%nodejs_version:~0,1%" EQU "6" npm install npm@2 -g
+  - IF "%nodejs_version:~0,1%" EQU "8" npm install npm@2 -g
+  - IF "%nodejs_version:~0,1%" EQU "9" npm install npm@2 -g
   - npm config get
   - node --version
   - npm --version
@@ -24,11 +28,6 @@ install:
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
   - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
-  # workaround https://github.com/mapbox/node-pre-gyp/issues/300#issuecomment-328179994
-  - IF "%nodejs_version:~0,1%" EQU "6" npm install npm@2 -g
-  - IF "%nodejs_version:~0,1%" EQU "8" npm install npm@6 -g
-  - IF "%nodejs_version:~0,1%" EQU "9" npm install npm@6 -g
-  - IF "%nodejs_version:~0,1%" EQU "10" npm install npm@6 -g
   - npm install
   - npm test
 

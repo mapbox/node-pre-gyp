@@ -193,7 +193,7 @@ test(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.arg
     });
 });
 
-// NOTE: currently fails with npm v3.x on windows (hench downgrade in appveyor.yml)
+// NOTE: currently fails with npm v3.x on windows (hence downgrade in appveyor.yml)
 test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(t) {
     run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
         console.log('ERROR', err);

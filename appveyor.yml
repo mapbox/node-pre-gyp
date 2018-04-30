@@ -20,6 +20,7 @@ install:
   - IF "%nodejs_version:~0,1%" EQU "6" npm install npm@2 -g
   - IF "%nodejs_version:~0,1%" EQU "8" npm install npm@2 -g
   - IF "%nodejs_version:~0,1%" EQU "9" npm install npm@2 -g
+  - IF "%nodejs_version:~0,2%" EQU "10" npm install npm@2 -g
   - npm config get
   - node --version
   - npm --version

@@ -196,6 +196,9 @@ test(app.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + app.arg
 // NOTE: currently fails with npm v3.x on windows (hench downgrade in appveyor.yml)
 test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, function(t) {
     run('npm', 'install', '--build-from-source --nodedir=invalid-value', app, {}, function(err,stdout,stderr) {
+        console.log('ERROR', err);
+        console.log('STDOUT', stdout);
+        console.log('STDERR', stderr);
         t.ok(err, 'Expected command to fail');
         t.stringContains(stderr,"common.gypi not found");
         t.end();
@@ -232,6 +235,9 @@ test(app.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + app.ar
 
 test(app.name + ' passes --dist-url down to node-gyp via npm ' + app.args, function(t) {
     run('npm', 'install', '--build-from-source --ensure=false --dist-url=invalid-value', app, {}, function(err,stdout,stderr) {
+        console.log('ERROR', err);
+        console.log('STDOUT', stdout);
+        console.log('STDERR', stderr);
         t.ok(err, 'Expected command to fail');
         t.end();
     });

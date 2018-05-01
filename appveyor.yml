@@ -16,14 +16,6 @@ shallow_clone: true
 install:
   - ps: Install-Product node $env:nodejs_version $env:Platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
-  - SET PATH=bin\;%PATH%
-  - npm -C test/app1/ install || true
-  # workaround https://github.com/mapbox/node-pre-gyp/issues/300#issuecomment-328179994
-  - IF "%nodejs_version:~0,1%" EQU "6" npm install npm@2 -g
-  - IF "%nodejs_version:~0,1%" EQU "8" npm install npm@2 -g
-  - IF "%nodejs_version:~0,1%" EQU "9" npm install npm@2 -g
-  - IF "%nodejs_version:~0,2%" EQU "10" npm install npm@2 -g
-  - npm -C test/app1/ install || true
   - npm config get
   - node --version
   - npm --version

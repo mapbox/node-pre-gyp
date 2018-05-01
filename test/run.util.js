@@ -46,7 +46,7 @@ function run(prog,command,args,app,opts,cb) {
 
     // unless explicitly provided, lets execute the command inside the app specific directory
     if (!opts.cwd) {
-        final_cmd += ' -C ' + path.join(__dirname,app.name);
+        opts.cwd = path.join(__dirname,app.name);
     }
     // avoid breakage when compiling with clang++ and node v0.10.x
     // This is harmless to add for other versions and platforms

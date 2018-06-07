@@ -20,7 +20,8 @@ test('should follow redirects', function(t) {
   var opts = {
     opts: {
       'build-from-source': false,
-      'update-binary': true
+      'update-binary': true,
+      'ignore-node-pre-gyp-cache': true
     }
   };
 

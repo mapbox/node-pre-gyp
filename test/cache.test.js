@@ -108,16 +108,19 @@ function on_error(err,stdout,stderr) {
             if(err) return on_error(err,stdout,stderr);
             fs.readdir(cache_dir, function(err, files) { // populate cache
                 if(err) throw err;
-                var mtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
-                setTimeout(function() {
-                    install(install_cmd + ' --ignore-node-pre-gyp-cache', function(err,stdout,stderr) {
-                        if(err) return on_error(err,stdout,stderr);
-                        t.equal(stderr.indexOf('from cache'), -1);
-                        var newMtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
-                        t.ok(newMtime.getTime() > mtime.getTime(), 'cache value was not used, but was instead updated: ' + newMtime.getTime() + ' > ' + mtime.getTime());
-                        t.end();
-                    });
-                }, 100);
+                var file_path = path.join(cache_dir,files[0]);
+                var stats = fs.statSync(file_path);
+                var orig_mtime = stats.mtime.getTime();
+                var past_mtime = orig_mtime - 5e3;
+                fs.utimesSync(file_path, stats.atime.getTime() / 1e3, past_mtime / 1e3);
+                t.ok(fs.statSync(file_path).mtime.getTime() < orig_mtime, 'precond, ensure mtime was updated.');
+                install(install_cmd + ' --ignore-node-pre-gyp-cache', function(err,stdout,stderr) {
+                    if(err) return on_error(err,stdout,stderr);
+                    t.equal(stderr.indexOf('from cache'), -1);
+                    var newMtime = fs.statSync(path.join(cache_dir,files[0])).mtime;
+                    t.ok(newMtime.getTime() > past_mtime, 'cache value was not used, but was instead updated: ' + newMtime.getTime() + ' > ' + past_mtime);
+                    t.end();
+                });
             });
         });
     });

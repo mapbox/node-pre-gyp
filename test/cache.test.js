@@ -29,10 +29,9 @@ function install(cmd,opts,callback) {
 }
 
 function on_error(err,stdout,stderr) {
-    var msg = err.message;
     msg += '\nstdout: ' + stdout;
     msg += '\nstderr: ' + stderr;
-    throw new Error(msg);
+    throw err;
 }
 
 (/^v0.10/.test(process.version) ? test.skip : test)('caching', function(suite) {

@@ -23,6 +23,9 @@ var prog = new node_pre_gyp.Run();
 var completed = false;
 prog.parseArgv(process.argv);
 
+var originalTodo = prog.todo;
+var completedTodo = [];
+
 if (prog.todo.length === 0) {
   if (~process.argv.indexOf('-v') || ~process.argv.indexOf('--version')) {
     console.log('v%s', prog.version);
@@ -71,10 +74,8 @@ if (dir) {
 }
 
 function run () {
-  console.log('[DEBUG] prog', JSON.stringify(prog.todo, null, 2));
-
   var command = prog.todo.shift();
-  console.log('[DEBUG] current command', command);
+  completedTodo.push(command);  
   if (!command) {
     // done!
     completed = true;
@@ -102,6 +103,7 @@ function run () {
 
 process.on('exit', function (code) {
   if (!completed && !code) {
+    console.log('[DEBUG] prog', JSON.stringify(prog.todo, null, 2));
     log.error('Completion callback never invoked!');
     issueMessage();
     process.exit(6);

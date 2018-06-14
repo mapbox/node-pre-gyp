@@ -71,7 +71,10 @@ if (dir) {
 }
 
 function run () {
+  console.log('[DEBUG] prog', JSON.stringify(prog.todo, null, 2));
+
   var command = prog.todo.shift();
+  console.log('[DEBUG] current command', command);
   if (!command) {
     // done!
     completed = true;

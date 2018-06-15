@@ -48,6 +48,6 @@
   "scripts": {
     "pretest": "jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js test/fetch.test.js lib lib/util scripts bin/node-pre-gyp",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "jshint lib lib/util scripts bin/node-pre-gyp && tape test/*test.js"
+    "test": "jshint lib lib/util scripts bin/node-pre-gyp && NODE_DEBUG=http tape test/*test.js"
   }
 }

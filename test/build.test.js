@@ -334,6 +334,7 @@ apps.forEach(function(app) {
                 } else {
                     // we expect some npm output
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                 }
                 t.end();
             });
@@ -394,6 +395,7 @@ apps.forEach(function(app) {
                 run('node-pre-gyp', 'unpublish publish', '', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                     t.end();
                 });
             });
@@ -417,6 +419,7 @@ apps.forEach(function(app) {
                 run('node-pre-gyp', 'clean', '', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                     t.end();
                 });
             });
@@ -425,6 +428,7 @@ apps.forEach(function(app) {
                 run('npm', 'install', '--fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                     t.end();
                 });
             });
@@ -433,6 +437,7 @@ apps.forEach(function(app) {
                 run('npm', 'install', '--update-binary --fallback-to-build=false', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                     t.end();
                 });
             });
@@ -441,6 +446,7 @@ apps.forEach(function(app) {
                 run('npm', 'install', '', app, {cwd: path.join(__dirname,app.name)}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.notEqual(stdout,'');
+                    console.log('[STDOUT]', stdout);
                     t.end();
                 });
             });

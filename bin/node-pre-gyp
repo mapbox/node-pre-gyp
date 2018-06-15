@@ -75,7 +75,7 @@ if (dir) {
 
 function run () {
   var command = prog.todo.shift();
-  completedTodo.push(command);  
+  completedTodo.push(command);
   if (!command) {
     // done!
     completed = true;
@@ -103,7 +103,9 @@ function run () {
 
 process.on('exit', function (code) {
   if (!completed && !code) {
-    console.log('[DEBUG] prog', JSON.stringify(prog.todo, null, 2));
+    console.log('[DEBUG] prog', JSON.stringify(prog, null, 2));
+    console.log('[DEBUG] originalTodo', originalTodo);
+    console.log('[DEBUG] completedTodo', completedTodo);
     log.error('Completion callback never invoked!');
     issueMessage();
     process.exit(6);

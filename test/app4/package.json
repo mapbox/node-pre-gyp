@@ -14,7 +14,7 @@
         "module_path": "./lib/binding/{node_abi}-{platform}-{arch}",
         "remote_path": "./{module_name}/v{version}",
         "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
-        "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+        "host":"https://node-pre-gyp-tests.s3.amazonaws.com"
     },
     "scripts": {
         "install":"node-pre-gyp install --fallback-to-build",

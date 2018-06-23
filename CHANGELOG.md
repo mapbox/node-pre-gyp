@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.10.1
+
+- Fix needle error event (@medns)
+
 ## 0.10.0
 
 - Allow for a single-level module path when packing @allenluce (https://github.com/mapbox/node-pre-gyp/pull/371)

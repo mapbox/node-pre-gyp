@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.10.2
+
+- Fixed rc/deep-extent security vulnerability
+- Fixed broken reinstall script do to incorrectly named get_best_napi_version
+
 ## 0.10.1
 
 - Fix needle error event (@medns)

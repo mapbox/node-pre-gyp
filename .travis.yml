@@ -27,6 +27,7 @@ before_install:
      export CXX="g++-4.8";
   fi;
 - source ./scripts/install_node.sh ${NODE_VERSION}
+- npm install request
 - npm config set loglevel=error
 
 install:
@@ -34,7 +35,6 @@ install:
 
 before_script:
 - npm test
-- if [[ ${RETIRE:-false} == true ]]; then ./node_modules/.bin/retire -n; fi;
 # test node-webkit usage
 - ./scripts/test-node-webkit.sh
 

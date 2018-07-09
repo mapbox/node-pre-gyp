@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.10.3
+
+- Now will use `request` over `needle` if request is installed. By default `needle` is used for `https`. This should unbreak proxy support that regressed in v0.9.0
+
 ## 0.10.2
 
 - Fixed rc/deep-extent security vulnerability

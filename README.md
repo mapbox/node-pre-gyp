@@ -106,7 +106,6 @@ This looks like:
     "devDependencies": {
       "aws-sdk": "2.x"
     }
-    "bundledDependencies":["node-pre-gyp"],
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build"
     },
@@ -123,12 +122,10 @@ Let's break this down:
 
  - Dependencies need to list `node-pre-gyp`
  - Your devDependencies should list `aws-sdk` so that you can run `node-pre-gyp publish` locally or a CI system. We recommend using `devDependencies` only since `aws-sdk` is large and not needed for `node-pre-gyp install` since it only uses http to fetch binaries
- - You should add `"bundledDependencies":["node-pre-gyp"]`. This ensures that when you publish your module that the correct version of node-pre-gyp will be included in the `node_modules` folder during publishing. Then when uses install your module `node-pre-gyp` will already be present. Without this your module will not be safely installable for downstream applications that have a dependency on node-pre-gyp in the npm tree (without bundling npm deduping might break the install when node-pre-gyp is moved in flight)
- - Your `scripts` section should optionally add `"prepublishOnly": "npm ls"` to ensure the right node-pre-gyp version is bundled before publishing your module. If node-pre-gyp is missing or an old version is present then this will catch that error before you publish a broken package.
  - Your `scripts` section should override the `install` target with `"install": "node-pre-gyp install --fallback-to-build"`. This allows node-pre-gyp to be used instead of the default npm behavior of always source compiling with `node-gyp` directly.
  - Your package.json should contain a `binary` section describing key properties you provide to allow node-pre-gyp to package optimally. They are detailed below.
 
-Note: in the past we recommended using `"preinstall": "npm install node-pre-gyp"` as an alternative method to avoid needing to bundle. But this does not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `node-pre-gyp`. Instead we recommend bundling. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
+NOte: in the past we recommended putting `node-pre-gyp` in the `bundledDependencies`, but we no longer recommend this. In the past there were npm bugs (with node versions 0.10.x) that could lead to node-pre-gyp not being available at the right time during install (unless we bundled). This should no longer be the case. Also, for a time we recommended using `"preinstall": "npm install node-pre-gyp"` as an alternative method to avoid needing to bundle. But this did not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `node-pre-gyp`. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
 
 ##### The `binary` object has three required properties
 

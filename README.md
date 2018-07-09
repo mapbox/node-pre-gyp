@@ -82,7 +82,7 @@ Both `--build-from-source` and `--fallback-to-build` can be passed alone or they
 
 For example: `npm install --build-from-source=myapp`. This is useful if:
 
- - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependent with `npm install`.
+ - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependency with `npm install`.
  - The larger app also depends on other modules installed with `node-pre-gyp`
  - You only want to trigger a source compile for `myapp` and the other modules.
 
@@ -123,7 +123,7 @@ Let's break this down:
 
  - Dependencies need to list `node-pre-gyp`
  - Your devDependencies should list `aws-sdk` so that you can run `node-pre-gyp publish` locally or a CI system. We recommend using `devDependencies` only since `aws-sdk` is large and not needed for `node-pre-gyp install` since it only uses http to fetch binaries
- - You should add `"bundledDependencies":["node-pre-gyp"]`. This ensures that when you publish your module that the correct version of node-pre-gyp will be included in the `node_modules` folder during publishing. Then when uses install your module `node-pre-gyp` will already be present. Without this your module will not be safely installable for downstream applications that have a depedency on node-pre-gyp in the npm tree (without bundling npm deduping might break the install when node-pre-gyp is moved in flight)
+ - You should add `"bundledDependencies":["node-pre-gyp"]`. This ensures that when you publish your module that the correct version of node-pre-gyp will be included in the `node_modules` folder during publishing. Then when uses install your module `node-pre-gyp` will already be present. Without this your module will not be safely installable for downstream applications that have a dependency on node-pre-gyp in the npm tree (without bundling npm deduping might break the install when node-pre-gyp is moved in flight)
  - Your `scripts` section should optionally add `"prepublishOnly": "npm ls"` to ensure the right node-pre-gyp version is bundled before publishing your module. If node-pre-gyp is missing or an old version is present then this will catch that error before you publish a broken package.
  - Your `scripts` section should override the `install` target with `"install": "node-pre-gyp install --fallback-to-build"`. This allows node-pre-gyp to be used instead of the default npm behavior of always source compiling with `node-gyp` directly.
  - Your package.json should contain a `binary` section describing key properties you provide to allow node-pre-gyp to package optimally. They are detailed below.
@@ -156,7 +156,7 @@ It is highly recommended that you use Amazon S3. The reasons are:
   - S3 is a very solid hosting platform for distributing large files.
   - We provide detail documentation for using [S3 hosting](#s3-hosting) with node-pre-gyp.
 
-Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a GitHub repo. This is not recommended, but if an author really wants to host in a non-s3 location then it should be possible.
+Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a GitHub repo. This is not recommended, but if an author really wants to host in a non-S3 location then it should be possible.
 
 It should also be mentioned that there is an optional and entirely separate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-github publish```.
 
@@ -312,7 +312,7 @@ When the `napi_versions` array property is present, `node-pre-gyp` fires off mul
 
 ### The `napi_build_version` value
 
-For each of the N-API module operations `node-pre-gyp` initiates, it insures that the `napi_build_version` is set appropriately.
+For each of the N-API module operations `node-pre-gyp` initiates, it ensures that the `napi_build_version` is set appropriately.
 
 This value is of importance in two areas:
 
@@ -329,7 +329,7 @@ The `napi_build_version` value is communicated to the C/C++ code by adding this 
 ]
 ```
 
-This insures that `NAPI_BUILD_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
+This ensures that `NAPI_BUILD_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
 
 ### Path and file naming requirements in `package.json`
 

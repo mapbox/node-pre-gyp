@@ -1,44 +1,33 @@
-language: cpp
+language: node_js
 
 sudo: false
 
-# https://docs.travis-ci.com/user/languages/objective-c/#Supported-OS-X-iOS-SDK-versions
-osx_image: xcode8.2
-
-os:
-  - linux
-  - osx
-
-addons:
-  apt:
-    sources: [ 'ubuntu-toolchain-r-test' ]
-    packages: ['g++-4.8', 'xvfb','libasound2','libx11-6','libglib2.0-0','libgtk2.0-0','libatk1.0-0','libgdk-pixbuf2.0-0','libcairo2','libfreetype6','libfontconfig1','libxcomposite1','libasound2','libxdamage1','libxext6','libxfixes3','libnss3','libnspr4','libgconf-2-4','libexpat1','libdbus-1-3','libudev1']
-
-
-env:
-  matrix:
-   - NODE_VERSION="6"
-   - NODE_VERSION="8"
-   - NODE_VERSION="9"
-   - NODE_VERSION="10"
-
-before_install:
-- if [[ $(uname -s) == 'Linux' ]]; then
-     export CXX="g++-4.8";
-  fi;
-- source ./scripts/install_node.sh ${NODE_VERSION}
-- npm install request
-- npm config set loglevel=error
+matrix:
+  include:
+    # Test node v10 with needle https (default)
+    - os: linux
+      node_js: 10
+    # Test node v6 with needle https (default)
+    - os: linux
+      node_js: 6
+    # Test node v10 with request override
+    - os: linux
+      node_js: 10
+      before_install:
+        - npm install request
+    # Test node webkit
+    - os: linux
+      node_js: 10
+      addons:
+        apt:
+          sources: [ 'ubuntu-toolchain-r-test' ]
+          packages: ['xvfb','libasound2','libx11-6','libglib2.0-0','libgtk2.0-0','libatk1.0-0','libgdk-pixbuf2.0-0','libcairo2','libfreetype6','libfontconfig1','libxcomposite1','libasound2','libxdamage1','libxext6','libxfixes3','libnss3','libnspr4','libgconf-2-4','libexpat1','libdbus-1-3','libudev1']
+      script:
+        # test node-webkit usage
+        - ./scripts/test-node-webkit.sh
 
 install:
 - npm install
 
-before_script:
-- npm test
-# test node-webkit usage
-- ./scripts/test-node-webkit.sh
-
 script:
-# test non-authenticated mode
-- unset node_pre_gyp_accessKeyId
 - npm test

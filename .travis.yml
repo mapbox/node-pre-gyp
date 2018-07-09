@@ -2,14 +2,22 @@ language: node_js
 
 sudo: false
 
+
+##### WARNING
+# node-pre-gyp tests are not concurrency safe
+# such that in the below travis builds we cannot
+# have more than one run with the same node version
+# otherwise they will clobber each other
+#####
+
 matrix:
   include:
-    # Test node v10 with needle https (default)
-    - os: linux
-      node_js: 10
     # Test node v6 with needle https (default)
     - os: linux
       node_js: 6
+    # Test node v8 with needle https (default)
+    - os: linux
+      node_js: 8
     # Test node v10 with request override
     - os: linux
       node_js: 10

@@ -35,7 +35,6 @@
     "aws-sdk": "^2.28.0",
     "jshint": "^2.9.5",
     "nock": "^9.2.3",
-    "retire": "^1.2.12",
     "tape": "^4.6.3"
   },
   "jshintConfig": {

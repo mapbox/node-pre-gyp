@@ -319,23 +319,25 @@ This value is of importance in two areas:
 1. The C/C++ code which needs to know against which N-API version it should compile.
 2. `node-pre-gyp` itself which must assign appropriate path and file names to avoid collisions.
 
-### Defining `NAPI_BUILD_VERSION` for the C/C++ code
+### Defining `NAPI_VERSION` for the C/C++ code
 
 The `napi_build_version` value is communicated to the C/C++ code by adding this code to the `binding.gyp` file:
 
 ```
 "defines": [
-    "NAPI_BUILD_VERSION=<(napi_build_version)",
+    "NAPI_VERSION=<(napi_build_version)",
 ]
 ```
 
-This ensures that `NAPI_BUILD_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
+This ensures that `NAPI_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
+
+> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is prefered because it used by the N-API C/C++ headers to configure the specific N-API veriosn being requested. 
 
 ### Path and file naming requirements in `package.json`
 
 Since `node-pre-gyp` fires off multiple operations for each request, it is essential that path and file names be created in such a way as to avoid collisions. This is accomplished by imposing additional path and file naming requirements.
 
-Specifically, when performing N-API builds, the `{napi_build_version}` text substitution string  *must* be present in the `module_path` property. In addition, the `{napi_build_version}` text substitution string  *must* be present in either the `remote_path` or `package_name` property. (No problem if it's in both.)
+Specifically, when performing N-API builds, the `{napi_build_version}` text configuration value  *must* be present in the `module_path` property. In addition, the `{napi_build_version}` text configuration value  *must* be present in either the `remote_path` or `package_name` property. (No problem if it's in both.)
 
 Here's an example:
 
@@ -350,9 +352,42 @@ Here's an example:
   }
 ```
 
+## Supporting both N-API and NAN builds
+
+You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property. 
+
+Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build. 
+
+The configuration value `node_napi_label` is set by `node-pre-gyp` to the type of build created, `napi` or `node`, and the version number. For N-API builds, the string contains the N-API version nad has values like `napi-v3`. For traditional, non-N-API builds, the string contains the ABI version with values like `node-v46`.
+
+Here's how the `binary` configuration above might be changed to support both N-API and NAN builds:
+
+```js
+"binary": {
+    "module_name": "your_module",
+    "module_path": "./lib/binding/{node_napi_label}",
+    "remote_path": "./{module_name}/v{version}/{configuration}/",
+    "package_name": "{platform}-{arch}-{node_napi_label}.tar.gz",
+    "host": "https://your_bucket.s3-us-west-1.amazonaws.com",
+    "napi_versions": [1,3]
+  }
+```
+
+The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds. 
+
+For example:
+ 
+```C
+#if NAPI_VERSION
+// N-API code goes here
+#else
+// NAN code goes here
+#endif
+```
+
 ### Two additional configuration values
 
-For those who need them in legacy projects, two additional configuration values are available for all builds.
+The following two configuration values, which were implemented in previous versions of `node-pre-gyp`, continue to exist, but have been replaced by the `node_napi_label` configuration value described above.
 
 1. `napi_version` If N-API is supported by the currently executing Node instance, this value is the N-API version number supported by Node. If N-API is not supported, this value is an empty string.
 

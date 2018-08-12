@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.11.0
+
+- Fixed double-install problem with node v10
+- Significant N-API improvements (https://github.com/mapbox/node-pre-gyp/pull/405)
+
 ## 0.10.3
 
 - Now will use `request` over `needle` if request is installed. By default `needle` is used for `https`. This should unbreak proxy support that regressed in v0.9.0

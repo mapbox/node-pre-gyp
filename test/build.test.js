@@ -263,6 +263,7 @@ apps.forEach(function(app) {
             });
         });
 
+        /* wait for https://github.com/nodejs/node-gyp/pull/1540
         test(app.name + ' configures with unparsed options ' + app.args, function(t) {
             run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
@@ -275,6 +276,21 @@ apps.forEach(function(app) {
             run('node-pre-gyp', 'rebuild', '--loglevel=info -- -DFOO=bar', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
                 t.ok(stderr.search(/(gyp info spawn args).*(-DFOO=bar)/) > -1);
+                if (process.platform == 'win32') {
+                    if (app.args.indexOf('--debug') > -1) {
+                        t.stringContains(stdout,'Debug\\'+app.name+'.pdb');
+                    } else {
+                        t.stringContains(stdout,'Release\\'+app.name+'.pdb');
+                    }
+                }
+                t.end();
+            });
+        });*/
+
+        test(app.name + ' builds ' + app.args, function(t) {
+            run('node-pre-gyp', 'rebuild', '--loglevel=info', app, {}, function(err,stdout,stderr) {
+                t.ifError(err);
+                t.ok(stderr.search(/(gyp info spawn args).*(binding\.gyp)/) > -1);
                 if (process.platform == 'win32') {
                     if (app.args.indexOf('--debug') > -1) {
                         t.stringContains(stdout,'Debug\\'+app.name+'.pdb');

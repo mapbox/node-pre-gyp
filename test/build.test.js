@@ -264,22 +264,20 @@ apps.forEach(function(app) {
         });
 
         test(app.name + ' configures with unparsed options ' + app.args, function(t) {
-            run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'configure', '--loglevel=info -- --foo=bar', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
-                t.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
+                t.ok(stderr.search(/(gyp info spawn args).*(--foo=bar)/) > -1);
                 t.end();
             });
         });
 
         test(app.name + ' builds with unparsed options ' + app.args, function(t) {
-            // clean and build as separate steps here because configure only works with -Dfoo=bar
-            // and build only works with FOO=bar
             run('node-pre-gyp', 'clean', '', app, {}, function(err) {
                 t.ifError(err);
-                run('node-pre-gyp', 'build', '--loglevel=info -- -DFOO=bar', app, {}, function(err,stdout,stderr) {
+                run('node-pre-gyp', 'build', '--loglevel=info -- --FOO=bar', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
-                    t.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
-                    if (process.platform !== 'win32') {
+                    t.ok(stderr.search(/(gyp info spawn args).*(--FOO=bar)/) > -1);
+                    if (process.platform == 'win32') {
                         if (app.args.indexOf('--debug') > -1) {
                             t.stringContains(stdout,'Debug/'+app.name+'.node');
                         } else {
@@ -294,7 +292,7 @@ apps.forEach(function(app) {
         test(app.name + ' builds ' + app.args, function(t) {
             run('node-pre-gyp', 'rebuild', '--fallback-to-build --loglevel=error', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
-                if (process.platform !== 'win32') {
+                if (process.platform == 'win32') {
                     if (app.args.indexOf('--debug') > -1) {
                         t.stringContains(stdout,'Debug/'+app.name+'.node');
                     } else {

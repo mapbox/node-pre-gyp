@@ -276,8 +276,7 @@ apps.forEach(function(app) {
             // and build only works with FOO=bar
             run('node-pre-gyp', 'clean', '', app, {}, function(err) {
                 t.ifError(err);
-                var propertyPrefix = (process.platform === 'win32') ? '/p:' : '';
-                run('node-pre-gyp', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, function(err,stdout,stderr) {
+                run('node-pre-gyp', 'build', '--loglevel=info -- -DFOO=bar', app, {}, function(err,stdout,stderr) {
                     t.ifError(err);
                     t.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
                     if (process.platform !== 'win32') {

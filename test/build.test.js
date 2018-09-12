@@ -264,7 +264,7 @@ apps.forEach(function(app) {
         });
 
         test(app.name + ' configures with unparsed options ' + app.args, function(t) {
-            run('node-pre-gyp', 'configure', '--loglevel=info --foo=bar', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'configure', '--loglevel=info -- --foo=bar', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
                 t.ok(stderr.search(/(gyp info spawn args).*(--foo=bar)/) > -1);
                 t.end();
@@ -272,14 +272,14 @@ apps.forEach(function(app) {
         });
 
         test(app.name + ' builds with unparsed options ' + app.args, function(t) {
-            run('node-pre-gyp', 'rebuild', '--loglevel=info --FOO=bar', app, {}, function(err,stdout,stderr) {
+            run('node-pre-gyp', 'rebuild', '--loglevel=info -- --FOO=bar', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);
                 t.ok(stderr.search(/(gyp info spawn args).*(--FOO=bar)/) > -1);
                 if (process.platform == 'win32') {
                     if (app.args.indexOf('--debug') > -1) {
-                        t.stringContains(stdout,'Debug\\'+app.name+'.node');
+                        t.stringContains(stdout,'Debug\\'+app.name+'.pdb');
                     } else {
-                        t.stringContains(stdout,'Release\\'+app.name+'.node');
+                        t.stringContains(stdout,'Release\\'+app.name+'.pdb');
                     }
                 }
                 t.end();

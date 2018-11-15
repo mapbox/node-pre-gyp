@@ -1,5 +1,10 @@
 # node-pre-gyp changelog
 
+## 0.12.0
+
+- Fixed double-build problem with node v10 (https://github.com/mapbox/node-pre-gyp/pull/428)
+- Added node 11 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/422)
+
 ## 0.11.0
 
 - Fixed double-install problem with node v10

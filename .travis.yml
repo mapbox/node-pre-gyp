@@ -33,6 +33,11 @@ matrix:
       script:
         # test node-webkit usage
         - ./scripts/test-node-webkit.sh
+    # Lint Python code for syntax errors and undefined names
+    - language: python
+      install: pip install flake8
+      script: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      
 
 install:
 - npm install

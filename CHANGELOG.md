@@ -2,6 +2,7 @@
 
 ## 0.14.0
 
+- Defer modules requires in napi.js (https://github.com/mapbox/node-pre-gyp/pull/434)
 - Bump dependency on `tar` from `^4` to `^4.4.2` (https://github.com/mapbox/node-pre-gyp/pull/454)
 - Support extracting compiled binary from local offline mirror (https://github.com/mapbox/node-pre-gyp/pull/459)
 - Added Node 13 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/483)

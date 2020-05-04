@@ -1,0 +1,28 @@
+name: Nightly Sync of ABI Crosswalk
+
+on:
+  schedule:
+  - cron: '0 3 * * *' # run daily at 3am
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+
+      - name: Install
+        run: npm i
+
+      - name: Collect latest releases
+        run: npm run update-crosswalk
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: 'feat: Update ABI Crosswalk values'
+          title: 'feat: Update ABI Crosswalk values'
+          body: Auto-generated PR with content updates from https://nodejs.org/download/release/index.json

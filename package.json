@@ -21,7 +21,7 @@
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^1.0.2",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^0.5.3",
     "needle": "^2.5.0",
     "nopt": "^4.0.1",
     "npm-packlist": "^1.1.6",

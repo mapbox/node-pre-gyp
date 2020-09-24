@@ -24,7 +24,7 @@
     "mkdirp": "^0.5.3",
     "needle": "^2.5.0",
     "nopt": "^4.0.1",
-    "npm-packlist": "^1.1.6",
+    "npm-packlist": "^2",
     "npmlog": "^4.0.2",
     "rc": "^1.2.7",
     "rimraf": "^2.6.1",

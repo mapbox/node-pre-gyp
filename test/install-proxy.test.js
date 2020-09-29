@@ -7,8 +7,8 @@ var sinon = require('sinon');
 var HttpsProxyAgent = require('https-proxy-agent');
 var nock = require('nock');
 
-test.only('should set a agent for proxy with needle', function(t) {
-
+test('should set a agent for proxy with needle', function(t) {
+  var proxyUrl='http://localhost:3122';
   var needleGetStub = sinon.stub(needle, 'get')
       .onFirstCall().callsFake((uri, requestOpts) => {
     t.deepEqual(requestOpts.agent, new HttpsProxyAgent(proxyUrl))
@@ -18,8 +18,6 @@ test.only('should set a agent for proxy with needle', function(t) {
   })
       .callThrough()
 
-  var proxyUrl='http://localhost:3122';
-  process.env.http_proxy=proxyUrl;
   // Dummy tar.gz data, contains a blank directory.
   var targz = 'H4sICPr8u1oCA3kudGFyANPTZ6A5MDAwMDc1VQDTZhAaCGA0hGNobGRqZm5uZmxupGBgaGhiZsKgYMpAB1BaXJJYBHRKYk5pcioedeUZqak5+D2J5CkFhlEwCkbBKBjkAAAyG1ofAAYAAA==';
 
@@ -39,6 +37,7 @@ test.only('should set a agent for proxy with needle', function(t) {
   };
 
   process.chdir('test/app1');
+  process.env.http_proxy=proxyUrl;
 
   install(opts, [], function(err) {
     t.ifError(err); // Worked fine

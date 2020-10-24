@@ -179,6 +179,15 @@ test.Test.prototype.stringContains = function(actual, contents, message) {
   });
 };
 
+test.Test.prototype.stringMatches = function(actual, regex, message) {
+  this._assert(regex.test(actual) > -1, {
+    message: message || 'should match '+regex,
+    operator: 'stringMatches',
+    actual: actual,
+    expected: regex
+  });
+};
+
 // Because the below tests only ensure that flags can be correctly passed to node-gyp is it not
 // likely they will behave differently for different apps. So we save time by avoiding running these for each app.
 var app = apps[0];
@@ -206,9 +215,11 @@ test(app.name + ' passes --nodedir down to node-gyp via npm' + app.args, functio
 // https://github.com/nodejs/node-gyp/blob/c84a54194781410743efe353d18ca7d20fc9d3a3/lib/configure.js#L396-L397
 if (process.platform !== 'win32') {
     test(app.name + ' passes --python down to node-gyp via node-pre-gyp ' + app.args, function(t) {
+        // node-gyp@5 improved the python detection the the below wont be used if it's invalid,
+        // we can instead set an invalid NODE_GYP_FORCE_PYTHON environment variable to force a failure
         run('node-pre-gyp', 'configure', '--python=invalid-value', app, {}, function(err,stdout,stderr) {
             t.ok(err, 'Expected command to fail');
-            t.stringContains(stderr,"Can't find Python executable");
+            t.stringMatches(stderr,/(Can't find Python executable|Could not find any Python installation to use)/);
             t.end();
         });
     });
@@ -216,7 +227,7 @@ if (process.platform !== 'win32') {
     test(app.name + ' passes --python down to node-gyp via npm ' + app.args, function(t) {
         run('node-pre-gyp', 'configure', '--build-from-source --python=invalid-value', app, {}, function(err,stdout,stderr) {
             t.ok(err, 'Expected command to fail');
-            t.stringContains(stderr,"Can't find Python executable");
+            t.stringMatches(stderr,/(Can't find Python executable|Could not find any Python installation to use)/);
             t.end();
         });
     });

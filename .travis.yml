@@ -12,9 +12,6 @@ sudo: false
 
 matrix:
   include:
-    # Test node v6 with needle https (default)
-    - os: linux
-      node_js: 6
     # Test node v8 with needle https (default)
     - os: linux
       node_js: 8

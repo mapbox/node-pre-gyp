@@ -1,7 +1,9 @@
 language: node_js
 
-sudo: false
+dist: xenial
 
+services:
+  - xvfb
 
 ##### WARNING
 # node-pre-gyp tests are not concurrency safe

@@ -24,7 +24,6 @@ else
     # assume 64 bit linux
     wget https://s3.amazonaws.com/node-webkit/v${NODE_WEBKIT_VERSION}/node-webkit-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
     tar xf node-webkit-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
-    export DISPLAY=:99.0; sh -e /etc/init.d/xvfb start;
     export PATH=${BASE}/node-webkit-v0.8.5-linux-x64:${PATH}
 fi
 

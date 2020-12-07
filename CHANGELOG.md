@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 0.17.0
+- Got travis + appveyor green again
+- Added support for more node versions
+
 ## 0.16.0
 
 - Added Node 15 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/520)

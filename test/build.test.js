@@ -273,24 +273,24 @@ apps.forEach(function(app) {
                   });
               });
           });
-
-          test(app.name + ' builds ' + app.args, function(t) {
-              run('node-pre-gyp', 'rebuild', '--fallback-to-build --loglevel=error', app, {}, function(err,stdout,stderr) {
-                  t.ifError(err);
-                  if (process.platform !== 'win32') {
-                      if (app.args.indexOf('--debug') > -1) {
-                          t.stringContains(stdout,'Debug/'+app.name+'.node');
-                      } else {
-                          t.stringContains(stdout,'Release/'+app.name+'.node');
-                      }
-                  }
-                  t.end();
-              });
-          });
         } else {
           // Skipping since this support broke upstream in node-gyp: https://github.com/nodejs/node-gyp/pull/1616
           test.skip(app.name + ' builds with unparsed options ' + app.args, function() {});
         }
+
+        test(app.name + ' builds ' + app.args, function(t) {
+            run('node-pre-gyp', 'rebuild', '--fallback-to-build --loglevel=error', app, {}, function(err,stdout,stderr) {
+                t.ifError(err);
+                if (process.platform !== 'win32') {
+                    if (app.args.indexOf('--debug') > -1) {
+                        t.stringContains(stdout,'Debug/'+app.name+'.node');
+                    } else {
+                        t.stringContains(stdout,'Release/'+app.name+'.node');
+                    }
+                }
+                t.end();
+            });
+        });
 
         test(app.name + ' is found ' + app.args, function(t) {
             run('node-pre-gyp', 'reveal', 'module_path --silent', app, {}, function(err,stdout,stderr) {

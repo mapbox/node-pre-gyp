@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "0.15.0",
+  "version": "0.17.0",
   "keywords": [
     "native",
     "addon",
@@ -20,17 +20,17 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "detect-libc": "^1.0.2",
+    "detect-libc": "^1.0.3",
     "https-proxy-agent": "^5.0.0",
-    "mkdirp": "^0.5.3",
-    "needle": "^2.5.0",
-    "nopt": "^4.0.1",
-    "npm-packlist": "^1.1.6",
-    "npmlog": "^4.0.2",
-    "rc": "^1.2.7",
-    "rimraf": "^2.6.1",
-    "semver": "^5.3.0",
-    "tar": "^4.4.2"
+    "mkdirp": "^0.5.5",
+    "needle": "^2.5.2",
+    "nopt": "^4.0.3",
+    "npm-packlist": "^1.4.8",
+    "npmlog": "^4.1.2",
+    "rc": "^1.2.8",
+    "rimraf": "^2.7.1",
+    "semver": "^5.7.1",
+    "tar": "^4.4.13"
   },
   "devDependencies": {
     "aws-sdk": "^2.28.0",

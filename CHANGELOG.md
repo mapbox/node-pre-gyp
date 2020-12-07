@@ -1,5 +1,19 @@
 # node-pre-gyp changelog
 
+## 0.17.0
+- Got travis + appveyor green again
+- Added support for more node versions
+
+## 0.16.0
+
+- Added Node 15 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/520)
+
+## 0.15.0
+
+- Bump dependency on `mkdirp` from `^0.5.1` to `^0.5.3` (https://github.com/mapbox/node-pre-gyp/pull/492)
+- Bump dependency on `needle` from `^2.2.1` to `^2.5.0` (https://github.com/mapbox/node-pre-gyp/pull/502)
+- Added Node 14 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/501)
+
 ## 0.14.0
 
 - Defer modules requires in napi.js (https://github.com/mapbox/node-pre-gyp/pull/434)

@@ -68,8 +68,35 @@ if (dir) {
   }
 }
 
-function run() {
-  const command = prog.todo.shift();
+/**
+ * read /etc/os-release if --distinguish_linux was passed
+ */
+var distinguish = prog.opts.distinguish_linux;
+var linux_name = 'linux';
+
+if (distinguish && process.platform === 'linux') {
+  var linuxInfo = require('linux-os-info');
+  if (typeof distinguish === 'string') {
+    distinguish = distinguish.split(',');
+  }
+  var info = linuxInfo({mode: 'sync'});
+  if (info.file instanceof Error) {
+    log.error('cannot determine linux: %s', info.file.message);
+    process.exit(1);
+  }
+
+  // if distinguish all or this linux is in the list then set the name
+  if (distinguish === true || ~distinguish.indexOf(info.id)) {
+    linux_name = info.id;
+  }
+}
+
+// this can be used in the output template but is only
+// meaningful if --distinguish_linux was specified.
+prog.opts.linux_name = linux_name;
+
+function run () {
+  var command = prog.todo.shift();
   if (!command) {
     // done!
     completed = true;

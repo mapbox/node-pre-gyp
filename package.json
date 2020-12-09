@@ -21,6 +21,7 @@
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^1.0.3",
+    "linux-os-info": "^2.0.0",
     "mkdirp": "^0.5.5",
     "needle": "^2.5.2",
     "nopt": "^4.0.3",

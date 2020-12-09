@@ -74,6 +74,7 @@ Options include:
  - `--target=0.4.0`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
+ - `--distinguish_linux`: make `linux_name` available in the `package_name` template. `linux_name` is set to the `id` property from `/etc/os-release`.
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 
@@ -82,6 +83,8 @@ For example: `npm install --build-from-source=myapp`. This is useful if:
  - `myapp` is referenced in the package.json of a larger app and therefore `myapp` is being installed as a dependency with `npm install`.
  - The larger app also depends on other modules installed with `node-pre-gyp`
  - You only want to trigger a source compile for `myapp` and the other modules.
+
+In addition, `--distinguish_linux` can be passed alone or with an argument. If passed alone then `linux_name` is set to `id` whenever `process.platform === 'linux'`. If passed a list, e.g., `alpine` or `alpine,centos` then `linux_name` is only set to `id` if `id` is in the list; `linux_name` will just be `linux` if `id` is not in the list. This allows creating different builds for packages that
 
 ### Configuring
 
@@ -325,7 +328,7 @@ The `napi_build_version` value is communicated to the C/C++ code by adding this 
 
 This ensures that `NAPI_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
 
-> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is prefered because it used by the N-API C/C++ headers to configure the specific N-API veriosn being requested. 
+> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is prefered because it used by the N-API C/C++ headers to configure the specific N-API veriosn being requested.
 
 ### Path and file naming requirements in `package.json`
 
@@ -348,9 +351,9 @@ Here's an example:
 
 ## Supporting both N-API and NAN builds
 
-You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property. 
+You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property.
 
-Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build. 
+Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build.
 
 The configuration value `node_napi_label` is set by `node-pre-gyp` to the type of build created, `napi` or `node`, and the version number. For N-API builds, the string contains the N-API version nad has values like `napi-v3`. For traditional, non-N-API builds, the string contains the ABI version with values like `node-v46`.
 
@@ -367,10 +370,10 @@ Here's how the `binary` configuration above might be changed to support both N-A
   }
 ```
 
-The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds. 
+The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds.
 
 For example:
- 
+
 ```C
 #if NAPI_VERSION
 // N-API code goes here

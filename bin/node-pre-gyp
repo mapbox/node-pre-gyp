@@ -26,13 +26,13 @@ prog.parseArgv(process.argv);
 if (prog.todo.length === 0) {
   if (~process.argv.indexOf('-v') || ~process.argv.indexOf('--version')) {
     console.log('v%s', prog.version);
-    return process.exit(0);
+    process.exit(0);
   } else if (~process.argv.indexOf('-h') || ~process.argv.indexOf('--help')) {
     console.log('%s', prog.usage());
-    return process.exit(0);
+    process.exit(0);
   }
   console.log('%s', prog.usage());
-  return process.exit(1);
+  process.exit(1);
 }
 
 // if --no-color is passed
@@ -87,7 +87,7 @@ if (distinguish && process.platform === 'linux') {
     process.exit(1);
   }
 
-  // if distinguish all or this linux is in the list then set the name
+  // if distinguish all or this specific linux is in the list then set the name
   if (distinguish === true || ~distinguish.indexOf(info.id)) {
     linux_name = info.id;
   }
@@ -97,6 +97,9 @@ if (distinguish && process.platform === 'linux') {
 // meaningful if --distinguish_linux was specified.
 prog.opts.linux_name = linux_name;
 
+//
+// run all the supplied commands.
+//
 function run () {
   var command = prog.todo.shift();
   if (!command) {
@@ -104,6 +107,12 @@ function run () {
     completed = true;
     log.info('ok');
     return;
+  }
+
+  // set binary.host when appropriate.
+  let target;
+  if (target = prog.setBinaryHostProperty(command.name)) {
+    log.info('setting binary.host to ' + prog.package_json.binary.host);
   }
 
   prog.commands[command.name](command.args, function (err) {

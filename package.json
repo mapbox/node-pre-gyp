@@ -1,7 +1,7 @@
 {
   "name": "node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "0.17.0",
+  "version": "1.0.0-rc",
   "keywords": [
     "native",
     "addon",
@@ -13,6 +13,7 @@
   ],
   "license": "BSD-3-Clause",
   "author": "Dane Springmeyer <dane@mapbox.com>",
+  "contributors": ["Bruce A. MacNaughton <bmacnaughton@gmail.com>"],
   "repository": {
     "type": "git",
     "url": "git://github.com/mapbox/node-pre-gyp.git"

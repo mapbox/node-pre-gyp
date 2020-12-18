@@ -1,5 +1,5 @@
 {
-    "name": "node-pre-gyp-test-app3",
+    "name": "node-pre-gyp-test-app4",
     "author": "Dane Springmeyer <springmeyer>",
     "description":"node-pre-gyp test",
     "repository"   :  {
@@ -19,5 +19,8 @@
     "scripts": {
         "install":"node-pre-gyp install --fallback-to-build",
         "test":"node index.js"
+    },
+    "dependencies": {
+        "nan": "^2.14.2"
     }
 }

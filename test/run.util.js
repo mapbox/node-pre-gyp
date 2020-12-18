@@ -41,7 +41,7 @@ function run(prog,command,args,app,opts,cb) {
         opts.env.PATH = cmd_path + sep + process.env.PATH;
         // needed for apps that require node-pre-gyp to find local module
         // since they don't install a copy in their node_modules
-        opts.env.NODE_PATH = NODE_PATH = path.join(__dirname,'../lib/');
+        opts.env.NODE_PATH = path.join(__dirname,'../lib/');
     }
 
     // unless explicitly provided, lets execute the command inside the app specific directory
@@ -51,7 +51,7 @@ function run(prog,command,args,app,opts,cb) {
     // avoid breakage when compiling with clang++ and node v0.10.x
     // This is harmless to add for other versions and platforms
     final_cmd += ' --clang=1';
-    
+
     // Test building with msvs 2015 since that is more edge case than 2013
     if (process.platform === 'win32') {
         final_cmd += ' --msvs_version=2015 ';

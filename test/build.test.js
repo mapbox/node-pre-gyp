@@ -237,6 +237,17 @@ apps.forEach(function(app) {
             t.end();
         });
 
+        test('install dependencies (only nan at this time)', function (t) {
+          run('npm', 'install', '-d', app, {}, function (err, stdout, stderr) {
+            if (err) {
+              console.log(stdout);
+              console.log(stderr);
+            }
+            t.ifError(err);
+            t.end();
+          });
+        });
+
         test(app.name + ' configures ' + app.args, function(t) {
             run('node-pre-gyp', 'configure', '--loglevel=error', app, {}, function(err,stdout,stderr) {
                 t.ifError(err);

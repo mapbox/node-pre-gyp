@@ -19,5 +19,8 @@
     "scripts": {
         "install":"node-pre-gyp install --fallback-to-build",
         "test":"node index.js"
+    },
+    "dependencies": {
+        "nan": "^2.14.2"
     }
 }

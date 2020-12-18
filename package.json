@@ -13,7 +13,9 @@
   ],
   "license": "BSD-3-Clause",
   "author": "Dane Springmeyer <dane@mapbox.com>",
-  "contributors": ["Bruce A. MacNaughton <bmacnaughton@gmail.com>"],
+  "contributors": [
+    "Bruce A. MacNaughton <bmacnaughton@gmail.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/mapbox/node-pre-gyp.git"
@@ -35,20 +37,11 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.28.0",
-    "jshint": "^2.9.5",
     "nock": "^9.2.3",
     "tape": "^4.6.3"
   },
-  "jshintConfig": {
-    "node": true,
-    "globalstrict": true,
-    "undef": true,
-    "unused": false,
-    "noarg": true
-  },
   "scripts": {
-    "pretest": "jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js test/fetch.test.js lib lib/util scripts bin/node-pre-gyp",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "jshint lib lib/util scripts bin/node-pre-gyp && tape test/*test.js"
+    "test": "tape test/*test.js"
   }
 }

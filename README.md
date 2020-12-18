@@ -157,7 +157,7 @@ Why then not require S3? Because while some applications using node-pre-gyp need
 
 It should also be mentioned that there is an optional and entirely separate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-github publish```.
 
-##### The `binary` object has two optional properties
+##### The `binary` object has optional properties
 
 ###### remote_path
 
@@ -280,7 +280,32 @@ What will happen is this:
 3. `node-pre-gyp` will fetch the binary `.node` module and unpack in the right place
 4. Assuming that all worked, you are done
 
-If a a binary was not available for a given platform and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
+If a binary was not available for a given platform and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
+
+#### 9) One more option
+
+It maybe be that you want to work with two s3 buckets, one for staging and one for production; this
+arrangement makes it less likely to accidentally overwrite a production binary and allows the production
+environment to have more restrictive permissions than staging.
+
+The binary.host property can be set at execution time. In order to do so all of the following conditions
+must be true.
+ - binary is a property in package.json
+ - binary.host is falsey or not present
+ - binary.staging_host is not empty
+ - binary.production_host is not empty
+
+If any of the previous checks fail then the publish operation will fail because the `binary.host` is missing.
+
+If the command being executed is "publish" the the default is set to `binary.staging_host`. In all other cases
+the default is `binary.production_host`.
+
+The command-line options `--s3_host staging` or `--s3_host production` override the default. If `s3_host`
+is not `staging` or `production` an exception is thrown.
+
+This allows installing from staging for testing by specifying `--s3_host staging`. And it requires specifying
+`--s3_option production` in order to publish to production making accidental publishing less likely.
+
 
 ## N-API Considerations
 
@@ -536,7 +561,7 @@ Remember this publishing is not the same as `npm publish`. We're just talking ab
 
 [Travis](https://travis-ci.org/) can push to S3 after a successful build and supports both:
 
- - Ubuntu Precise and OS X (64 bit)
+ - Ubuntu and OS X (64 bit)
  - Multiple Node.js versions
 
 For an example of doing this see [node-add-example's .travis.yml](https://github.com/springmeyer/node-addon-example/blob/2ff60a8ded7f042864ad21db00c3a5a06cf47075/.travis.yml).
@@ -589,8 +614,8 @@ os:
 
 env:
   matrix:
-    - NODE_VERSION="4"
-    - NODE_VERSION="6"
+    - NODE_VERSION="12"
+    - NODE_VERSION="14"
 
 before_install:
 - rm -rf ~/.nvm/ && git clone --depth 1 https://github.com/creationix/nvm.git ~/.nvm
@@ -668,6 +693,7 @@ The `binary` properties of `module_path`, `remote_path`, and `package_name` supp
 
  - `node_abi`: The node C++ `ABI` number. This value is available in Javascript as `process.versions.modules` as of [`>= v0.10.4 >= v0.11.7`](https://github.com/joyent/node/commit/ccabd4a6fa8a6eb79d29bc3bbe9fe2b6531c2d8e) and in C++ as the `NODE_MODULE_VERSION` define much earlier. For versions of Node before this was available we fallback to the V8 major and minor version.
  - `platform` matches node's `process.platform` like `linux`, `darwin`, and `win32` unless the user passed the `--target_platform` option to override.
+ - `linux_name` is the same as `platform` unless the `--distinguish_linux` option is specified (see below).
  - `arch` matches node's `process.arch` like `x64` or `ia32` unless the user passes the `--target_arch` option to override.
  - `libc` matches `require('detect-libc').family` like `glibc` or `musl` unless the user passes the `--target_libc` option to override.
  - `configuration` - Either 'Release' or 'Debug' depending on if `--debug` is passed during the build.
@@ -677,6 +703,12 @@ The `binary` properties of `module_path`, `remote_path`, and `package_name` supp
  - `build` - the sevmer `build` value. For example it would be `this.that` if your package.json `version` was `v1.0.0+this.that`
  - `prerelease` - the semver `prerelease` value. For example it would be `alpha.beta` if your package.json `version` was `v1.0.0-alpha.beta`
 
+`--distinguish_linux` is used for situations in which the specific distribution of linux is used in the build. One example is when the package contains
+a different library for alpine than for other linux distributions. There are three states for `--distinguish_linux`:
+- not specified, the value of `linux_name` is always `'linux'`.
+- `--distinguish_linux` with no argument, `linux_name` is set to the value of the `id` property in `/etc/os-release` (or os-specific variant of the file).
+- `--distinguish_linux=alpine` (followed by a comma-separated list of one or more linux distributions), `linux_name` is set to the value of the `id`
+property only if the `id` is in the list. If `id` is not in the list `linux_name` is `'linux'`.
 
 The options are visible in the code at <https://github.com/mapbox/node-pre-gyp/blob/612b7bca2604508d881e1187614870ba19a7f0c5/lib/util/versioning.js#L114-L127>
 

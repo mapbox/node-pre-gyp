@@ -2,6 +2,7 @@
 
 var test = require('tape');
 var nock = require('nock');
+var fs = require('fs');
 var install = require('../lib/install.js');
 
 test('should follow redirects', function(t) {
@@ -17,6 +18,8 @@ test('should follow redirects', function(t) {
       .get('/otherapp.tar.gz')
       .reply(200, Buffer.from(targz, 'base64'));
 
+  process.chdir('test/app1');
+
   var opts = {
     // commands no longer read package.json so it must be done here.
     package_json: JSON.parse(fs.readFileSync('./package.json')),
@@ -25,8 +28,6 @@ test('should follow redirects', function(t) {
       'update-binary': true
     }
   };
-
-  process.chdir('test/app1');
 
   install(opts, [], function(err) {
     t.ifError(err); // Worked fine

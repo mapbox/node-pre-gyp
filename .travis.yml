@@ -14,17 +14,24 @@ services:
 
 matrix:
   include:
-    # Test node v6 with needle https (default)
-    - os: linux
-      node_js: 6
-    # Test node v8 with needle https (default)
-    - os: linux
-      node_js: 8
     # Test node v10 with request override
     - os: linux
       node_js: 10
       before_install:
         - npm install request
+
+    # Test node v14 with request override
+    - os: linux
+      node_js: 12
+      before_install:
+        - npm install request
+
+    # Test node v14 with request override
+    - os: linux
+      node_js: 14
+      before_install:
+        - npm install request
+
     # Test node webkit
     - os: linux
       node_js: 10

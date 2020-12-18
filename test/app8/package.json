@@ -9,6 +9,9 @@
     "license": "BSD-3-Clause",
     "version": "0.1.0",
     "main": "./index.js",
+    "dependencies": {
+      "nan": "^2.14.2"
+    },
     "binary": {
         "module_name": "app8",
         "module_path": "./lib",

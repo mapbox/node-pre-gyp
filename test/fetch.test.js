@@ -18,6 +18,8 @@ test('should follow redirects', function(t) {
       .reply(200, Buffer.from(targz, 'base64'));
 
   var opts = {
+    // commands no longer read package.json so it must be done here.
+    package_json: JSON.parse(fs.readFileSync('./package.json')),
     opts: {
       'build-from-source': false,
       'update-binary': true

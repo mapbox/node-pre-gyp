@@ -84,7 +84,7 @@ For example: `npm install --build-from-source=myapp`. This is useful if:
  - The larger app also depends on other modules installed with `node-pre-gyp`
  - You only want to trigger a source compile for `myapp` and the other modules.
 
-In addition, `--distinguish_linux` can be passed alone or with an argument. If passed alone then `linux_name` is set to `id` whenever `process.platform === 'linux'`. If passed a list, e.g., `alpine` or `alpine,centos` then `linux_name` is only set to `id` if `id` is in the list; `linux_name` will just be `linux` if `id` is not in the list. This allows creating different builds for packages that
+In addition, `--distinguish_linux` can be passed alone or with an argument. If passed alone then `linux_name` is set to `id` (taken from `/etc/os-release` or a variant) whenever `process.platform === 'linux'`. If passed a list, e.g., `alpine` or `alpine,centos` then `linux_name` is set to `id` only if `id` is in the list; `linux_name` will just be `linux` if `id` is not in the list. This allows different naming for builds on different linux distributions.
 
 ### Configuring
 
@@ -284,18 +284,18 @@ If a binary was not available for a given platform and `--fallback-to-build` was
 
 #### 9) One more option
 
-It maybe be that you want to work with two s3 buckets, one for staging and one for production; this
-arrangement makes it less likely to accidentally overwrite a production binary and allows the production
-environment to have more restrictive permissions than staging.
+It may be that you want to work with two s3 buckets, one for staging and one for production; this
+arrangement makes it less likely to accidentally overwrite a production binary. It also allows the production
+environment to have more restrictive permissions than staging while still enabling publishing when
+developing and testing.
 
 The binary.host property can be set at execution time. In order to do so all of the following conditions
 must be true.
- - binary is a property in package.json
  - binary.host is falsey or not present
  - binary.staging_host is not empty
  - binary.production_host is not empty
 
-If any of the previous checks fail then the publish operation will fail because the `binary.host` is missing.
+If any of these checks fail then the operation will not perform execution time determination of the s3 target.
 
 If the command being executed is "publish" the the default is set to `binary.staging_host`. In all other cases
 the default is `binary.production_host`.
@@ -303,7 +303,7 @@ the default is `binary.production_host`.
 The command-line options `--s3_host staging` or `--s3_host production` override the default. If `s3_host`
 is not `staging` or `production` an exception is thrown.
 
-This allows installing from staging for testing by specifying `--s3_host staging`. And it requires specifying
+This allows installing from staging by specifying `--s3_host staging`. And it requires specifying
 `--s3_option production` in order to publish to production making accidental publishing less likely.
 
 

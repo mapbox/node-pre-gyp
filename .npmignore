@@ -14,5 +14,6 @@ test-node-webkit.sh
 test-custom-target.sh
 scripts
 .travis.yml
+appveyor.yml
 TODO.md
 *.tgz

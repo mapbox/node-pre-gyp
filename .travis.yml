@@ -20,11 +20,13 @@ matrix:
     # Test node v8 with needle https (default)
     - os: linux
       node_js: 8
-    # Test node v10 with request override
+    # Test node v10 with request override + coverage reporting
     - os: linux
       node_js: 10
       before_install:
         - npm install request
+      script:
+        - npm run coverage
       after_script:
         - npm run upload-coverage
     # Test node webkit

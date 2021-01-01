@@ -25,6 +25,8 @@ matrix:
       node_js: 10
       before_install:
         - npm install request
+    after_script:
+      - npm run upload-coverage
     # Test node webkit
     - os: linux
       node_js: 10

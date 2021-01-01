@@ -47,20 +47,20 @@ const apps = [
       }
     }
   },
-  // {
-  //   'name': 'app2',
-  //   'args': '--custom_include_path=../include --debug',
-  //   'files': {
-  //     'base': ['node-pre-gyp-test-app2/app2.node'],
-  //     'win32': [
-  //       'node-pre-gyp-test-app2/app2.exp',
-  //       'node-pre-gyp-test-app2/app2.ilk',
-  //       'node-pre-gyp-test-app2/app2.lib',
-  //       'node-pre-gyp-test-app2/app2.map',
-  //       'node-pre-gyp-test-app2/app2.node'
-  //     ]
-  //   }
-  // },
+  {
+    'name': 'app2',
+    'args': '--custom_include_path=../include --debug',
+    'files': {
+      'base': ['node-pre-gyp-test-app2/app2.node'],
+      'win32': [
+        'node-pre-gyp-test-app2/app2.exp',
+        'node-pre-gyp-test-app2/app2.ilk',
+        'node-pre-gyp-test-app2/app2.lib',
+        'node-pre-gyp-test-app2/app2.map',
+        'node-pre-gyp-test-app2/app2.node'
+      ]
+    }
+  },
   // {
   //   'name': 'app2',
   //   'args': '--custom_include_path=../include --toolset=cpp11',

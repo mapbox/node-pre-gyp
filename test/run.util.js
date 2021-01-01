@@ -1,3 +1,5 @@
+'use strict';
+
 const cp = require('child_process');
 const path = require('path');
 
@@ -41,7 +43,7 @@ function run(prog,command,args,app,opts,cb) {
     opts.env.PATH = cmd_path + sep + process.env.PATH;
     // needed for apps that require node-pre-gyp to find local module
     // since they don't install a copy in their node_modules
-    opts.env.NODE_PATH = NODE_PATH = path.join(__dirname,'../lib/');
+    opts.env.NODE_PATH = path.join(__dirname,'../lib/');
   }
 
   // unless explicitly provided, lets execute the command inside the app specific directory

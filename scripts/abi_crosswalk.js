@@ -18,7 +18,7 @@ const cross = {};
 // thanks to rvagg, this is so simple
 // https://github.com/iojs/build/issues/94
 https.get('https://iojs.org/download/release/index.json', (res) => {
-  if (res.statusCode != 200 ) {
+  if (res.statusCode !== 200 ) {
     throw new Error('server returned ' + res.statusCode + ' for iojs.org');
   }
   res.setEncoding('utf8');
@@ -36,7 +36,7 @@ https.get('https://iojs.org/download/release/index.json', (res) => {
 });
 
 https.get('https://nodejs.org/download/release/index.json', (res) => {
-  if (res.statusCode != 200 ) {
+  if (res.statusCode !== 200 ) {
     throw new Error('server returned ' + res.statusCode + ' for nodejs.org');
   }
   res.setEncoding('utf8');
@@ -56,8 +56,8 @@ https.get('https://nodejs.org/download/release/index.json', (res) => {
 const sortObjectByKey = function(obj){
   const keys = [];
   const sorted_obj = {};
-  for (var key in obj){
-    if (obj.hasOwnProperty(key)){
+  for (const key in obj){
+    if (Object.hasOwnProperty.call(obj,key)){
       keys.push(key);
     }
   }
@@ -72,7 +72,7 @@ const sortObjectByKey = function(obj){
 
   for (let i = 0; i < len; i++)
   {
-    key = keys[i];
+    const key = keys[i];
     sorted_obj[key] = obj[key];
   }
   return sorted_obj;

@@ -1,3 +1,4 @@
+'use strict';
 
 /*
 
@@ -16,7 +17,7 @@ function getPreviousVersion(current_version, abi_crosswalk) {
   while (patch > 0) {
     --patch;
     const new_target = '' + major + '.' + minor + '.' + patch;
-    if (new_target == current_version) {
+    if (new_target === current_version) {
       break;
     }
     if (abi_crosswalk[new_target]) {

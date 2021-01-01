@@ -7,7 +7,7 @@ const targets = {};
 Object.keys(data).forEach((v) => {
   const o = data[v];
   let abi;
-  if (o.node_abi == 1) {
+  if (o.node_abi === 1) {
     abi = 'v8-' + o.v8;
   } else {
     abi = 'node-v' + o.node_abi;

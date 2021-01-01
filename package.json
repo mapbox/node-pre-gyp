@@ -46,6 +46,13 @@
   "eslintConfig": {
     "extends": "@mapbox/eslint-config-mapbox"
   },
+  "nyc": {
+    "all": true,
+    "skip-full": false,
+    "exclude": [
+      "test/**"
+    ]
+  },
   "scripts": {
     "coverage": "nyc --all --include index.js --include lib/ npm test",
     "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",

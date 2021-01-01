@@ -10,20 +10,20 @@ export PATH=`pwd`/bin:$PATH
 BASE=$(pwd)
 
 export NODE_WEBKIT_VERSION="0.50.2"
+export NW_INSTALL_URL="https://dl.nwjs.io"
 
 if [[ `uname -s` == 'Darwin' ]]; then
     if [[ ! -f nwjs-v${NODE_WEBKIT_VERSION}-osx-x64.zip ]]; then
-        wget https://dl.nwjs.io/v${NODE_WEBKIT_VERSION}/nwjs-v${NODE_WEBKIT_VERSION}-osx-x64.zip
+        wget ${NW_INSTALL_URL}/v${NODE_WEBKIT_VERSION}/nwjs-v${NODE_WEBKIT_VERSION}-osx-x64.zip
     fi
     if [[ ! -d nwjs-v${NODE_WEBKIT_VERSION}-osx-x64/nwjs.app ]]; then
         unzip nwjs-v${NODE_WEBKIT_VERSION}-osx-x64.zip
     fi
     export PATH=${BASE}/nwjs-v${NODE_WEBKIT_VERSION}-osx-x64/nwjs.app/Contents/MacOS:${PATH}
 else
-    # assume 64 bit linux
-    wget https://dl.nwjs.io/v${NODE_WEBKIT_VERSION}/nwjs-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
+    wget ${NW_INSTALL_URL}/v${NODE_WEBKIT_VERSION}/nwjs-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
     tar xf nwjs-v${NODE_WEBKIT_VERSION}-linux-x64.tar.gz
-    export PATH=${BASE}/nwjs-v0.8.5-linux-x64:${PATH}
+    export PATH=${BASE}/nwjs-v${NODE_WEBKIT_VERSION}-linux-x64:${PATH}
 fi
 
 # install nw-gyp

@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## 1.0.0
+- Dropped node 6 support, added node v14 support
+- Switched tests to use mapbox-owned bucket
+- Added coverage tracking and linting with eslint
+- Upgraded all test apps to N-API/node-addon-api
+
 ## 0.17.0
 - Got travis + appveyor green again
 - Added support for more node versions

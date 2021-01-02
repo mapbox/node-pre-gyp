@@ -99,8 +99,8 @@ if (previous_patch_version && previous_patch_version !== current_version) {
       const opts = { env: new_env };
       run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target=' + previous_patch_version, app, opts, (err, stdout, stderr) => {
         t.ifError(err);
-        t.notEqual(stdout, '');
-        t.notEqual(stderr, '');
+        t.notEqual(stdout.trim(), '');
+        t.notEqual(stderr.trim(), '');
         run('node-pre-gyp', 'clean', '--target=' + current_version, app, opts, (err2, stdout2, stderr2) => {
           t.ifError(err2);
           t.notEqual(stdout2, '');

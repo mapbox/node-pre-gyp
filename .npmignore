@@ -17,3 +17,5 @@ scripts
 appveyor.yml
 TODO.md
 *.tgz
+.nyc_output
+coverage

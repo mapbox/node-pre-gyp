@@ -10,13 +10,13 @@ Convenience function to call out to local node-pre-gyp or npm
 
 */
 
-const cmd_path = path.join(__dirname,'../bin/');
+const cmd_path = path.join(__dirname, '../bin/');
 let sep = ':';
 if (process.platform === 'win32') {
   sep = ';';
 }
 
-function run(prog,command,args,app,opts,cb) {
+function run(prog, command, args, app, opts, cb) {
 
   // validate args
   if (!prog) throw new Error('prog arg undefined');
@@ -43,12 +43,12 @@ function run(prog,command,args,app,opts,cb) {
     opts.env.PATH = cmd_path + sep + process.env.PATH;
     // needed for apps that require node-pre-gyp to find local module
     // since they don't install a copy in their node_modules
-    opts.env.NODE_PATH = path.join(__dirname,'../lib/');
+    opts.env.NODE_PATH = path.join(__dirname, '../lib/');
   }
 
   // unless explicitly provided, lets execute the command inside the app specific directory
   if (!opts.cwd) {
-    opts.cwd = path.join(__dirname,app.name);
+    opts.cwd = path.join(__dirname, app.name);
   }
   // avoid breakage when compiling with clang++ and node v0.10.x
   // This is harmless to add for other versions and platforms
@@ -73,13 +73,13 @@ function run(prog,command,args,app,opts,cb) {
 
   // Finally, execute the command
 
-  cp.exec(final_cmd,opts,(err,stdout,stderr) => {
+  cp.exec(final_cmd, opts, (err, stdout, stderr) => {
     if (err) {
       const error = new Error("Command failed '" + final_cmd + "'");
       error.stack = stderr;
-      return cb(error,stdout,stderr);
+      return cb(error, stdout, stderr);
     }
-    return cb(err,stdout,stderr);
+    return cb(err, stdout, stderr);
   });
 }
 

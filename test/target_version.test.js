@@ -9,9 +9,9 @@ const path = require('path');
 const test = require('tape');
 
 test('should properly calculate previous version', (t) => {
-  t.equal(getPrevious('1.0.0',abi_crosswalk),undefined);
-  t.equal(getPrevious('1.0.1',abi_crosswalk),'1.0.0');
-  t.equal(getPrevious('1.0.2',abi_crosswalk),'1.0.1');
+  t.equal(getPrevious('1.0.0', abi_crosswalk), undefined);
+  t.equal(getPrevious('1.0.1', abi_crosswalk), '1.0.0');
+  t.equal(getPrevious('1.0.2', abi_crosswalk), '1.0.1');
   t.end();
 });
 
@@ -47,7 +47,7 @@ test('every major version should have a unique ABI that is consistent across all
       if (!abis[major]) {
         abis[major] = o.node_abi;
       } else {
-        t.equal(abis[major],o.node_abi,v + ' should have abi: ' + o.node_abi);
+        t.equal(abis[major], o.node_abi, v + ' should have abi: ' + o.node_abi);
       }
     }
   });
@@ -77,7 +77,7 @@ Then we test the --target flag by:
   - the current version does not exist in the abi_crosswalk (by mocking it)
 */
 
-const previous_patch_version = getPrevious(current_version,abi_crosswalk);
+const previous_patch_version = getPrevious(current_version, abi_crosswalk);
 
 if (previous_patch_version && previous_patch_version !== current_version) {
 
@@ -90,21 +90,21 @@ if (previous_patch_version && previous_patch_version !== current_version) {
       const target_abi = {};
       target_abi[previous_patch_version] = abi_crosswalk[previous_patch_version];
       // write this crosswalk to disk
-      const testing_crosswalk = path.join(os.tmpdir(),'fake_abi_crosswalk.json');
-      fs.writeFileSync(testing_crosswalk,JSON.stringify(target_abi));
+      const testing_crosswalk = path.join(os.tmpdir(), 'fake_abi_crosswalk.json');
+      fs.writeFileSync(testing_crosswalk, JSON.stringify(target_abi));
       // pass mock crosswalk to env so that the node-pre-gyp we shell out to
       // uses the mock crosswalk
       const new_env = JSON.parse(JSON.stringify(process.env));
       new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
-      const opts = { env : new_env };
-      run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target=' + previous_patch_version, app, opts, (err,stdout,stderr) => {
+      const opts = { env: new_env };
+      run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target=' + previous_patch_version, app, opts, (err, stdout, stderr) => {
         t.ifError(err);
-        t.notEqual(stdout,'');
-        t.notEqual(stderr,'');
-        run('node-pre-gyp', 'clean', '--target=' + current_version, app, opts, (err,stdout,stderr) => {
-          t.ifError(err);
-          t.notEqual(stdout,'');
-          t.notEqual(stderr,'');
+        t.notEqual(stdout, '');
+        t.notEqual(stderr, '');
+        run('node-pre-gyp', 'clean', '--target=' + current_version, app, opts, (err2, stdout2, stderr2) => {
+          t.ifError(err2);
+          t.notEqual(stdout2, '');
+          t.notEqual(stderr2, '');
           t.end();
         });
       });

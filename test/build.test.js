@@ -246,7 +246,7 @@ apps.forEach((app) => {
   test(app.name + ' configures with unparsed options ' + app.args, (t) => {
     run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, (err, stdout, stderr) => {
       t.ifError(err);
-      t.ok(stdout);
+      t.equal(stdout, '');
       t.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
       t.end();
     });

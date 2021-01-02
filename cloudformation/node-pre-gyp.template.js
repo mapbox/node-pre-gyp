@@ -14,12 +14,41 @@ module.exports = s3Template.build({
       'PolicyDocument': {
         'Statement': [
           {
-            'Sid': 'Allow setting Object ACLs',
+            'Sid': 'Prevent Changing Bucket ACL',
+            'Effect': 'Deny',
+            'Principal': {
+              'AWS': '*'
+            },
+            'Action': [
+              's3:PutBucketAcl'
+            ],
+            'Resource': [
+              {
+                'Fn::Join': [
+                  '',
+                  [
+                    'arn:',
+                    {
+                      'Ref': 'AWS::Partition'
+                    },
+                    ':s3:::',
+                    bucketName
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            'Sid': 'Allow setting Objects and ACLs, deleting, getting',
             'Effect': 'Allow',
             'Principal': {
               'AWS': '*'
             },
             'Action': [
+              's3:DeleteObject',
+              's3:GetObject',
+              's3:GetObjectAcl',
+              's3:PutObject',
               's3:PutObjectAcl'
             ],
             'Resource': [

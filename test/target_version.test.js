@@ -97,15 +97,17 @@ if (previous_patch_version && previous_patch_version !== current_version) {
       const new_env = JSON.parse(JSON.stringify(process.env));
       new_env.NODE_PRE_GYP_ABI_CROSSWALK = testing_crosswalk;
       const opts = { env: new_env };
-      run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target=' + previous_patch_version, app, opts, (err, stdout, stderr) => {
+      run('node-pre-gyp', 'rebuild', '--build-from-source --fallback-to-build --target=' + previous_patch_version, app, opts, (err, stdout, stderr) => {
         t.ifError(err);
+        console.log(`stdout1 "${stdout}" there`);
+        console.log(`stderr1 "${stderr}" there`);
         t.notEqual(stdout, '');
-        console.log(`here "${stderr}" there`)
         t.notEqual(stderr, '');
         run('node-pre-gyp', 'clean', '--target=' + current_version, app, opts, (err2, stdout2, stderr2) => {
           t.ifError(err2);
+          console.log(`stdout2 "${stdout2}" there`);
+          console.log(`stderr2 "${stderr2}" there`);
           t.notEqual(stdout2, '');
-          console.log(`here "${stderr2}" there`)
           t.notEqual(stderr2, '');
           t.end();
         });

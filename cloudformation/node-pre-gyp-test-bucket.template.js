@@ -3,6 +3,6 @@
 const s3Template = require('@mapbox/s3-bucket-template');
 
 module.exports = s3Template.build({
-  BucketName: 'mapbox-node-pre-gyp-public-tests',
+  BucketName: 'mapbox-node-pre-gyp-public-testing-bucket',
   PublicAccessBlock: false
 });

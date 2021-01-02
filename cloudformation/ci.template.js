@@ -1,12 +1,11 @@
 'use strict';
 
 const cf = require('@mapbox/cloudfriend');
-const package_json = require('../package.json');
 const bucketName = require('./bucketName');
 
 module.exports = {
   AWSTemplateFormatVersion: '2010-09-09',
-  Description: `user for publishing to s3://${bucketName}/${package_json.name}`,
+  Description: `user for publishing to s3://${bucketName}/node-pre-gyp`,
   Resources: {
     User: {
       Type: 'AWS::IAM::User',
@@ -22,7 +21,7 @@ module.exports = {
                   Resource: `arn:aws:s3:::${bucketName}`,
                   Condition : {
                     StringLike : {
-                      "s3:prefix": [ package_json.name + "/*"]
+                      "s3:prefix": [ "node-pre-gyp/*"]
                     }
                   }
                 }
@@ -42,7 +41,7 @@ module.exports = {
                     's3:PutObjectAcl'
                   ],
                   Effect: 'Allow',
-                  Resource: `arn:aws:s3:::s3://${bucketName}/${package_json.name}/*`
+                  Resource: `arn:aws:s3:::s3://${bucketName}/node-pre-gyp/*`
                 }
               ]
             }

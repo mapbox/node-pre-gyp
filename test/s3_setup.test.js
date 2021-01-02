@@ -9,6 +9,7 @@ test('should propertly detect s3 bucket and prefix', (t) => {
   s3_setup.detect(url, result);
   t.equal(result.prefix, '');
   t.equal(result.bucket, 'bucket-with-dashes');
+  t.equal(result.region, 'us-west-1');
   t.end();
 });
 
@@ -18,5 +19,16 @@ test('should propertly detect s3 bucket and prefix with dots', (t) => {
   s3_setup.detect(url, result);
   t.equal(result.prefix, 'prefix');
   t.equal(result.bucket, 'bucket.with.dots');
+  t.equal(result.region, 'us-east-1');
+  t.end();
+});
+
+test('should propertly detect modern s3 bucket and prefix', (t) => {
+  const url = 'https://bucket-name.s3.us-east-1.amazonaws.com';
+  const result = {};
+  s3_setup.detect(url, result);
+  t.equal(result.prefix, '');
+  t.equal(result.bucket, 'bucket-name');
+  t.equal(result.region, 'us-east-1');
   t.end();
 });

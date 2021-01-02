@@ -15,7 +15,7 @@ test('should normalize double slash', (t) => {
       'module_path': './lib/binding/{configuration}/{toolset}/{name}',
       'remote_path': './{name}/v{version}/{configuration}/{version}/{toolset}/',
       'package_name': '{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{toolset}-{node_abi}-{platform}-{arch}.tar.gz',
-      'host': 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com'
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com'
     }
   };
   const opts = versioning.evaluate(mock_package_json, {});
@@ -100,7 +100,7 @@ test('should detect custom binary host from env', (t) => {
       'module_path': './lib/binding/{configuration}/{toolset}/{name}',
       'remote_path': './{name}/v{version}/{configuration}/{version}/{toolset}/',
       'package_name': '{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{toolset}-{node_abi}-{platform}-{arch}.tar.gz',
-      'host': 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com'
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com'
     }
   };
     // mock npm_config_test_binary_host_mirror env
@@ -121,7 +121,7 @@ test('should detect libc', (t) => {
       'module_path': './lib/binding/{name}-{libc}',
       'remote_path': './{name}/{libc}/',
       'package_name': '{module_name}-{libc}.tar.gz',
-      'host': 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com'
+      'host': 'https://some-bucket.s3-us-west-1.amazonaws.com'
     }
   };
   const opts = versioning.evaluate(mock_package_json, { module_root: '/root' });
@@ -131,6 +131,6 @@ test('should detect libc', (t) => {
   t.equal(opts.module, path.normalize('/root/lib/binding/test-' + expected_libc_token + '/test.node'));
   t.equal(opts.remote_path, './test/' + expected_libc_token + '/');
   t.equal(opts.package_name, 'test-' + expected_libc_token + '.tar.gz');
-  t.equal(opts.hosted_tarball, 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/test/' + expected_libc_token + '/test-' + expected_libc_token + '.tar.gz');
+  t.equal(opts.hosted_tarball, 'https://some-bucket.s3-us-west-1.amazonaws.com/test/' + expected_libc_token + '/test-' + expected_libc_token + '.tar.gz');
   t.end();
 });

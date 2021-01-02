@@ -8,9 +8,11 @@ test('should follow redirects', (t) => {
   // Dummy tar.gz data, contains a blank directory.
   const targz = 'H4sICPr8u1oCA3kudGFyANPTZ6A5MDAwMDc1VQDTZhAaCGA0hGNobGRqZm5uZmxupGBgaGhiZsKgYMpAB1BaXJJYBHRKYk5pcioedeUZqak5+D2J5CkFhlEwCkbBKBjkAAAyG1ofAAYAAA==';
 
+  const pattern = /\/app1-v0.1.0-node-v\d+-\S+.tar.gz/;
   // Mock an HTTP redirect
   const n = nock('https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com')
-    .get(/\/app1-v0.1.0-node-v\d+-\S+.tar.gz/)
+    .persist()
+    .get(pattern)
     .reply(302, '', {
       'Location': 'https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com/otherapp.tar.gz'
     })

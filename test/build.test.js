@@ -19,115 +19,35 @@ const apps = [
     'name': 'app1',
     'args': '',
     'files': {
-      'base': ['binding/app1.node'],
-      'win32': {
-        'base': [
-          'binding/app1.exp',
-          'binding/app1.lib',
-          'binding/app1.map',
-          'binding/app1.node'
-        ],
-        'node-v59': [
-          'binding/app1.exp',
-          'binding/app1.iobj',
-          'binding/app1.ipdb',
-          'binding/app1.lib',
-          'binding/app1.map',
-          'binding/app1.node'
-        ],
-        'node-v64': [
-          'binding/app1.exp',
-          'binding/app1.iobj',
-          'binding/app1.ipdb',
-          'binding/app1.lib',
-          'binding/app1.map',
-          'binding/app1.node'
-        ]
-      }
+      'base': ['binding/app1.node']
     }
   },
   {
     'name': 'app2',
     'args': '--custom_include_path=../include --debug',
     'files': {
-      'base': ['node-pre-gyp-test-app2/app2.node'],
-      'win32': [
-        'node-pre-gyp-test-app2/app2.exp',
-        'node-pre-gyp-test-app2/app2.ilk',
-        'node-pre-gyp-test-app2/app2.lib',
-        'node-pre-gyp-test-app2/app2.map',
-        'node-pre-gyp-test-app2/app2.node'
-      ]
+      'base': ['node-pre-gyp-test-app2/app2.node']
     }
   },
   {
     'name': 'app2',
     'args': '--custom_include_path=../include --toolset=cpp11',
     'files': {
-      'base': ['node-pre-gyp-test-app2/app2.node'],
-      'win32': {
-        'base': [
-          'node-pre-gyp-test-app2/app2.exp',
-          'node-pre-gyp-test-app2/app2.lib',
-          'node-pre-gyp-test-app2/app2.map',
-          'node-pre-gyp-test-app2/app2.node'
-        ],
-        'node-v59': [
-          'node-pre-gyp-test-app2/app2.exp',
-          'node-pre-gyp-test-app2/app2.iobj',
-          'node-pre-gyp-test-app2/app2.ipdb',
-          'node-pre-gyp-test-app2/app2.lib',
-          'node-pre-gyp-test-app2/app2.map',
-          'node-pre-gyp-test-app2/app2.node'
-        ],
-        'node-v64': [
-          'node-pre-gyp-test-app2/app2.exp',
-          'node-pre-gyp-test-app2/app2.iobj',
-          'node-pre-gyp-test-app2/app2.ipdb',
-          'node-pre-gyp-test-app2/app2.lib',
-          'node-pre-gyp-test-app2/app2.map',
-          'node-pre-gyp-test-app2/app2.node'
-        ]
-      }
+      'base': ['node-pre-gyp-test-app2/app2.node']
     }
   },
   {
     'name': 'app3',
     'args': '',
     'files': {
-      'base': [[localVer, 'app3.node'].join('/')],
-      'win32': {
-        'base': [
-          [localVer, 'app3.exp'].join('/'),
-          [localVer, 'app3.lib'].join('/'),
-          [localVer, 'app3.map'].join('/'),
-          [localVer, 'app3.node'].join('/')
-        ],
-        'node-v59': [
-          [localVer, 'app3.exp'].join('/'),
-          [localVer, 'app3.iobj'].join('/'),
-          [localVer, 'app3.ipdb'].join('/'),
-          [localVer, 'app3.lib'].join('/'),
-          [localVer, 'app3.map'].join('/'),
-          [localVer, 'app3.node'].join('/')
-        ],
-        'node-v64': [
-          [localVer, 'app3.exp'].join('/'),
-          [localVer, 'app3.iobj'].join('/'),
-          [localVer, 'app3.ipdb'].join('/'),
-          [localVer, 'app3.lib'].join('/'),
-          [localVer, 'app3.map'].join('/'),
-          [localVer, 'app3.node'].join('/')
-        ]
-      }
+      'base': [[localVer, 'app3.node'].join('/')]
     }
   },
   {
     'name': 'app4',
     'args': '',
     'files': {
-      'base': [[localVer, 'app4.node'].join('/'), [localVer, 'lib.target', 'mylib.' + SOEXT].join('/')],
-      'win32': [[localVer, 'app4.node'].join('/'), [localVer, 'mylib.' + SOEXT].join('/')]
+      'base': [[localVer, 'app4.node'].join('/'), [localVer, 'lib.target', 'mylib.' + SOEXT].join('/')]
     }
   },
   {

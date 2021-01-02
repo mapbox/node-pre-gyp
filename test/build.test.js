@@ -248,8 +248,12 @@ apps.forEach((app) => {
   }
 
   test(app.name + ' builds ' + app.args, (t) => {
-    run('node-pre-gyp', 'rebuild', '--fallback-to-build', app, {}, (err, stdout) => {
+    run('node-pre-gyp', 'rebuild', '--fallback-to-build', app, {}, (err, stdout, stderr) => {
       t.ifError(err);
+      if (err) {
+        console.log(stdout);
+        console.log(stderr);
+      }
       if (process.platform !== 'win32') {
         if (app.args.indexOf('--debug') > -1) {
           t.stringContains(stdout, 'Debug/' + app.name + '.node');

@@ -1,4 +1,4 @@
-'use strict';
+const fs = require('fs');
 
 const test = require('tape');
 const nock = require('nock');
@@ -19,6 +19,8 @@ test('should follow redirects', (t) => {
 
   const opts = {
     opts: {
+      // commands no longer read package.json to it must be passed to them.
+      package_json: JSON.parse(fs.readFileSync('./package.json')),
       'build-from-source': false,
       'update-binary': true
     }

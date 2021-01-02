@@ -46,4 +46,5 @@ install:
 - npm ci
 
 script:
+- npm run lint
 - npm test

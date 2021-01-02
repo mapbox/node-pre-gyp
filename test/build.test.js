@@ -133,37 +133,6 @@ const apps = [
   {
     'name': 'app7',
     'args': ''
-  },
-  {
-    'name': 'app8',
-    'args': '',
-    'files': {
-      'base': ['lib/app8.node'],
-      'win32': {
-        'base': [
-          'lib/app8.exp',
-          'lib/app8.lib',
-          'lib/app8.map',
-          'lib/app8.node'
-        ],
-        'node-v59': [
-          'lib/app8.exp',
-          'lib/app8.iobj',
-          'lib/app8.ipdb',
-          'lib/app8.lib',
-          'lib/app8.map',
-          'lib/app8.node'
-        ],
-        'node-v64': [
-          'lib/app8.exp',
-          'lib/app8.iobj',
-          'lib/app8.ipdb',
-          'lib/app8.lib',
-          'lib/app8.map',
-          'lib/app8.node'
-        ]
-      }
-    }
   }
 ];
 
@@ -426,6 +395,14 @@ apps.forEach((app) => {
 
     test(app.name + ' via remote passes tests ' + app.args, (t) => {
       run('npm', 'install', '', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+        t.ifError(err);
+        t.notEqual(stdout, '');
+        t.end();
+      });
+    });
+
+    test(app.name + ' unpublishes ' + app.args, (t) => {
+      run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();

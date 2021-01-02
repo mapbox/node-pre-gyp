@@ -1,8 +1,9 @@
 'use strict';
 
 const s3Template = require('@mapbox/s3-bucket-template');
+const bucketName = require('./bucketName');
 
 module.exports = s3Template.build({
-  BucketName: 'mapbox-node-pre-gyp-public-testing-bucket',
+  BucketName: bucketName,
   PublicAccessBlock: false
 });

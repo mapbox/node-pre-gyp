@@ -10,7 +10,7 @@ test('should follow redirects', (t) => {
 
   // Mock an HTTP redirect
   const n = nock('https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com')
-    .get(/\/app1-v0.1.0-node-v\d+-\S+.tar.gz/)
+    .get(/\/node-pre-gyp\/node-pre-gyp-test-app1\/v0.1.0\/Release\/node-v\d+-\S+.tar.gz/)
     .reply(302, '', {
       'Location': 'https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com/otherapp.tar.gz'
     })

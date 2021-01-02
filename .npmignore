@@ -19,3 +19,5 @@ TODO.md
 *.tgz
 .nyc_output
 coverage
+.eslintrc
+cloudformation

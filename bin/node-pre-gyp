@@ -36,7 +36,7 @@ if (prog.todo.length === 0) {
 }
 
 // if --no-color is passed
-if (prog.opts && Object.hasOwnProperty.call(prog,'color') && !prog.opts.color) {
+if (prog.opts && Object.hasOwnProperty.call(prog, 'color') && !prog.opts.color) {
   log.disableColor();
 }
 
@@ -70,7 +70,7 @@ if (dir) {
   }
 }
 
-function run () {
+function run() {
   const command = prog.todo.shift();
   if (!command) {
     // done!
@@ -79,7 +79,7 @@ function run () {
     return;
   }
 
-  prog.commands[command.name](command.args, function (err) {
+  prog.commands[command.name](command.args, function(err) {
     if (err) {
       log.error(command.name + ' error');
       log.error('stack', err.stack);
@@ -112,7 +112,7 @@ process.on('uncaughtException', (err) => {
   process.exit(7);
 });
 
-function errorMessage () {
+function errorMessage() {
   // copied from npm's lib/util/error-handler.js
   const os = require('os');
   log.error('System', os.type() + ' ' + os.release());
@@ -122,7 +122,7 @@ function errorMessage () {
   log.error(process.title + ' -v', 'v' + prog.package.version);
 }
 
-function issueMessage () {
+function issueMessage() {
   errorMessage();
   log.error('', ['This is a bug in `' + process.title + '`.',
     'Try to update ' + process.title + ' and file an issue if it does not help:',

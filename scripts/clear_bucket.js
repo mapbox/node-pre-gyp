@@ -3,7 +3,7 @@
 const fs = require('fs');
 const versioning = require('../lib/util/versioning.js');
 const s3_setup = require('../lib/util/s3_setup.js');
-const config = require('rc')('node_pre_gyp',{ acl:'public-read' });
+const config = require('rc')('node_pre_gyp', { acl: 'public-read' });
 
 if (!config.accessKeyId  || !config.secretAccessKey) {
   throw new Error('Unknown S3 `accessKeyId` and `secretAccessKey`');
@@ -11,7 +11,7 @@ if (!config.accessKeyId  || !config.secretAccessKey) {
   const AWS = require('aws-sdk');
   const package_json = JSON.parse(fs.readFileSync('./test/app1/package.json'));
   const opts = versioning.evaluate(package_json, {});
-  s3_setup.detect(opts.hosted_path,config);
+  s3_setup.detect(opts.hosted_path, config);
   AWS.config.update(config);
   const s3 =  new AWS.S3();
   const s3_opts = {  Bucket: config.bucket,
@@ -25,8 +25,8 @@ if (!config.accessKeyId  || !config.secretAccessKey) {
         const s3_obj_opts = {  Bucket: config.bucket,
           Key: item.Key
         };
-        s3.deleteObject(s3_obj_opts, (err) => {
-          if (err) console.log(err);
+        s3.deleteObject(s3_obj_opts, (err2) => {
+          if (err2) console.log(err2);
           console.log('deleted ' + item.Key);
         });
       });

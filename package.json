@@ -43,9 +43,6 @@
     "nyc": "^15.1.0",
     "tape": "^4.6.3"
   },
-  "eslintConfig": {
-    "extends": "@mapbox/eslint-config-mapbox"
-  },
   "nyc": {
     "all": true,
     "skip-full": false,
@@ -56,7 +53,7 @@
   "scripts": {
     "coverage": "nyc --all --include index.js --include lib/ npm test",
     "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",
-    "lint": "eslint --fix bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
+    "lint": "eslint --fix bin/node-pre-gyp lib/*js lib/util/*js scripts/*js",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "test": "tape test/*test.js"
   }

@@ -16,7 +16,7 @@ Object.keys(data).forEach((v) => {
     targets[abi] = v;
   } else {
     const cur = targets[abi];
-    if (semver.gt(v,cur)) {
+    if (semver.gt(v, cur)) {
       targets[abi] = v;
     }
   }
@@ -24,5 +24,5 @@ Object.keys(data).forEach((v) => {
 
 Object.keys(targets).forEach((k) => {
   const version = targets[k];
-  console.log(version,data[version]);
+  console.log(version, data[version]);
 });

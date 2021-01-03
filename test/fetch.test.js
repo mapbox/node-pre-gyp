@@ -19,14 +19,15 @@ test('should follow redirects', (t) => {
 
   const opts = {
     opts: {
-      // commands no longer read package.json to it must be passed to them.
-      package_json: JSON.parse(fs.readFileSync('./package.json')),
       'build-from-source': false,
       'update-binary': true
     }
   };
 
   process.chdir('test/app1');
+
+  // commands no longer read package.json so it must be passed to them.
+  opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
 
   install(opts, [], (err) => {
     t.ifError(err); // Worked fine

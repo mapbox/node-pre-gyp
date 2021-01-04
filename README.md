@@ -295,7 +295,7 @@ must be true.
 
 If any of these checks fail then the operation will not perform execution time determination of the s3 target.
 
-If the command being executed is "publish" the the default is set to `binary.staging_host`. In all other cases
+If the command being executed is "publish" then the default is set to `binary.staging_host`. In all other cases
 the default is `binary.production_host`.
 
 The command-line options `--s3_host staging` or `--s3_host production` override the default. If `s3_host`

@@ -212,7 +212,7 @@ test('should verify host overrides staging and production values', (t) => {
     binary: {
       module_name: 'binary-module-name',
       module_path: 'binary-module-path',
-      host: '',
+      host: 'binary-path',
       staging_host: 's3-staging-path',
       production_host: 's3-production-path'
     }
@@ -233,7 +233,7 @@ test('should verify host overrides staging and production values', (t) => {
 
 });
 
-test.only('should set staging and production hosts', (t) => {
+test('should set staging and production hosts', (t) => {
   // make sure it's good when specifying host.
   const mock_package_json = {
     'name': 'test',
@@ -325,15 +325,11 @@ function setupTest(dir, package_json, opts) {
 
   try {
     fs.writeFileSync('package.json', JSON.stringify(package_json));
-
     const prog = new npg.Run('./package.json');
     prog.parseArgv(argv);
     prog.setBinaryHostProperty(prog.todo[0] && prog.todo[0].name);
     return { prog };
-  } catch (e) { // eslint-disable-line no-useless-catch
-    throw e;
-  }
-  finally {
+  } finally {
     process.chdir(prev_dir);
   }
 }

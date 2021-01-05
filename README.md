@@ -436,27 +436,7 @@ Or put the local version on your PATH
 
 #### 3) Configure AWS credentials
 
-There are several ways to do this.
-
 You can use any of the methods described at http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html.
-
-Or you can create a `~/.node_pre_gyprc`
-
-Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
-
-A `~/.node_pre_gyprc` looks like:
-
-```js
-{
-    "accessKeyId": "xxx",
-    "secretAccessKey": "xxx"
-}
-```
-
-Another way is to use your environment:
-
-    export node_pre_gyp_accessKeyId=xxx
-    export node_pre_gyp_secretAccessKey=xxx
 
 You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
 

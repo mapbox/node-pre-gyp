@@ -1,6 +1,7 @@
 # node-pre-gyp changelog
 
 ## 1.0.0
+- BREAKING: removed support for RC based configuration. Configure using the AWS SDK environment settings now only. 
 - Dropped node 6 support, added node v14 support
 - Switched tests to use mapbox-owned bucket
 - Added coverage tracking and linting with eslint

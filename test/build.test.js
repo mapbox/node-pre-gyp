@@ -74,7 +74,7 @@ const appOne = apps[0];
 // make sure node-gyp options are passed by passing invalid values
 // and ensuring the expected errors are returned from node-gyp
 test(appOne.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + appOne.args, (t) => {
-  run('node-pre-gyp.js', 'configure', '--nodedir=invalid-value', appOne, {}, (err, stdout, stderr) => {
+  run('node-pre-gyp', 'configure', '--nodedir=invalid-value', appOne, {}, (err, stdout, stderr) => {
     t.ok(err, 'Expected command to fail');
     t.stringContains(stderr, 'common.gypi not found');
     t.end();
@@ -93,7 +93,7 @@ test(appOne.name + ' passes --nodedir down to node-gyp via npm' + appOne.args, (
 // note: --ensure=false tells node-gyp to attempt to re-download the node headers
 // even if they already exist on disk at ~/.node-gyp/{version}
 test(appOne.name + ' passes --dist-url down to node-gyp via node-pre-gyp ' + appOne.args, (t) => {
-  run('node-pre-gyp.js', 'configure', '--ensure=false --dist-url=invalid-value', appOne, {}, (err) => {
+  run('node-pre-gyp', 'configure', '--ensure=false --dist-url=invalid-value', appOne, {}, (err) => {
     t.ok(err, 'Expected command to fail');
     t.end();
   });
@@ -126,14 +126,14 @@ apps.forEach((app) => {
   });
 
   test(app.name + ' configures ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'configure', '--loglevel=error', app, {}, (err) => {
+    run('node-pre-gyp', 'configure', '--loglevel=error', app, {}, (err) => {
       t.ifError(err);
       t.end();
     });
   });
 
   test(app.name + ' configures with unparsed options ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, (err, stdout, stderr) => {
+    run('node-pre-gyp', 'configure', '--loglevel=info -- -Dfoo=bar', app, {}, (err, stdout, stderr) => {
       t.ifError(err);
       t.equal(stdout, '');
       t.ok(stderr.search(/(gyp info spawn args).*(-Dfoo=bar)/) > -1);
@@ -145,10 +145,10 @@ apps.forEach((app) => {
     test(app.name + ' builds with unparsed options ' + app.args, (t) => {
       // clean and build as separate steps here because configure only works with -Dfoo=bar
       // and build only works with FOO=bar
-      run('node-pre-gyp.js', 'clean', '', app, {}, (err) => {
+      run('node-pre-gyp', 'clean', '', app, {}, (err) => {
         t.ifError(err);
         const propertyPrefix = (process.platform === 'win32') ? '/p:' : '';
-        run('node-pre-gyp.js', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, (err2, stdout, stderr) => {
+        run('node-pre-gyp', 'build', '--loglevel=info -- ' + propertyPrefix + 'FOO=bar', app, {}, (err2, stdout, stderr) => {
           t.ifError(err2);
           t.ok(stderr.search(/(gyp info spawn args).*(FOO=bar)/) > -1);
           if (process.platform !== 'win32') {
@@ -168,7 +168,7 @@ apps.forEach((app) => {
   }
 
   test(app.name + ' builds ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'rebuild', '--fallback-to-build', app, {}, (err, stdout, stderr) => {
+    run('node-pre-gyp', 'rebuild', '--fallback-to-build', app, {}, (err, stdout, stderr) => {
       t.ifError(err);
       if (err) {
         console.log(stdout);
@@ -186,7 +186,7 @@ apps.forEach((app) => {
   });
 
   test(app.name + ' is found ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'reveal', 'module_path --silent', app, {}, (err, stdout) => {
+    run('node-pre-gyp', 'reveal', 'module_path --silent', app, {}, (err, stdout) => {
       t.ifError(err);
       let module_path = stdout.trim();
       if (module_path.indexOf('\n') !== -1) { // take just the first line
@@ -219,10 +219,10 @@ apps.forEach((app) => {
   });
 
   test(app.name + ' packages ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'package', '', app, {}, (err) => {
+    run('node-pre-gyp', 'package', '', app, {}, (err) => {
       t.ifError(err);
       // Make sure a tarball was created
-      run('node-pre-gyp.js', 'reveal', 'staged_tarball --silent', app, {}, (err2, stdout) => {
+      run('node-pre-gyp', 'reveal', 'staged_tarball --silent', app, {}, (err2, stdout) => {
         t.ifError(err2);
         let staged_tarball = stdout.trim();
         if (staged_tarball.indexOf('\n') !== -1) { // take just the first line
@@ -265,7 +265,7 @@ apps.forEach((app) => {
   });
 
   test(app.name + ' package is valid ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'testpackage', '', app, {}, (err) => {
+    run('node-pre-gyp', 'testpackage', '', app, {}, (err) => {
       t.ifError(err);
       t.end();
     });
@@ -274,7 +274,7 @@ apps.forEach((app) => {
   if (process.env.AWS_ACCESS_KEY_ID || process.env.node_pre_gyp_accessKeyId) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
-      run('node-pre-gyp.js', 'unpublish publish', '', app, {}, (err, stdout) => {
+      run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -282,13 +282,13 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' info shows it ' + app.args, (t) => {
-      run('node-pre-gyp.js', 'reveal', 'package_name', app, {}, (err, stdout) => {
+      run('node-pre-gyp', 'reveal', 'package_name', app, {}, (err, stdout) => {
         t.ifError(err);
         let package_name = stdout.trim();
         if (package_name.indexOf('\n') !== -1) { // take just the first line
           package_name = package_name.substr(0, package_name.indexOf('\n'));
         }
-        run('node-pre-gyp.js', 'info', '', app, {}, (err2, stdout2) => {
+        run('node-pre-gyp', 'info', '', app, {}, (err2, stdout2) => {
           t.ifError(err2);
           t.stringContains(stdout2, package_name);
           t.end();
@@ -297,7 +297,7 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' can be uninstalled ' + app.args, (t) => {
-      run('node-pre-gyp.js', 'clean', '', app, {}, (err, stdout) => {
+      run('node-pre-gyp', 'clean', '', app, {}, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -329,7 +329,7 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' unpublishes ' + app.args, (t) => {
-      run('node-pre-gyp.js', 'unpublish', '', app, {}, (err, stdout) => {
+      run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -343,7 +343,7 @@ apps.forEach((app) => {
   // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all following tests will fail
 
   test(app.name + ' builds with custom --target ' + app.args, (t) => {
-    run('node-pre-gyp.js', 'rebuild', '--loglevel=error --fallback-to-build --target=' + process.versions.node, app, {}, (err) => {
+    run('node-pre-gyp', 'rebuild', '--loglevel=error --fallback-to-build --target=' + process.versions.node, app, {}, (err) => {
       t.ifError(err);
       t.end();
     });

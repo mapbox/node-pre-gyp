@@ -100,7 +100,7 @@ function run() {
 process.on('exit', (code) => {
   if (!completed && !code) {
     log.error('Completion callback never invoked!');
-    issueMessage();
+    errorMessage();
     process.exit(6);
   }
 });
@@ -108,7 +108,7 @@ process.on('exit', (code) => {
 process.on('uncaughtException', (err) => {
   log.error('UNCAUGHT EXCEPTION');
   log.error('stack', err.stack);
-  issueMessage();
+  errorMessage();
   process.exit(7);
 });
 
@@ -120,14 +120,6 @@ function errorMessage() {
   log.error('cwd', process.cwd());
   log.error('node -v', process.version);
   log.error(process.title + ' -v', 'v' + prog.package.version);
-}
-
-function issueMessage() {
-  errorMessage();
-  log.error('', ['This is a bug in `' + process.title + '`.',
-    'Try to update ' + process.title + ' and file an issue if it does not help:',
-    '    <https://github.com/mapbox/' + process.title + '/issues>'
-  ].join('\n'));
 }
 
 // start running the given commands!

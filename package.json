@@ -53,7 +53,7 @@
   "scripts": {
     "coverage": "nyc --all --include bin/ --include lib/ npm test",
     "upload-coverage": "nyc report --reporter json && codecov --file=./coverage/coverage-final.json",
-    "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
+    "lint": "eslint bin/*js lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "test": "tape test/*test.js"

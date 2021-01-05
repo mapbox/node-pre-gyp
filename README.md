@@ -325,7 +325,7 @@ The `napi_build_version` value is communicated to the C/C++ code by adding this 
 
 This ensures that `NAPI_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
 
-> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is prefered because it used by the N-API C/C++ headers to configure the specific N-API veriosn being requested. 
+> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is preferred because it used by the N-API C/C++ headers to configure the specific N-API versions being requested.
 
 ### Path and file naming requirements in `package.json`
 

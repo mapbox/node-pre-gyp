@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git://github.com/mapbox/node-pre-gyp.git"
   },
-  "bin": "./bin/node-pre-gyp",
+  "bin": "./bin/node-pre-gyp.js",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^1.0.3",
@@ -51,8 +51,8 @@
     ]
   },
   "scripts": {
-    "coverage": "nyc --all --include index.js --include lib/ npm test",
-    "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",
+    "coverage": "nyc --all --include bin/ --include lib/ npm test",
+    "upload-coverage": "nyc report --reporter json && codecov --file=./coverage/coverage-final.json",
     "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",

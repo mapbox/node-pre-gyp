@@ -229,9 +229,9 @@ test('should verify host overrides staging and production values', (t) => {
   }
 
   t.end();
-  return;
-
 });
+
+const dir = '.tmp';
 
 test('should set staging and production hosts', (t) => {
   // make sure it's good when specifying host.
@@ -242,13 +242,11 @@ test('should set staging and production hosts', (t) => {
     'binary': {
       'module_name': 'binary-module-name',
       'module_path': 'binary-module-path',
-      'host': 'resolved-s3-path',
+      'host': 'binary-path',
       'staging_host': 's3-staging-path',
       'production_host': 's3-production-path'
     }
   };
-
-  const dir = './.tmp';
 
   let { prog } = setupTest(dir, mock_package_json);
   t.deepEqual(prog.package_json, mock_package_json);
@@ -290,16 +288,84 @@ test('should set staging and production hosts', (t) => {
     t.equal(prog.binaryHostSet, true, 'binary host should be flagged as set');
   });
 
-  test.onFinish(() => {
-    fs.unlinkSync('.tmp/package.json');
-    fs.rmdirSync('.tmp');
-  });
+  t.end();
+});
+
+test('should execute setBinaryHostProperty() properly', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'host': '',
+      'staging_host': 's3-staging-path',
+      'production_host': 's3-production-path'
+    }
+  };
+  const opts = { argv: ['publish', '--s3_host=staging'] };
+
+  let { prog, binaryHost } = setupTest(dir, mock_package_json, opts);
+  t.equal(binaryHost, mock_package_json.binary.staging_host);
+
+  // set it again to verify that it returns the already set value
+  binaryHost = prog.setBinaryHostProperty('publish');
+  t.equal(binaryHost, mock_package_json.binary.staging_host);
+
+  // now do this again but expect an empty binary host value because
+  // staging_host is missing.
+  const mpj = clone(mock_package_json);
+  delete mpj.binary.staging_host;
+  ({ prog, binaryHost } = setupTest(dir, mpj, opts));
+  t.equal(binaryHost, '');
+
+  // one more time but with an invalid value for s3_host
+  opts.argv = ['publish', '--s3_host=bad-news'];
+  try {
+    ({ prog, binaryHost } = setupTest(dir, mock_package_json, opts));
+    t.fail('should throw with --s3_host=bad-news');
+  } catch (e) {
+    t.equal(e.message, 'invalid s3_host bad-news');
+  }
 
   t.end();
 });
 
-test.onFinish(() => {
+test('verify that a non-existent package.json fails', (t) => {
+  fs.unlink(dir + '/package.json', (e0) => {
+    if (e0 && e0.code !== 'ENOENT') {
+      console.error(e0.message);
+    }
+    // ignore errors
+    fs.rmdir(dir, (e1) => {
+      if (e1 && e1.code !== 'ENOENT') {
+        console.error(e1.message);
+      }
+      try {
+        new npg.Run(dir + '/package.json');
+        t.fail('new Run() should have thrown');
+      } catch (e) {
+        t.equal(e.message, "ENOENT: no such file or directory, open '.tmp/package.json'");
+      }
+      t.end();
+    });
+  });
+});
 
+// clean up after the s3_host tests.
+test.onFinish(() => {
+  try {
+    fs.unlinkSync(dir + '/package.json');
+  } catch (e) {
+    // empty blocks are not allowed.
+  }
+
+  try {
+    fs.rmdirSync(dir);
+  } catch (e) {
+    //
+  }
 });
 
 //
@@ -307,7 +373,7 @@ test.onFinish(() => {
 //
 
 // helper to write package.json to disk so Run() can be instantiated with it.
-function setupTest(dir, package_json, opts) {
+function setupTest(directory, package_json, opts) {
   opts = opts || {};
   let argv = ['node', 'program'];
   if (opts.argv) {
@@ -315,20 +381,20 @@ function setupTest(dir, package_json, opts) {
   }
   const prev_dir = process.cwd();
   try {
-    fs.mkdirSync(dir);
+    fs.mkdirSync(directory);
   } catch (e) {
     if (e.code !== 'EEXIST') {
       throw e;
     }
   }
-  process.chdir(dir);
+  process.chdir(directory);
 
   try {
     fs.writeFileSync('package.json', JSON.stringify(package_json));
     const prog = new npg.Run('./package.json');
     prog.parseArgv(argv);
-    prog.setBinaryHostProperty(prog.todo[0] && prog.todo[0].name);
-    return { prog };
+    const binaryHost = prog.setBinaryHostProperty(prog.todo[0] && prog.todo[0].name);
+    return { prog, binaryHost };
   } finally {
     process.chdir(prev_dir);
   }

@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 const test = require('tape');
 const nock = require('nock');
 const install = require('../lib/install.js');
@@ -25,6 +27,9 @@ test('should follow redirects', (t) => {
   };
 
   process.chdir('test/app1');
+
+  // commands no longer read package.json so it must be passed to them.
+  opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
 
   install(opts, [], (err) => {
     t.ifError(err); // Worked fine

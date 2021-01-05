@@ -5,6 +5,7 @@
 - Switched tests to use mapbox-owned bucket
 - Added coverage tracking and linting with eslint
 - Upgraded all test apps to N-API/node-addon-api
+- new: support for staging and production s3 targets (see README.md)
 
 ## 0.17.0
 - Got travis + appveyor green again

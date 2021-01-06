@@ -1,18 +1,14 @@
-#include <nan.h>
+#include <napi.h>
 
-// node.js
-#include <node.h>
-#include <node_version.h>
-
-
-NAN_METHOD(get_hello) {
-  info.GetReturnValue().Set(Nan::New("hello").ToLocalChecked());
+Napi::Value get_hello(Napi::CallbackInfo const& info) {
+  Napi::Env env = info.Env();
+  Napi::EscapableHandleScope scope(env);
+  return scope.Escape(Napi::String::New(env, "hello"));
 }
 
-NAN_MODULE_INIT(init) {
-  Nan::HandleScope scope;
-  Nan::Set(target, Nan::New("hello").ToLocalChecked(),
-    Nan::GetFunction(Nan::New<v8::FunctionTemplate>(get_hello)).ToLocalChecked());
+Napi::Object start(Napi::Env env, Napi::Object exports) {
+    exports.Set("hello", Napi::Function::New(env, get_hello));
+    return exports;
 }
 
-NODE_MODULE(app1, init)
+NODE_API_MODULE(app1, start)

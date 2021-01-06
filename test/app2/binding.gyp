@@ -6,11 +6,17 @@
       'product_dir': '<(module_path)',
       'include_dirs': [
           '<(custom_include_path)',
-	  '<!@(node --no-warnings -p "require(\'nan\')")',
+          "../../node_modules/node-addon-api/"
       ],
+      'product_dir': '<(module_path)',
+      'cflags!': [ '-fno-exceptions' ],
+      'cflags_cc!': [ '-fno-exceptions' ],
       "xcode_settings": {
-        "MACOSX_DEPLOYMENT_TARGET":"10.9",
+        'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
         "CLANG_CXX_LIBRARY": "libc++"
+      },
+      'msvs_settings': {
+        'VCCLCompilerTool': { 'ExceptionHandling': 1 },
       }
     }
   ]

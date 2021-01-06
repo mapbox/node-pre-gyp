@@ -27,7 +27,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v6.x
+ - Node.js >= node v8.x
 
 ## Install
 
@@ -101,7 +101,7 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "0.6.x"
+      "node-pre-gyp": "1.x"
     },
     "devDependencies": {
       "aws-sdk": "2.x"
@@ -307,6 +307,31 @@ This allows installing from staging by specifying `--s3_host staging`. And it re
 `--s3_option production` in order to publish to production making accidental publishing less likely.
 
 
+#### 9) One more option
+
+It may be that you want to work with two s3 buckets, one for staging and one for production; this
+arrangement makes it less likely to accidentally overwrite a production binary. It also allows the production
+environment to have more restrictive permissions than staging while still enabling publishing when
+developing and testing.
+
+The binary.host property can be set at execution time. In order to do so all of the following conditions
+must be true.
+
+- binary.host is falsey or not present
+- binary.staging_host is not empty
+- binary.production_host is not empty
+
+If any of these checks fail then the operation will not perform execution time determination of the s3 target.
+
+If the command being executed is "publish" then the default is set to `binary.staging_host`. In all other cases
+the default is `binary.production_host`.
+
+The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
+is not `staging` or `production` an exception is thrown.
+
+This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
+`--s3_option=production` in order to publish to production making accidental publishing less likely.
+
 ## N-API Considerations
 
 [N-API](https://nodejs.org/api/n-api.html#n_api_n_api) is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. N-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future.
@@ -445,7 +470,7 @@ It is recommended to create a IAM user with a policy that only gives permissions
         "s3:PutObjectAcl"
       ],
       "Resource": [
-        "arn:aws:s3:::node-pre-gyp-tests/*"
+        "arn:aws:s3:::your-bucket-name/*"
       ]
     }
   ]

@@ -1,0 +1,1 @@
+module.exports = 'mapbox-node-pre-gyp-public-testing-bucket';

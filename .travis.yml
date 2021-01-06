@@ -1,7 +1,5 @@
 language: node_js
 
-dist: xenial
-
 services:
   - xvfb
 
@@ -14,24 +12,29 @@ services:
 
 matrix:
   include:
-    # Test node v10 with request override
+    # Test node v10 with request override + coverage reporting
     - os: linux
       node_js: 10
       before_install:
         - npm install request
-
-    # Test node v14 with request override
+      script:
+        - npm run lint
+        - npm run coverage
+      after_script:
+        - npm run upload-coverage
+    # Test node v12 with needle + coverage reporting
     - os: linux
       node_js: 12
-      before_install:
-        - npm install request
-
-    # Test node v14 with request override
+      script:
+        - npm run coverage
+      after_script:
+        - npm run upload-coverage
+    # Test node v14
     - os: linux
       node_js: 14
-      before_install:
-        - npm install request
-
+    # Test node v8
+    - os: linux
+      node_js: 8
     # Test node webkit
     - os: linux
       node_js: 10
@@ -44,7 +47,7 @@ matrix:
         - ./scripts/test-node-webkit.sh
 
 install:
-- npm install
+- npm ci
 
 script:
 - npm test

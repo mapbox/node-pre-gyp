@@ -1,7 +1,7 @@
 {
-  "name": "node-pre-gyp",
+  "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "keywords": [
     "native",
     "addon",
@@ -27,20 +27,38 @@
     "linux-os-info": "^2.0.0",
     "mkdirp": "^0.5.5",
     "needle": "^2.5.2",
-    "nopt": "^4.0.3",
-    "npm-packlist": "^1.4.8",
+    "nopt": "^5.0.0",
+    "npm-packlist": "^2.1.4",
     "npmlog": "^4.1.2",
     "rc": "^1.2.8",
-    "rimraf": "^2.7.1",
-    "semver": "^5.7.1",
-    "tar": "^4.4.13"
+    "rimraf": "^3.0.2",
+    "semver": "^7.3.4",
+    "tar": "^6.0.5"
   },
   "devDependencies": {
+    "@mapbox/cloudfriend": "^4.5.1",
+    "@mapbox/eslint-config-mapbox": "^3.0.0",
     "aws-sdk": "^2.28.0",
-    "nock": "^9.2.3",
+    "codecov": "^3.8.1",
+    "eslint": "^7.16.0",
+    "eslint-plugin-node": "^11.1.0",
+    "nock": "^12.0.3",
+    "node-addon-api": "^3.1.0",
+    "nyc": "^15.1.0",
     "tape": "^4.6.3"
   },
+  "nyc": {
+    "all": true,
+    "skip-full": false,
+    "exclude": [
+      "test/**"
+    ]
+  },
   "scripts": {
+    "coverage": "nyc --all --include index.js --include lib/ npm test",
+    "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",
+    "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
+    "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "test": "tape test/*test.js"
   }

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-
-"use strict";
+'use strict';
 
 /**
  * Set the title.
@@ -12,15 +11,15 @@ process.title = 'node-pre-gyp';
  * Module dependencies.
  */
 
-var node_pre_gyp = require('../');
-var log = require('npmlog');
+const node_pre_gyp = require('../');
+const log = require('npmlog');
 
 /**
  * Process and execute the selected commands.
  */
 
-var prog = new node_pre_gyp.Run();
-var completed = false;
+const prog = new node_pre_gyp.Run();
+let completed = false;
 prog.parseArgv(process.argv);
 
 if (prog.todo.length === 0) {
@@ -36,7 +35,7 @@ if (prog.todo.length === 0) {
 }
 
 // if --no-color is passed
-if (prog.opts && prog.opts.hasOwnProperty('color') && !prog.opts.color) {
+if (prog.opts && Object.hasOwnProperty.call(prog, 'color') && !prog.opts.color) {
   log.disableColor();
 }
 
@@ -50,11 +49,11 @@ log.info('using', 'node@%s | %s | %s', process.versions.node, process.platform, 
  * Change dir if -C/--directory was passed.
  */
 
-var dir = prog.opts.directory;
+const dir = prog.opts.directory;
 if (dir) {
-  var fs = require('fs');
+  const fs = require('fs');
   try {
-    var stat = fs.statSync(dir);
+    const stat = fs.statSync(dir);
     if (stat.isDirectory()) {
       log.info('chdir', dir);
       process.chdir(dir);
@@ -70,38 +69,8 @@ if (dir) {
   }
 }
 
-/**
- * read /etc/os-release if --distinguish_linux was passed
- */
-var distinguish = prog.opts.distinguish_linux;
-var linux_name = 'linux';
-
-if (distinguish && process.platform === 'linux') {
-  var linuxInfo = require('linux-os-info');
-  if (typeof distinguish === 'string') {
-    distinguish = distinguish.split(',');
-  }
-  var info = linuxInfo({mode: 'sync'});
-  if (info.file instanceof Error) {
-    log.error('cannot determine linux: %s', info.file.message);
-    process.exit(1);
-  }
-
-  // if distinguish all or this specific linux is in the list then set the name
-  if (distinguish === true || ~distinguish.indexOf(info.id)) {
-    linux_name = info.id;
-  }
-}
-
-// this can be used in the output template but is only
-// meaningful if --distinguish_linux was specified.
-prog.opts.linux_name = linux_name;
-
-//
-// run all the supplied commands.
-//
-function run () {
-  var command = prog.todo.shift();
+function run() {
+  const command = prog.todo.shift();
   if (!command) {
     // done!
     completed = true;
@@ -109,13 +78,13 @@ function run () {
     return;
   }
 
-  // set binary.host when appropriate.
-  let target;
-  if (target = prog.setBinaryHostProperty(command.name)) {
+  // set binary.host when appropriate. host determines the s3 target bucket.
+  const target = prog.setBinaryHostProperty(command.name);
+  if (target) {
     log.info('setting binary.host to ' + prog.package_json.binary.host);
   }
 
-  prog.commands[command.name](command.args, function (err) {
+  prog.commands[command.name](command.args, function(err) {
     if (err) {
       log.error(command.name + ' error');
       log.error('stack', err.stack);
@@ -124,7 +93,7 @@ function run () {
       console.log(err.message);
       return process.exit(1);
     }
-    var args_array = [].slice.call(arguments, 1);
+    const args_array = [].slice.call(arguments, 1);
     if (args_array.length) {
       console.log.apply(console, args_array);
     }
@@ -133,7 +102,7 @@ function run () {
   });
 }
 
-process.on('exit', function (code) {
+process.on('exit', (code) => {
   if (!completed && !code) {
     log.error('Completion callback never invoked!');
     issueMessage();
@@ -141,29 +110,29 @@ process.on('exit', function (code) {
   }
 });
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', (err) => {
   log.error('UNCAUGHT EXCEPTION');
   log.error('stack', err.stack);
   issueMessage();
   process.exit(7);
 });
 
-function errorMessage () {
+function errorMessage() {
   // copied from npm's lib/util/error-handler.js
-  var os = require('os');
+  const os = require('os');
   log.error('System', os.type() + ' ' + os.release());
   log.error('command', process.argv.map(JSON.stringify).join(' '));
   log.error('cwd', process.cwd());
   log.error('node -v', process.version);
-  log.error(process.title+' -v', 'v' + prog.package.version);
+  log.error(process.title + ' -v', 'v' + prog.package.version);
 }
 
-function issueMessage () {
+function issueMessage() {
   errorMessage();
-  log.error('', [ 'This is a bug in `'+process.title+'`.',
-                  'Try to update '+process.title+' and file an issue if it does not help:',
-                  '    <https://github.com/mapbox/'+process.title+'/issues>',
-                ].join('\n'));
+  log.error('', ['This is a bug in `' + process.title + '`.',
+    'Try to update ' + process.title + ' and file an issue if it does not help:',
+    '    <https://github.com/mapbox/' + process.title + '/issues>'
+  ].join('\n'));
 }
 
 // start running the given commands!

@@ -17,6 +17,7 @@ matrix:
       node_js: 10
       before_install:
         - npm install request
+        - npm install --package-lock
       script:
         - npm run lint
         - npm run coverage

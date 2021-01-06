@@ -1,10 +1,10 @@
 {
     "name": "node-pre-gyp-test-app3",
     "author": "Dane Springmeyer <springmeyer>",
-    "description":"node-pre-gyp test",
-    "repository"   :  {
-       "type" : "git",
-       "url"  : "git://github.com/mapbox/node-pre-gyp.git"
+    "description": "node-pre-gyp test",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/mapbox/node-pre-gyp.git"
     },
     "license": "BSD-3-Clause",
     "version": "0.1.0-dev.4",
@@ -12,12 +12,12 @@
     "binary": {
         "module_name": "app4",
         "module_path": "./lib/binding/{node_abi}-{platform}-{arch}",
-        "remote_path": "./{module_name}/v{version}",
+        "remote_path": "./node-pre-gyp/{module_name}/v{version}",
         "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
-        "host":"https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+        "host": "https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com"
     },
     "scripts": {
-        "install":"node-pre-gyp install --fallback-to-build",
-        "test":"node index.js"
+        "install": "node-pre-gyp install --fallback-to-build",
+        "test": "node index.js"
     }
 }

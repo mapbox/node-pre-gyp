@@ -1,7 +1,7 @@
 {
-  "name": "node-pre-gyp",
+  "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "0.15.0",
+  "version": "1.0.0",
   "keywords": [
     "native",
     "addon",
@@ -20,32 +20,41 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "detect-libc": "^1.0.2",
-    "mkdirp": "^0.5.3",
-    "needle": "^2.5.0",
-    "nopt": "^4.0.1",
-    "npmlog": "^4.0.2",
-    "rc": "^1.2.7",
-    "rimraf": "^2.6.1",
-    "semver": "^5.3.0",
-    "tar": "^4.4.2"
+    "detect-libc": "^1.0.3",
+    "mkdirp": "^0.5.5",
+    "needle": "^2.5.2",
+    "nopt": "^5.0.0",
+    "npmlog": "^4.1.2",
+    "rc": "^1.2.8",
+    "rimraf": "^3.0.2",
+    "semver": "^7.3.4",
+    "tar": "^6.0.5"
   },
   "devDependencies": {
+    "@mapbox/cloudfriend": "^4.5.1",
+    "@mapbox/eslint-config-mapbox": "^3.0.0",
     "aws-sdk": "^2.28.0",
-    "jshint": "^2.9.5",
-    "nock": "^9.2.3",
+    "codecov": "^3.8.1",
+    "eslint": "^7.16.0",
+    "eslint-plugin-node": "^11.1.0",
+    "nock": "^12.0.3",
+    "node-addon-api": "^3.1.0",
+    "nyc": "^15.1.0",
     "tape": "^4.6.3"
   },
-  "jshintConfig": {
-    "node": true,
-    "globalstrict": true,
-    "undef": true,
-    "unused": false,
-    "noarg": true
+  "nyc": {
+    "all": true,
+    "skip-full": false,
+    "exclude": [
+      "test/**"
+    ]
   },
   "scripts": {
-    "pretest": "jshint test/build.test.js test/s3_setup.test.js test/versioning.test.js test/fetch.test.js lib lib/util scripts bin/node-pre-gyp",
+    "coverage": "nyc --all --include index.js --include lib/ npm test",
+    "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",
+    "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
+    "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "jshint lib lib/util scripts bin/node-pre-gyp && tape test/*test.js"
+    "test": "tape test/*test.js"
   }
 }

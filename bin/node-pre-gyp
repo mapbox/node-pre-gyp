@@ -71,15 +71,15 @@ if (dir) {
 /**
  * read /etc/os-release if --distinguish_linux was passed
  */
-var distinguish = prog.opts.distinguish_linux;
-var linux_name = 'linux';
+let distinguish = prog.opts.distinguish_linux;
+let linux_name = 'linux';
 
 if (distinguish && process.platform === 'linux') {
-  var linuxInfo = require('linux-os-info');
+  const linuxInfo = require('linux-os-info');
   if (typeof distinguish === 'string') {
     distinguish = distinguish.split(',');
   }
-  var info = linuxInfo({mode: 'sync'});
+  const info = linuxInfo({mode: 'sync'});
   if (info.file instanceof Error) {
     log.error('cannot determine linux: %s', info.file.message);
     process.exit(1);
@@ -96,7 +96,7 @@ if (distinguish && process.platform === 'linux') {
 prog.opts.linux_name = linux_name;
 
 function run () {
-  var command = prog.todo.shift();
+  const command = prog.todo.shift();
   if (!command) {
     // done!
     completed = true;

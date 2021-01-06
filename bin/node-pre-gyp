@@ -79,7 +79,7 @@ if (distinguish && process.platform === 'linux') {
   if (typeof distinguish === 'string') {
     distinguish = distinguish.split(',');
   }
-  const info = linuxInfo({mode: 'sync'});
+  const info = linuxInfo({ mode: 'sync' });
   if (info.file instanceof Error) {
     log.error('cannot determine linux: %s', info.file.message);
     process.exit(1);
@@ -95,7 +95,7 @@ if (distinguish && process.platform === 'linux') {
 // meaningful if --distinguish_linux was specified.
 prog.opts.linux_name = linux_name;
 
-function run () {
+function run() {
   const command = prog.todo.shift();
   if (!command) {
     // done!

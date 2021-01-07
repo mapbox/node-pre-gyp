@@ -18,9 +18,8 @@ const log = require('npmlog');
  * Process and execute the selected commands.
  */
 
-const prog = new node_pre_gyp.Run();
+const prog = new node_pre_gyp.Run({ argv: process.argv });
 let completed = false;
-prog.parseArgv(process.argv);
 
 if (prog.todo.length === 0) {
   if (~process.argv.indexOf('-v') || ~process.argv.indexOf('--version')) {

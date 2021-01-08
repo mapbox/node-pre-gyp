@@ -271,7 +271,8 @@ apps.forEach((app) => {
     });
   });
 
-  if (process.env.AWS_ACCESS_KEY_ID || process.env.node_pre_gyp_accessKeyId) {
+  const env = process.env;
+  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
       run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
@@ -305,7 +306,12 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' can be installed via remote ' + app.args, (t) => {
-      run('npm', 'install', '--fallback-to-build=false', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
+        npg_debug: true
+      };
+      run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -313,7 +319,12 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
-      run('npm', 'install', '--update-binary --fallback-to-build=false', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
+        npg_debug: false
+      };
+      run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -321,7 +332,12 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' via remote passes tests ' + app.args, (t) => {
-      run('npm', 'install', '', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
+        npg_debug: false
+      };
+      run('npm', 'install', '', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();

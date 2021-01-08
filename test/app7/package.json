@@ -21,6 +21,6 @@
         ]
     },
     "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build"
+        "install": "${node_pre_gyp_command:-npx node-pre-gyp} install --fallback-to-build",
     }
 }

@@ -8,3 +8,4 @@ npm-debug.log
 .nyc_output
 coverage
 test/*/package-lock.json
+test/app7/build-tmp-napi-*

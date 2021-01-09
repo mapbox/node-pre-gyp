@@ -44,14 +44,6 @@ function run(prog, command, args, app, opts, cb) {
   // use some external version on PATH
   if (final_cmd.indexOf('node-pre-gyp') > -1) {
     final_cmd = cmd_path + final_cmd;
-
-    // if mocking s3 then load the mocker first so that the node http module
-    // is monkey-patched before node-pre-gyp is executed.
-    if (mock_s3) {
-      opts.env = process.env;
-      opts.env.node_pre_gyp_mock_s3 = mock_s3;
-      final_cmd = `node -r ${__dirname}/create-mock-s3.js ${final_cmd}`;
-    }
     if (opts.npg_debug) {
       console.log(`found node-pre-gyp, final_cmd="${final_cmd}"`);
     }
@@ -66,19 +58,9 @@ function run(prog, command, args, app, opts, cb) {
     // needed for apps that require node-pre-gyp to find local module
     // since they don't install a copy in their node_modules
     opts.env.NODE_PATH = path.join(__dirname, '../lib/');
-    if (opts.env.NVM_BIN) {
-      opts.env.PATH = opts.env.PATH + sep + opts.env.NVM_BIN;
-      opts.env.NODE_PATH = opts.env.NODE_PATH + sep + opts.env.NVM_BIN;
-    }
-
-    // mocking when executing an npm is a bit different
-    if (mock_s3) {
-      opts.env.node_pre_gyp_mock_s3 = mock_s3;
-      opts.env.node_pre_gyp_command = `node -r ${__dirname}/create-mock-s3.js ../../bin/node-pre-gyp`;
-    }
 
     if (opts.npg_debug) {
-      console.log(`found npm, final_cmd now="${final_cmd}"; node_pre_gyp_command="${opts.env.node_pre_gyp_command}"`);
+      console.log(`found npm, final_cmd now="${final_cmd}"`);
     }
   }
 

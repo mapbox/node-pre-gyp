@@ -17,7 +17,7 @@
         "host": "https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com"
     },
     "scripts": {
-        "install": "${node_pre_gyp_command:-npx node-pre-gyp} install --fallback-to-build",
+        "install": "node-pre-gyp install --fallback-to-build",
         "test": "node index.js"
     }
 }

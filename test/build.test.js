@@ -4,6 +4,7 @@ const test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
+const os = require('os');
 const rm = require('rimraf');
 const path = require('path');
 const napi = require('../lib/util/napi.js');
@@ -12,6 +13,10 @@ const tar = require('tar');
 
 const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
+
+if (process.env.node_pre_gyp_mock_s3) {
+  process.env.node_pre_gyp_mock_s3 = `${os.tmpdir()}/mock`;
+}
 
 // The list of different sample apps that we use to test
 const apps = [

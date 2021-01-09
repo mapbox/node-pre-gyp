@@ -17,7 +17,7 @@
         "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
-        "install": "${node_pre_gyp_command:-npx node-pre-gyp} install --fallback-to-build",
+        "install": "node-pre-gyp install --fallback-to-build",
         "test": "node index.js"
     }
 }

@@ -24,17 +24,6 @@ function run(prog, command, args, app, opts, cb) {
   if (!app) throw new Error('app arg undefined');
   if (!app.name) throw new Error('app.name undefined');
 
-  let mock_s3;
-  if (opts.npg_mock_s3) {
-    mock_s3 = opts.npg_mock_s3;
-    delete opts.npg_mock_s3;
-  }
-
-  if (opts.npg_debug) {
-    console.log(`mock_s3 set to ${mock_s3}`);
-  }
-
-
   // start forming up the command we will execute.
   // here we add the program and the command
   let final_cmd = prog + ' ' + command;
@@ -89,7 +78,6 @@ function run(prog, command, args, app, opts, cb) {
     final_cmd = 'V=1 ' + final_cmd;
   }
 
-  // Finally, execute the command
   if (opts.npg_debug) {
     if (opts.npg_debug === 'env') {
       console.log('executing:', final_cmd, opts);
@@ -101,6 +89,7 @@ function run(prog, command, args, app, opts, cb) {
     delete opts.npg_debug;
   }
 
+  // Finally, execute the command
   cp.exec(final_cmd, opts, (err, stdout, stderr) => {
     if (err) {
       const error = new Error("Command failed '" + final_cmd + "'");

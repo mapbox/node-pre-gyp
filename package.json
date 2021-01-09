@@ -58,6 +58,6 @@
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "no-mock-test": "tape test/*test.js",
-    "test": "node_pre_gyp_mock_s3=$(node -p 'os.tmpdir()')/mock/ tape test/*test.js"
+    "test": "node test/tape-helper.js tape test/*test.js"
   }
 }

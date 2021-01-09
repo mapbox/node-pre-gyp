@@ -313,8 +313,7 @@ apps.forEach((app) => {
     test(app.name + ' can be installed via remote ' + app.args, (t) => {
       const opts = {
         cwd: path.join(__dirname, app.name),
-        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
-        npg_debug: true
+        npg_debug: false
       };
       run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);
@@ -326,7 +325,6 @@ apps.forEach((app) => {
     test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
       const opts = {
         cwd: path.join(__dirname, app.name),
-        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
         npg_debug: false
       };
       run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
@@ -339,7 +337,6 @@ apps.forEach((app) => {
     test(app.name + ' via remote passes tests ' + app.args, (t) => {
       const opts = {
         cwd: path.join(__dirname, app.name),
-        npg_mock_s3: process.env.node_pre_gyp_mock_s3,
         npg_debug: false
       };
       run('npm', 'install', '', app, opts, (err, stdout) => {

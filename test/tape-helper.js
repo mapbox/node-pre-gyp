@@ -11,7 +11,12 @@ if (argv[0] !== 'tape') {
   throw new Error(`${script} can only help tape, not ${argv[0]}`);
 }
 
-argv[0] = `${process.cwd()}/node_modules/.bin/tape`;
+let ext = '';
+if (os.platform() === 'win32') {
+  ext = '.cmd';
+}
+
+argv[0] = `${process.cwd()}/node_modules/.bin/tape${ext}`;
 
 const nodePath = node.slice(0, -'/node'.length);
 

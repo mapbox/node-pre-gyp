@@ -16,10 +16,7 @@ argv[0] = `${process.cwd()}/node_modules/.bin/tape`;
 const nodePath = node.slice(0, -'/node'.length);
 
 const PATH = `${process.env.PATH}${path.delimiter}${nodePath}`;
-const env = {
-  PATH,
-  node_pre_gyp_mock_s3: `${os.tmpdir()}/mock`
-};
+const env = Object.assign({}, process.env, { PATH, node_pre_gyp_mock_s3: `${os.tmpdir()}/mock` });
 
 const opts = {
   env,

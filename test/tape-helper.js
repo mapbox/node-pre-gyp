@@ -11,9 +11,13 @@ if (argv[0] !== 'tape') {
   throw new Error(`${script} can only help tape, not ${argv[0]}`);
 }
 
+let shell;
 let ext = '';
+let command = node;
 if (os.platform() === 'win32') {
   ext = '.cmd';
+  command = argv.shift();
+  shell = 'cmd.exe';
 }
 
 argv[0] = `${process.cwd()}/node_modules/.bin/tape${ext}`;
@@ -25,10 +29,11 @@ const env = Object.assign({}, process.env, { PATH, node_pre_gyp_mock_s3: `${os.t
 
 const opts = {
   env,
-  stdio: 'inherit'
+  stdio: 'inherit',
+  shell
 };
 
-const child = spawn(node, argv, opts);
+const child = spawn(command, argv, opts);
 
 child.on('close', (code) => {
   process.exit(code);

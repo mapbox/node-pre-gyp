@@ -57,7 +57,7 @@
     "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "tape test/*test.js",
-    "mock-s3-test": "node_pre_gyp_mock_s3=/tmp/mock/ tape test/*test.js"
+    "no-mock-test": "tape test/*test.js",
+    "test": "node_pre_gyp_mock_s3=$(node -p 'os.tmpdir()')/mock/ tape test/*test.js"
   }
 }

@@ -309,7 +309,7 @@ apps.forEach((app) => {
       const opts = {
         cwd: path.join(__dirname, app.name),
         npg_mock_s3: process.env.node_pre_gyp_mock_s3,
-        npg_debug: true
+        npg_debug: false
       };
       run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);

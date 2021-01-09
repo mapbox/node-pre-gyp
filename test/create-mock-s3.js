@@ -20,12 +20,12 @@ const mockDir = process.env.node_pre_gyp_mock_s3 + '/mapbox-node-pre-gyp-public-
 
 // eslint-disable-next-line no-unused-vars
 function get(uri, requestBody) {
-  const filepath = path.join(mockDir, uri);
+  const filepath = path.join(mockDir, uri.replace('%2B', '+'));
 
   try {
     fs.accessSync(filepath, fs.constants.R_OK);
   } catch (e) {
-    return [404, 'not found\n'];
+    return [404, `not found: ${uri}\n`];
   }
 
   // the mock s3 functions just write to disk, so just read from it.

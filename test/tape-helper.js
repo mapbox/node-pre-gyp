@@ -10,17 +10,15 @@ const [node, script, ...argv] = process.argv.slice();
 if (argv[0] !== 'tape') {
   throw new Error(`${script} can only help tape, not ${argv[0]}`);
 }
+argv[0] = `${process.cwd()}/node_modules/.bin/tape`;
 
 let shell;
-let ext = '';
 let command = node;
 if (os.platform() === 'win32') {
-  ext = '.cmd';
-  command = argv.shift();
+  argv[0] += '.cmd';
   shell = 'cmd.exe';
+  command = argv.shift();
 }
-
-argv[0] = `${process.cwd()}/node_modules/.bin/tape${ext}`;
 
 const nodePath = node.slice(0, -'/node'.length);
 
@@ -32,6 +30,8 @@ const opts = {
   stdio: 'inherit',
   shell
 };
+
+console.log('spawning', command, argv, shell);
 
 const child = spawn(command, argv, opts);
 

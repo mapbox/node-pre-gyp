@@ -9,6 +9,8 @@ services:
 # have more than one run with the same node version
 # otherwise they will clobber each other
 #####
+env:
+  node_pre_gyp_mock_s3=true
 
 matrix:
   include:

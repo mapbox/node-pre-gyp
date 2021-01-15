@@ -9,6 +9,8 @@ services:
 # have more than one run with the same node version
 # otherwise they will clobber each other
 #####
+env:
+  node_pre_gyp_mock_s3=true
 
 matrix:
   include:
@@ -17,6 +19,7 @@ matrix:
       node_js: 10
       before_install:
         - npm install request
+        - npm install --package-lock-only
       script:
         - npm run lint
         - npm run coverage

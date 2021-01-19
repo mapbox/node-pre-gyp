@@ -1,6 +1,7 @@
 # node-pre-gyp changelog
 
 ## 1.0.0
+- Module is now name-spaced at `@mapbox/node-pre-gyp` and the original `node-pre-gyp` is deprecated.
 - Dropped node 6 support, added node v14 support
 - Switched tests to use mapbox-owned bucket
 - Added coverage tracking and linting with eslint

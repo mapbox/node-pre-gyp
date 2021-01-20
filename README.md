@@ -299,10 +299,12 @@ If the command being executed is "publish" then the default is set to `binary.st
 the default is `binary.production_host`.
 
 The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
-is not `staging` or `production` an exception is thrown.
+is present and not `staging` or `production` an exception is thrown.
 
 This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
 `--s3_option=production` in order to publish to production making accidental publishing less likely.
+
+The environment variable `node_pre_gyp_s3_host` overrides both the `--s3_host` option and the default.
 
 ## N-API Considerations
 

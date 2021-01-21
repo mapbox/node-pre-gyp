@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-
-"use strict";
+'use strict';
 
 /**
  * Set the title.
@@ -12,31 +11,30 @@ process.title = 'node-pre-gyp';
  * Module dependencies.
  */
 
-var node_pre_gyp = require('../');
-var log = require('npmlog');
+const node_pre_gyp = require('../');
+const log = require('npmlog');
 
 /**
  * Process and execute the selected commands.
  */
 
-var prog = new node_pre_gyp.Run();
-var completed = false;
-prog.parseArgv(process.argv);
+const prog = new node_pre_gyp.Run({ argv: process.argv });
+let completed = false;
 
 if (prog.todo.length === 0) {
   if (~process.argv.indexOf('-v') || ~process.argv.indexOf('--version')) {
     console.log('v%s', prog.version);
-    return process.exit(0);
+    process.exit(0);
   } else if (~process.argv.indexOf('-h') || ~process.argv.indexOf('--help')) {
     console.log('%s', prog.usage());
-    return process.exit(0);
+    process.exit(0);
   }
   console.log('%s', prog.usage());
-  return process.exit(1);
+  process.exit(1);
 }
 
 // if --no-color is passed
-if (prog.opts && prog.opts.hasOwnProperty('color') && !prog.opts.color) {
+if (prog.opts && Object.hasOwnProperty.call(prog, 'color') && !prog.opts.color) {
   log.disableColor();
 }
 
@@ -50,11 +48,11 @@ log.info('using', 'node@%s | %s | %s', process.versions.node, process.platform, 
  * Change dir if -C/--directory was passed.
  */
 
-var dir = prog.opts.directory;
+const dir = prog.opts.directory;
 if (dir) {
-  var fs = require('fs');
+  const fs = require('fs');
   try {
-    var stat = fs.statSync(dir);
+    const stat = fs.statSync(dir);
     if (stat.isDirectory()) {
       log.info('chdir', dir);
       process.chdir(dir);
@@ -70,8 +68,8 @@ if (dir) {
   }
 }
 
-function run () {
-  var command = prog.todo.shift();
+function run() {
+  const command = prog.todo.shift();
   if (!command) {
     // done!
     completed = true;
@@ -79,7 +77,13 @@ function run () {
     return;
   }
 
-  prog.commands[command.name](command.args, function (err) {
+  // set binary.host when appropriate. host determines the s3 target bucket.
+  const target = prog.setBinaryHostProperty(command.name);
+  if (target && ['install', 'publish', 'unpublish', 'info'].indexOf(command.name) >= 0) {
+    log.info('using binary.host: ' + prog.package_json.binary.host);
+  }
+
+  prog.commands[command.name](command.args, function(err) {
     if (err) {
       log.error(command.name + ' error');
       log.error('stack', err.stack);
@@ -88,7 +92,7 @@ function run () {
       console.log(err.message);
       return process.exit(1);
     }
-    var args_array = [].slice.call(arguments, 1);
+    const args_array = [].slice.call(arguments, 1);
     if (args_array.length) {
       console.log.apply(console, args_array);
     }
@@ -97,37 +101,29 @@ function run () {
   });
 }
 
-process.on('exit', function (code) {
+process.on('exit', (code) => {
   if (!completed && !code) {
     log.error('Completion callback never invoked!');
-    issueMessage();
+    errorMessage();
     process.exit(6);
   }
 });
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', (err) => {
   log.error('UNCAUGHT EXCEPTION');
   log.error('stack', err.stack);
-  issueMessage();
+  errorMessage();
   process.exit(7);
 });
 
-function errorMessage () {
+function errorMessage() {
   // copied from npm's lib/util/error-handler.js
-  var os = require('os');
+  const os = require('os');
   log.error('System', os.type() + ' ' + os.release());
   log.error('command', process.argv.map(JSON.stringify).join(' '));
   log.error('cwd', process.cwd());
   log.error('node -v', process.version);
-  log.error(process.title+' -v', 'v' + prog.package.version);
-}
-
-function issueMessage () {
-  errorMessage();
-  log.error('', [ 'This is a bug in `'+process.title+'`.',
-                  'Try to update '+process.title+' and file an issue if it does not help:',
-                  '    <https://github.com/mapbox/'+process.title+'/issues>',
-                ].join('\n'));
+  log.error(process.title + ' -v', 'v' + prog.package.version);
 }
 
 // start running the given commands!

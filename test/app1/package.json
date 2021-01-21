@@ -12,7 +12,9 @@
     "binary": {
         "module_name": "app1",
         "module_path": "./lib/binding/",
-        "host": "https://node-pre-gyp-tests.s3-us-west-1.amazonaws.com"
+        "host": "https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com",
+        "remote_path": "./node-pre-gyp/{name}/v{version}/{configuration}/{toolset}/",
+        "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",

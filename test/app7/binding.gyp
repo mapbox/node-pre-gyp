@@ -7,6 +7,9 @@
       "xcode_settings": {
         "MACOSX_DEPLOYMENT_TARGET":"10.9",
         "CLANG_CXX_LIBRARY": "libc++"
+      },
+      'msvs_settings': {
+        'VCCLCompilerTool': { 'ExceptionHandling': 1 },
       }
      }
   ]

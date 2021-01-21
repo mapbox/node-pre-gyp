@@ -22,26 +22,26 @@
   "dependencies": {
     "detect-libc": "^1.0.3",
     "mkdirp": "^0.5.5",
-    "needle": "^2.5.2",
+    "needle": "^2.6.0",
     "nopt": "^5.0.0",
     "npmlog": "^4.1.2",
     "rc": "^1.2.8",
     "rimraf": "^3.0.2",
     "semver": "^7.3.4",
-    "tar": "^6.0.5"
+    "tar": "^6.1.0"
   },
   "devDependencies": {
-    "@mapbox/cloudfriend": "^4.5.1",
+    "@mapbox/cloudfriend": "^4.6.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "aws-sdk": "^2.28.0",
+    "aws-sdk": "^2.829.0",
     "codecov": "^3.8.1",
-    "eslint": "^7.16.0",
+    "eslint": "^7.18.0",
     "eslint-plugin-node": "^11.1.0",
     "mock-aws-s3": "^4.0.1",
-    "nock": "^12.0.3",
+    "nock": "^13.0.6",
     "node-addon-api": "^3.1.0",
     "nyc": "^15.1.0",
-    "tape": "^4.6.3"
+    "tape": "^5.1.1"
   },
   "nyc": {
     "all": true,

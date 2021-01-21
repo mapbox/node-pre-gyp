@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.com/mapbox/node-pre-gyp.svg?branch=master)](https://travis-ci.com/mapbox/node-pre-gyp)
 [![Build status](https://ci.appveyor.com/api/projects/status/3nxewb425y83c0gv)](https://ci.appveyor.com/project/Mapbox/node-pre-gyp)
 
-`node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
+`@mapbox/node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
 
 ### Features
 
@@ -37,7 +37,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 But you can also install it globally:
 
-    npm install node-pre-gyp -g
+    npm install @mapbox/node-pre-gyp -g
 
 ## Usage
 
@@ -89,7 +89,7 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` to `dependencies`
+ - Add `@mapbox/node-pre-gyp` to `dependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
@@ -98,7 +98,7 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "1.x"
+      "@mapbox/node-pre-gyp": "1.x"
     },
     "devDependencies": {
       "aws-sdk": "2.x"
@@ -122,7 +122,7 @@ Let's break this down:
  - Your `scripts` section should override the `install` target with `"install": "node-pre-gyp install --fallback-to-build"`. This allows node-pre-gyp to be used instead of the default npm behavior of always source compiling with `node-gyp` directly.
  - Your package.json should contain a `binary` section describing key properties you provide to allow node-pre-gyp to package optimally. They are detailed below.
 
-Note: in the past we recommended putting `node-pre-gyp` in the `bundledDependencies`, but we no longer recommend this. In the past there were npm bugs (with node versions 0.10.x) that could lead to node-pre-gyp not being available at the right time during install (unless we bundled). This should no longer be the case. Also, for a time we recommended using `"preinstall": "npm install node-pre-gyp"` as an alternative method to avoid needing to bundle. But this did not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `node-pre-gyp`. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
+Note: in the past we recommended putting `@mapbox/node-pre-gyp` in the `bundledDependencies`, but we no longer recommend this. In the past there were npm bugs (with node versions 0.10.x) that could lead to node-pre-gyp not being available at the right time during install (unless we bundled). This should no longer be the case. Also, for a time we recommended using `"preinstall": "npm install @mapbox/node-pre-gyp"` as an alternative method to avoid needing to bundle. But this did not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `@mapbox/node-pre-gyp`. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
 
 ##### The `binary` object has three required properties
 
@@ -299,10 +299,12 @@ If the command being executed is "publish" then the default is set to `binary.st
 the default is `binary.production_host`.
 
 The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
-is not `staging` or `production` an exception is thrown.
+is present and not `staging` or `production` an exception is thrown.
 
 This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
 `--s3_option=production` in order to publish to production making accidental publishing less likely.
+
+The environment variable `node_pre_gyp_s3_host` overrides both the `--s3_host` option and the default.
 
 ## N-API Considerations
 

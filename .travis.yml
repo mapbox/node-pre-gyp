@@ -15,8 +15,14 @@ matrix:
     # Test node v10 with request override + coverage reporting
     - os: linux
       node_js: 10
+      # mock s3 on jobs that post coverage
+      # to allow coverage to work consistently
+      # across PRs from external contributors
+      env:
+        - node_pre_gyp_mock_s3=true
       before_install:
         - npm install request
+        - npm install --package-lock-only
       script:
         - npm run lint
         - npm run coverage
@@ -25,6 +31,11 @@ matrix:
     # Test node v12 with needle + coverage reporting
     - os: linux
       node_js: 12
+      # mock s3 on jobs that post coverage
+      # to allow coverage to work consistently
+      # across PRs from external contributors
+      env:
+        - node_pre_gyp_mock_s3=true
       script:
         - npm run coverage
       after_script:

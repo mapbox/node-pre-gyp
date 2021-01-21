@@ -4,6 +4,7 @@ const test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
+const os = require('os');
 const rm = require('rimraf');
 const path = require('path');
 const napi = require('../lib/util/napi.js');
@@ -12,6 +13,10 @@ const tar = require('tar');
 
 const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
+
+if (process.env.node_pre_gyp_mock_s3) {
+  process.env.node_pre_gyp_mock_s3 = `${os.tmpdir()}/mock`;
+}
 
 // The list of different sample apps that we use to test
 const apps = [
@@ -271,7 +276,8 @@ apps.forEach((app) => {
     });
   });
 
-  if (process.env.AWS_ACCESS_KEY_ID || process.env.node_pre_gyp_accessKeyId) {
+  const env = process.env;
+  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
       run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
@@ -305,7 +311,11 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' can be installed via remote ' + app.args, (t) => {
-      run('npm', 'install', '--fallback-to-build=false', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_debug: false
+      };
+      run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -313,7 +323,11 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
-      run('npm', 'install', '--update-binary --fallback-to-build=false', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_debug: false
+      };
+      run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();
@@ -321,7 +335,11 @@ apps.forEach((app) => {
     });
 
     test(app.name + ' via remote passes tests ' + app.args, (t) => {
-      run('npm', 'install', '', app, { cwd: path.join(__dirname, app.name) }, (err, stdout) => {
+      const opts = {
+        cwd: path.join(__dirname, app.name),
+        npg_debug: false
+      };
+      run('npm', 'install', '', app, opts, (err, stdout) => {
         t.ifError(err);
         t.notEqual(stdout, '');
         t.end();

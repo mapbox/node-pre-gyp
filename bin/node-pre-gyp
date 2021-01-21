@@ -18,9 +18,8 @@ const log = require('npmlog');
  * Process and execute the selected commands.
  */
 
-const prog = new node_pre_gyp.Run();
+const prog = new node_pre_gyp.Run({ argv: process.argv });
 let completed = false;
-prog.parseArgv(process.argv);
 
 if (prog.todo.length === 0) {
   if (~process.argv.indexOf('-v') || ~process.argv.indexOf('--version')) {
@@ -80,8 +79,8 @@ function run() {
 
   // set binary.host when appropriate. host determines the s3 target bucket.
   const target = prog.setBinaryHostProperty(command.name);
-  if (target) {
-    log.info('setting binary.host to ' + prog.package_json.binary.host);
+  if (target && ['install', 'publish', 'unpublish', 'info'].indexOf(command.name) >= 0) {
+    log.info('using binary.host: ' + prog.package_json.binary.host);
   }
 
   prog.commands[command.name](command.args, function(err) {

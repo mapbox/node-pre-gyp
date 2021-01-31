@@ -304,8 +304,6 @@ is present and not `staging` or `production` an exception is thrown.
 This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
 `--s3_option=production` in order to publish to production making accidental publishing less likely.
 
-The environment variable `node_pre_gyp_s3_host` overrides both the `--s3_host` option and the default.
-
 ## N-API Considerations
 
 [N-API](https://nodejs.org/api/n-api.html#n_api_n_api) is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. N-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future.
@@ -463,29 +461,12 @@ Or put the local version on your PATH
 
 #### 3) Configure AWS credentials
 
-There are several ways to do this.
+It is recommended to configure the AWS JS SDK v2 used internally by `node-pre-gyp` by setting these environment variables:
 
-You can use any of the methods described at http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html.
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
 
-Or you can create a `~/.node_pre_gyprc`
-
-Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
-
-A `~/.node_pre_gyprc` looks like:
-
-```js
-{
-    "accessKeyId": "xxx",
-    "secretAccessKey": "xxx"
-}
-```
-
-Another way is to use your environment:
-
-    export node_pre_gyp_accessKeyId=xxx
-    export node_pre_gyp_secretAccessKey=xxx
-
-You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
+But also you can also use the `Shared Config File` mentioned [in the AWS JS SDK v2 docs](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/configuring-the-jssdk.html)
 
 #### 4) Package and publish your build
 
@@ -531,9 +512,9 @@ Then paste the result into your `appveyor.yml`
 
 ```yml
 environment:
-  node_pre_gyp_accessKeyId:
+  AWS_ACCESS_KEY_ID:
     secure: Dn9HKdLNYvDgPdQOzRq/DqZ/MPhjknRHB1o+/lVU8MA=
-  node_pre_gyp_secretAccessKey:
+  AWS_SECRET_ACCESS_KEY:
     secure: W1rwNoSnOku1r+28gnoufO8UA8iWADmL1LiiwH9IOkIVhDTNGdGPJqAlLjNqwLnL
 ```
 

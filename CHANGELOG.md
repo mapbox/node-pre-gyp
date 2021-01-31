@@ -2,13 +2,13 @@
 
 ## 1.0.0
 - Module is now name-spaced at `@mapbox/node-pre-gyp` and the original `node-pre-gyp` is deprecated.
-- Added back support for symlinks inside the tarball
+- New: support for staging and production s3 targets (see README.md)
+- BREAKING: no longer supporting `node_pre_gyp_accessKeyId` & `node_pre_gyp_secretAccessKey`, use `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` instead to authenticate against s3 for `info`, `publish`, and `unpublish` commands.
 - Dropped node v6 support, added node v14 support
 - Switched tests to use mapbox-owned bucket for testing
 - Added coverage tracking and linting with eslint
+- Added back support for symlinks inside the tarball
 - Upgraded all test apps to N-API/node-addon-api
-- New: support for staging and production s3 targets (see README.md)
-- Added `node_pre_gyp_s3_host` env var which has priority over the `--s3_host` option or default.
 
 ## 0.17.0
 - Got travis + appveyor green again

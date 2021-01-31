@@ -90,7 +90,7 @@ This is a guide to configuring your module to use node-pre-gyp.
 #### 1) Add new entries to your `package.json`
 
  - Add `@mapbox/node-pre-gyp` to `dependencies`
- - Add `aws-sdk` as a `devDependency`
+ - Add `@aws-sdk/client-s3` as a `devDependency` (`npm install @aws-sdk/client-s3 --save-dev`)
  - Add a custom `install` script
  - Declare a `binary` object
 
@@ -101,7 +101,7 @@ This looks like:
       "@mapbox/node-pre-gyp": "1.x"
     },
     "devDependencies": {
-      "aws-sdk": "2.x"
+      "@aws-sdk/client-s3": "3.x"
     }
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build"
@@ -109,16 +109,16 @@ This looks like:
     "binary": {
         "module_name": "your_module",
         "module_path": "./lib/binding/",
-        "host": "https://your_module.s3-us-west-1.amazonaws.com"
+        "host": "https://your_module.s3.us-east-1.amazonaws.com".
+        "remote_path": "./node-pre-gyp/{name}/v{version}/{configuration}/",
+        "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
     }
 ```
-
-For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/master/package.json).
 
 Let's break this down:
 
  - Dependencies need to list `node-pre-gyp`
- - Your devDependencies should list `aws-sdk` so that you can run `node-pre-gyp publish` locally or a CI system. We recommend using `devDependencies` only since `aws-sdk` is large and not needed for `node-pre-gyp install` since it only uses http to fetch binaries
+ - Your devDependencies should list `@aws-sdk/client-s3` so that you can run `node-pre-gyp publish` locally or a CI system. We recommend using `devDependencies` only since `@aws-sdk/client-s3` is large and not needed for `node-pre-gyp install` since it only uses http to fetch binaries
  - Your `scripts` section should override the `install` target with `"install": "node-pre-gyp install --fallback-to-build"`. This allows node-pre-gyp to be used instead of the default npm behavior of always source compiling with `node-gyp` directly.
  - Your package.json should contain a `binary` section describing key properties you provide to allow node-pre-gyp to package optimally. They are detailed below.
 
@@ -249,7 +249,7 @@ Once packaged, now you can publish:
 
 Currently the `publish` command pushes your binary to S3. This requires:
 
- - You have installed `aws-sdk` with `npm install aws-sdk`
+ - You have installed `@aws-sdk/client-s3` with `npm install @aws-sdk/client-s3 --save-dev`
  - You have created a bucket already.
  - The `host` points to an S3 http or https endpoint.
  - You have configured node-pre-gyp to read your S3 credentials (see [S3 hosting](#s3-hosting) for details).
@@ -461,7 +461,7 @@ Or put the local version on your PATH
 
 #### 3) Configure AWS credentials
 
-It is recommended to configure the AWS JS SDK v2 used internally by `node-pre-gyp` by setting these environment variables:
+It is recommended to configure the AWS JS SDK used internally by `node-pre-gyp` by setting these environment variables:
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
@@ -470,15 +470,13 @@ But also you can also use the `Shared Config File` mentioned [in the AWS JS SDK 
 
 #### 4) Package and publish your build
 
-Install the `aws-sdk`:
+Install the `@aws-sdk/client-s3`:
 
-    npm install aws-sdk
+     npm install @aws-sdk/client-s3 --save-dev
 
 Then publish:
 
     node-pre-gyp package publish
-
-Note: if you hit an error like `Hostname/IP doesn't match certificate's altnames` it may mean that you need to provide the `region` option in your config.
 
 ## Appveyor Automation
 

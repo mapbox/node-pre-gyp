@@ -277,7 +277,7 @@ apps.forEach((app) => {
   });
 
   const env = process.env;
-  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
+  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_mock_s3) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
       run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {

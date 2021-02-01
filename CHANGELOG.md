@@ -9,6 +9,10 @@
 - Added coverage tracking and linting with eslint
 - Added back support for symlinks inside the tarball
 - Upgraded all test apps to N-API/node-addon-api
+- New: support for staging and production s3 targets (see README.md)
+- Added `node_pre_gyp_s3_host` env var which has priority over the `--s3_host` option or default.
+- Replaced needle with node-fetch
+- Added proxy support for node-fetch
 
 ## 0.17.0
 - Got travis + appveyor green again

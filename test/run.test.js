@@ -55,6 +55,8 @@ test('setup', (t) => {
       throw e;
     }
   }
+  // cleanup any previous test settings.
+  delete process.env.node_pre_gyp_s3_host;
 
   process.chdir(scratch);
   t.end();

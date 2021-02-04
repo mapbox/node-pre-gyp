@@ -20,9 +20,11 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
+    "aws4": "^1.11.0",
     "detect-libc": "^1.0.3",
+    "http-proxy-agent": "^4.0.1",
     "mkdirp": "^0.5.5",
-    "needle": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nopt": "^5.0.0",
     "npmlog": "^4.1.2",
     "rimraf": "^3.0.2",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^4.6.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
+    "action-walk": "^2.2.0",
     "aws-sdk": "^2.829.0",
     "codecov": "^3.8.1",
     "eslint": "^7.18.0",
@@ -40,7 +43,8 @@
     "nock": "^12.0.3",
     "node-addon-api": "^3.1.0",
     "nyc": "^15.1.0",
-    "tape": "^5.1.1"
+    "tape": "^5.1.1",
+    "xml2js": "^0.4.23"
   },
   "nyc": {
     "all": true,

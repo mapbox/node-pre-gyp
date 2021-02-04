@@ -1,8 +1,8 @@
 os: Visual Studio 2015
 
 environment:
-  global:
-    node_pre_gyp_mock_s3: true
+  #global:
+  #  node_pre_gyp_mock_s3: true
 
   matrix:
     - nodejs_version: 10

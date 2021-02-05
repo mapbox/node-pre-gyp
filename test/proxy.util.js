@@ -7,6 +7,7 @@
 
 const net = require('net');
 
+/* eslint-disable no-unused-vars */
 let red = '';
 let green = '';
 let yellow = '';
@@ -18,6 +19,7 @@ if (process.stdout.isTTY) {
   yellow = '\u001b[0;33m';
   nc = '\u001b[0m';
 }
+/* eslint-enable no-unused-vars */
 
 // thank you Nimit Aggarwal
 // https://github.com/nimit95/Forward-Proxy/blob/master/server.js

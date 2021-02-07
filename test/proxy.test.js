@@ -4,7 +4,6 @@ const test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
-const os = require('os');
 const rm = require('rimraf');
 const path = require('path');
 const napi = require('../lib/util/napi.js');
@@ -20,7 +19,8 @@ const proxy = require('./proxy.util');
 const proxyPort = 8124;
 const proxyServer = `http://localhost:${proxyPort}`;
 
-let initial;
+let initial_s3_host;
+let initial_mock_s3;
 
 test('setup proxy server', (t) => {
   delete process.env.http_proxy;
@@ -32,23 +32,22 @@ test('setup proxy server', (t) => {
   delete process.env.NO_PROXY;
   process.env.NOCK_OFF = true;
 
+  initial_mock_s3 = process.env.node_pre_gyp_mock_s3;
+  delete process.env.node_pre_gyp_mock_s3;
   mockS3Http('off');
 
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
-  initial = process.env.node_pre_gyp_s3_host;
-  console.log('proxy.test.js => s3_host:', initial);
+  initial_s3_host = process.env.node_pre_gyp_s3_host;
+  console.log('proxy.test.js => s3_host:', initial_s3_host);
   process.env.node_pre_gyp_s3_host = 'staging';
+
   process.env.NOCK_OFF = true;
   t.end();
 });
 
 // const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 // const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
-
-if (process.env.node_pre_gyp_mock_s3) {
-  process.env.node_pre_gyp_mock_s3 = `${os.tmpdir()}/mock`;
-}
 
 // The list of different sample apps that we use to test
 const apps = [
@@ -410,6 +409,7 @@ test(`cleanup after ${__filename}`, (t) => {
   delete process.env.NOCK_OFF;
   delete process.env.http_proxy;
   delete process.env.https_proxy;
-  process.env.node_pre_gyp_s3_host = initial;
+  process.env.node_pre_gyp_s3_host = initial_s3_host;
+  process.env.node_pre_gyp_mock_s3 = initial_mock_s3;
   t.end();
 });

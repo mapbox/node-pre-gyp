@@ -31,12 +31,12 @@ if (process.argv[2] !== 'toLocal' && process.argv[2] !== 'toMapbox') {
 
 const direction = {
   toLocal: {
-    source: /https:\/\/mapbox-node-pre-gyp-public-testing-bucket\.s3\.us-east-1\.amazonaws\.com/g,
-    target: 'https://bmac-pre-gyp-test.s3.us-east-1.amazonaws.com'
+    source: /mapbox-node-pre-gyp-public-testing-bucket/g,
+    target: 'bmac-pre-gyp-test'
   },
   toMapbox: {
-    source: /https:\/\/bmac-pre-gyp-test\.s3\.us-east-1\.amazonaws\.com/g,
-    target: 'https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com'
+    source: /bmac-pre-gyp-test/g,
+    target: 'mapbox-node-pre-gyp-public-testing-bucket'
   }
 };
 
@@ -55,7 +55,7 @@ function dirAction(path) {
 }
 
 function fileAction(path) {
-  if (path.endsWith('/package.json') || path.endsWith('/fetch.test.js')) {
+  if (path.endsWith('/package.json') || path.endsWith('/fetch.test.js') || path.endsWith('/lib/util/s3_setup.js')) {
     const file = fs.readFileSync(path, 'utf8');
     const changed = file.replace(repl.source, repl.target);
     if (file !== changed) {

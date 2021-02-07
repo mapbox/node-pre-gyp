@@ -1,21 +1,27 @@
 'use strict';
 
 //
-// utility to facilitate testing when not running as repo owner in the repo.
+// utility to switch s3 targets for local testing. if the s3 buckets are left
+// pointing to the mapbox-node-pre-gyp-public-testing-bucket and you don't have
+// write permissions to those buckets then the tests will fail. switching the
+// target allows the tests to be run locally (even though the CI tests will fail
+// if you are not a collaborator to the mapbox/node-pre-gyp repository).
+//
 // this replaces the mapbox-specific s3 URLs with an URL pointing to an S3
-// bucket to which i can write to. each person using this will need to supply
-// their own s3 buckets (and set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+// bucket which can be written to. each person using this will need to supply
+// their own `toLocal.target` and `toMapbox.source` values that refer to their
+// s3 buckets (and set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
 // appropriately).
 //
-// please reset to the mapbox settings before committing.
+// reset to the mapbox settings before committing.
 //
 
 const fs = require('fs');
 const walk = require('action-walk');
 
 const [maj, min] = process.versions.node.split('.');
-if (`${maj}.${min}` < 10.17) {
-  console.error('requires node >= 10.17');
+if (`${maj}.${min}` < 10.1) {
+  console.error('requires node >= 10.1 for fs.promises');
   process.exit(1);
 }
 if (process.argv[2] !== 'toLocal' && process.argv[2] !== 'toMapbox') {

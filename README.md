@@ -449,7 +449,7 @@ It is recommended to create a IAM user with a policy that only gives permissions
                 "s3:DeleteObject",
                 "s3:PutObjectAcl"
             ],
-            "Resource": "arn:aws:s3:::node-pre-gyp-tests/*"
+            "Resource": "arn:aws:s3:::your-bucket-name/*"
         },
         {
             "Sid": "bucket",

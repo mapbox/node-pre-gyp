@@ -20,7 +20,7 @@ npm install @mapbox/node-pre-gyp --save
 
  - A command line tool called `node-pre-gyp` that can install your package's C++ module from a binary.
  - A variety of developer targeted commands for packaging, testing, and publishing binaries.
- - A JavaScript module that can dynamically require your installed binary: `require('node-pre-gyp').find`
+ - A JavaScript module that can dynamically require your installed binary: `require('@mapbox/node-pre-gyp').find`
 
 For a hello world example of a module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example> and [the wiki ](https://github.com/mapbox/node-pre-gyp/wiki/Modules-using-node-pre-gyp) for real world examples.
 

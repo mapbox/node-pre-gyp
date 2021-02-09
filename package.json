@@ -34,7 +34,7 @@
     "@mapbox/cloudfriend": "^4.6.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
     "action-walk": "^2.2.0",
-    "aws-sdk": "^2.829.0",
+    "aws-sdk": "^2.840.0",
     "codecov": "^3.8.1",
     "eslint": "^7.18.0",
     "eslint-plugin-node": "^11.1.0",

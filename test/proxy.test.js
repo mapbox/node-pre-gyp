@@ -46,10 +46,8 @@ test('setup proxy server', (t) => {
   t.end();
 });
 
-// const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
-// const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
-
-// The list of different sample apps that we use to test
+// The list of different sample apps that we use to test. It's only one app for now but if other
+// tests are needed they can be added easily.
 const apps = [
   {
     'name': 'app1',
@@ -57,40 +55,6 @@ const apps = [
     'files': {
       'base': ['binding/app1.node']
     }
-  },
-  /*
-  {
-    'name': 'app2',
-    'args': '--custom_include_path=../include --debug',
-    'files': {
-      'base': ['node-pre-gyp-test-app2/app2.node']
-    }
-  },
-  {
-    'name': 'app2',
-    'args': '--custom_include_path=../include --toolset=cpp11',
-    'files': {
-      'base': ['node-pre-gyp-test-app2/app2.node']
-    }
-  },
-  {
-    'name': 'app3',
-    'args': '',
-    'files': {
-      'base': [[localVer, 'app3.node'].join('/')]
-    }
-  },
-  {
-    'name': 'app4',
-    'args': '',
-    'files': {
-      'base': [[localVer, 'app4.node'].join('/'), [localVer, 'lib.target', 'mylib.' + SOEXT].join('/')]
-    }
-  },
-  // */
-  {
-    'name': 'app7',
-    'args': ''
   }
 ];
 

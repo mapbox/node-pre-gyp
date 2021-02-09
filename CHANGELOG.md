@@ -1,5 +1,34 @@
 # node-pre-gyp changelog
 
+## 1.0.0
+- Module is now name-spaced at `@mapbox/node-pre-gyp` and the original `node-pre-gyp` is deprecated.
+- New: support for staging and production s3 targets (see README.md)
+- BREAKING: no longer supporting `node_pre_gyp_accessKeyId` & `node_pre_gyp_secretAccessKey`, use `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` instead to authenticate against s3 for `info`, `publish`, and `unpublish` commands.
+- Dropped node v6 support, added node v14 support
+- Switched tests to use mapbox-owned bucket for testing
+- Added coverage tracking and linting with eslint
+- Added back support for symlinks inside the tarball
+- Upgraded all test apps to N-API/node-addon-api
+- New: support for staging and production s3 targets (see README.md)
+- Added `node_pre_gyp_s3_host` env var which has priority over the `--s3_host` option or default.
+- Replaced needle with node-fetch
+- Added proxy support for node-fetch
+- Upgraded to mkdirp@1.x
+
+## 0.17.0
+- Got travis + appveyor green again
+- Added support for more node versions
+
+## 0.16.0
+
+- Added Node 15 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/520)
+
+## 0.15.0
+
+- Bump dependency on `mkdirp` from `^0.5.1` to `^0.5.3` (https://github.com/mapbox/node-pre-gyp/pull/492)
+- Bump dependency on `needle` from `^2.2.1` to `^2.5.0` (https://github.com/mapbox/node-pre-gyp/pull/502)
+- Added Node 14 support in the local database (https://github.com/mapbox/node-pre-gyp/pull/501)
+
 ## 0.14.0
 
 - Defer modules requires in napi.js (https://github.com/mapbox/node-pre-gyp/pull/434)

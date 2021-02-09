@@ -1,20 +1,26 @@
-# node-pre-gyp
+# @mapbox/node-pre-gyp
 
-#### node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries
+#### @mapbox/node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries
 
-[![NPM](https://nodei.co/npm/node-pre-gyp.png?downloads=true&downloadRank=true)](https://nodei.co/npm/node-pre-gyp/)
-
-[![Build Status](https://api.travis-ci.org/mapbox/node-pre-gyp.svg)](https://travis-ci.org/mapbox/node-pre-gyp)
+[![Build Status](https://travis-ci.com/mapbox/node-pre-gyp.svg?branch=master)](https://travis-ci.com/mapbox/node-pre-gyp)
 [![Build status](https://ci.appveyor.com/api/projects/status/3nxewb425y83c0gv)](https://ci.appveyor.com/project/Mapbox/node-pre-gyp)
-[![Dependencies](https://david-dm.org/mapbox/node-pre-gyp.svg)](https://david-dm.org/mapbox/node-pre-gyp)
 
-`node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
+`@mapbox/node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
+
+### Special note on previous package
+
+On Feb 9th, 2021 `@mapbox/node-pre-gyp@1.0.0` was [released](./CHANGELOG.md). Older, unscoped versions that are not part of the `@mapbox` org are deprecated and only `@mapbox/node-pre-gyp` will see updates going forward. To upgrade to the new package do:
+
+```
+npm uninstall node-pre-gyp --save
+npm install @mapbox/node-pre-gyp --save
+```
 
 ### Features
 
  - A command line tool called `node-pre-gyp` that can install your package's C++ module from a binary.
  - A variety of developer targeted commands for packaging, testing, and publishing binaries.
- - A JavaScript module that can dynamically require your installed binary: `require('node-pre-gyp').find`
+ - A JavaScript module that can dynamically require your installed binary: `require('@mapbox/node-pre-gyp').find`
 
 For a hello world example of a module packaged with `node-pre-gyp` see <https://github.com/springmeyer/node-addon-example> and [the wiki ](https://github.com/mapbox/node-pre-gyp/wiki/Modules-using-node-pre-gyp) for real world examples.
 
@@ -30,7 +36,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v6.x
+ - Node.js >= node v8.x
 
 ## Install
 
@@ -40,7 +46,7 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 But you can also install it globally:
 
-    npm install node-pre-gyp -g
+    npm install @mapbox/node-pre-gyp -g
 
 ## Usage
 
@@ -92,7 +98,7 @@ This is a guide to configuring your module to use node-pre-gyp.
 
 #### 1) Add new entries to your `package.json`
 
- - Add `node-pre-gyp` to `dependencies`
+ - Add `@mapbox/node-pre-gyp` to `dependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
  - Declare a `binary` object
@@ -101,7 +107,7 @@ This looks like:
 
 ```js
     "dependencies"  : {
-      "node-pre-gyp": "0.6.x"
+      "@mapbox/node-pre-gyp": "1.x"
     },
     "devDependencies": {
       "aws-sdk": "2.x"
@@ -125,7 +131,7 @@ Let's break this down:
  - Your `scripts` section should override the `install` target with `"install": "node-pre-gyp install --fallback-to-build"`. This allows node-pre-gyp to be used instead of the default npm behavior of always source compiling with `node-gyp` directly.
  - Your package.json should contain a `binary` section describing key properties you provide to allow node-pre-gyp to package optimally. They are detailed below.
 
-Note: in the past we recommended putting `node-pre-gyp` in the `bundledDependencies`, but we no longer recommend this. In the past there were npm bugs (with node versions 0.10.x) that could lead to node-pre-gyp not being available at the right time during install (unless we bundled). This should no longer be the case. Also, for a time we recommended using `"preinstall": "npm install node-pre-gyp"` as an alternative method to avoid needing to bundle. But this did not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `node-pre-gyp`. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
+Note: in the past we recommended putting `@mapbox/node-pre-gyp` in the `bundledDependencies`, but we no longer recommend this. In the past there were npm bugs (with node versions 0.10.x) that could lead to node-pre-gyp not being available at the right time during install (unless we bundled). This should no longer be the case. Also, for a time we recommended using `"preinstall": "npm install @mapbox/node-pre-gyp"` as an alternative method to avoid needing to bundle. But this did not behave predictably across all npm versions - see https://github.com/mapbox/node-pre-gyp/issues/260 for the details. So we do not recommend using `preinstall` to install `@mapbox/node-pre-gyp`. More history on this at https://github.com/strongloop/fsevents/issues/157#issuecomment-265545908.
 
 ##### The `binary` object has three required properties
 
@@ -157,7 +163,7 @@ Why then not require S3? Because while some applications using node-pre-gyp need
 
 It should also be mentioned that there is an optional and entirely separate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-github publish```.
 
-##### The `binary` object has two optional properties
+##### The `binary` object has optional properties
 
 ###### remote_path
 
@@ -282,6 +288,31 @@ What will happen is this:
 
 If a a binary was not available for a given platform and `--fallback-to-build` was used then `node-gyp rebuild` will be called to try to source compile the module.
 
+#### 9) One more option
+
+It may be that you want to work with two s3 buckets, one for staging and one for production; this
+arrangement makes it less likely to accidentally overwrite a production binary. It also allows the production
+environment to have more restrictive permissions than staging while still enabling publishing when
+developing and testing.
+
+The binary.host property can be set at execution time. In order to do so all of the following conditions
+must be true.
+
+- binary.host is falsey or not present
+- binary.staging_host is not empty
+- binary.production_host is not empty
+
+If any of these checks fail then the operation will not perform execution time determination of the s3 target.
+
+If the command being executed is "publish" then the default is set to `binary.staging_host`. In all other cases
+the default is `binary.production_host`.
+
+The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
+is present and not `staging` or `production` an exception is thrown.
+
+This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
+`--s3_option=production` in order to publish to production making accidental publishing less likely.
+
 ## N-API Considerations
 
 [N-API](https://nodejs.org/api/n-api.html#n_api_n_api) is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. N-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future.
@@ -328,7 +359,7 @@ The `napi_build_version` value is communicated to the C/C++ code by adding this 
 
 This ensures that `NAPI_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
 
-> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is prefered because it used by the N-API C/C++ headers to configure the specific N-API veriosn being requested. 
+> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is preferred because it used by the N-API C/C++ headers to configure the specific N-API versions being requested.
 
 ### Path and file naming requirements in `package.json`
 
@@ -351,9 +382,9 @@ Here's an example:
 
 ## Supporting both N-API and NAN builds
 
-You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property. 
+You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property.
 
-Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build. 
+Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build.
 
 The configuration value `node_napi_label` is set by `node-pre-gyp` to the type of build created, `napi` or `node`, and the version number. For N-API builds, the string contains the N-API version nad has values like `napi-v3`. For traditional, non-N-API builds, the string contains the ABI version with values like `node-v46`.
 
@@ -370,10 +401,10 @@ Here's how the `binary` configuration above might be changed to support both N-A
   }
 ```
 
-The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds. 
+The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds.
 
 For example:
- 
+
 ```C
 #if NAPI_VERSION
 // N-API code goes here
@@ -448,29 +479,12 @@ Or put the local version on your PATH
 
 #### 3) Configure AWS credentials
 
-There are several ways to do this.
+It is recommended to configure the AWS JS SDK v2 used internally by `node-pre-gyp` by setting these environment variables:
 
-You can use any of the methods described at http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html.
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
 
-Or you can create a `~/.node_pre_gyprc`
-
-Or pass options in any way supported by [RC](https://github.com/dominictarr/rc#standards)
-
-A `~/.node_pre_gyprc` looks like:
-
-```js
-{
-    "accessKeyId": "xxx",
-    "secretAccessKey": "xxx"
-}
-```
-
-Another way is to use your environment:
-
-    export node_pre_gyp_accessKeyId=xxx
-    export node_pre_gyp_secretAccessKey=xxx
-
-You may also need to specify the `region` if it is not explicit in the `host` value you use. The `bucket` can also be specified but it is optional because `node-pre-gyp` will detect it from the `host` value.
+But also you can also use the `Shared Config File` mentioned [in the AWS JS SDK v2 docs](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/configuring-the-jssdk.html)
 
 #### 4) Package and publish your build
 
@@ -516,9 +530,9 @@ Then paste the result into your `appveyor.yml`
 
 ```yml
 environment:
-  node_pre_gyp_accessKeyId:
+  AWS_ACCESS_KEY_ID:
     secure: Dn9HKdLNYvDgPdQOzRq/DqZ/MPhjknRHB1o+/lVU8MA=
-  node_pre_gyp_secretAccessKey:
+  AWS_SECRET_ACCESS_KEY:
     secure: W1rwNoSnOku1r+28gnoufO8UA8iWADmL1LiiwH9IOkIVhDTNGdGPJqAlLjNqwLnL
 ```
 

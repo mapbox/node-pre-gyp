@@ -1,6 +1,7 @@
 os: Visual Studio 2015
 
 environment:
+  # testing
   #global:
   #  node_pre_gyp_mock_s3: true
 

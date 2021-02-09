@@ -13,6 +13,7 @@
 - Added `node_pre_gyp_s3_host` env var which has priority over the `--s3_host` option or default.
 - Replaced needle with node-fetch
 - Added proxy support for node-fetch
+- Upgraded to mkdirp@1.x
 
 ## 0.17.0
 - Got travis + appveyor green again

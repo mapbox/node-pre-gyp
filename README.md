@@ -455,7 +455,7 @@ It is recommended to create a IAM user with a policy that only gives permissions
             "Sid": "bucket",
             "Effect": "Allow",
             "Action": "s3:ListBucket",
-            "Resource": "arn:aws:s3:::node-pre-gyp-tests"
+            "Resource": "arn:aws:s3:::your-bucket-name"
         },
         {
             "Sid": "buckets",

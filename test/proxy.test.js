@@ -10,9 +10,8 @@ const napi = require('../lib/util/napi.js');
 const versioning = require('../lib/util/versioning.js');
 const tar = require('tar');
 
-// this is a duplicate of build.test.js and should be kept in sync with it
-// as much as possible. the differences are that this setups up a proxy server
-// and only executes apps 1 and 7.
+// this is a derived from build.test.js and should be kept in sync with it
+// as much as possible.
 const { mockS3Http } = require('../lib/node-pre-gyp.js');
 const proxy = require('./proxy.util');
 

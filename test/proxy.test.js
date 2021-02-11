@@ -24,15 +24,15 @@ let initial_mock_s3;
 
 if (process.env.TRAVIS === 'true' && process.env.TRAVIS_SECURE_ENV_VARS !== 'true') {
   const t = test;
-  test = function (...args) {
+  test = function(...args) {
     t.skip(...args);
-  }
-  test.skip = function (...args) {
+  };
+  test.skip = function(...args) {
     t.skip(...args);
-  }
+  };
 } else {
   // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
-  test.Test.prototype.stringContains = function (actual, contents, message) {
+  test.Test.prototype.stringContains = function(actual, contents, message) {
     this._assert(actual.indexOf(contents) > -1, {
       message: message || 'should contain ' + contents,
       operator: 'stringContains',

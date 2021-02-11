@@ -1,6 +1,6 @@
 'use strict';
 
-const test = require('tape');
+let test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
@@ -21,6 +21,26 @@ const proxyServer = `http://localhost:${proxyPort}`;
 
 let initial_s3_host;
 let initial_mock_s3;
+
+if (process.env.TRAVIS === 'true' && process.env.TRAVIS_SECURE_ENV_VARS !== 'true') {
+  const t = test;
+  test = function (...args) {
+    t.skip(...args);
+  }
+  test.skip = function (...args) {
+    t.skip(...args);
+  }
+} else {
+  // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
+  test.Test.prototype.stringContains = function (actual, contents, message) {
+    this._assert(actual.indexOf(contents) > -1, {
+      message: message || 'should contain ' + contents,
+      operator: 'stringContains',
+      actual: actual,
+      expected: contents
+    });
+  };
+}
 
 test('setup proxy server', (t) => {
   delete process.env.http_proxy;
@@ -57,17 +77,6 @@ const apps = [
     }
   }
 ];
-
-
-// https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
-test.Test.prototype.stringContains = function(actual, contents, message) {
-  this._assert(actual.indexOf(contents) > -1, {
-    message: message || 'should contain ' + contents,
-    operator: 'stringContains',
-    actual: actual,
-    expected: contents
-  });
-};
 
 // Because the below tests only ensure that flags can be correctly passed to node-gyp is it not
 // likely they will behave differently for different apps. So we save time by avoiding running these for each app.

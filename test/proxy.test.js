@@ -1,6 +1,6 @@
 'use strict';
 
-let test = require('tape');
+const tape = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
@@ -21,25 +21,35 @@ const proxyServer = `http://localhost:${proxyPort}`;
 let initial_s3_host;
 let initial_mock_s3;
 
-if (process.env.TRAVIS === 'true' && process.env.TRAVIS_SECURE_ENV_VARS !== 'true') {
-  const t = test;
-  test = function(...args) {
-    t.skip(...args);
-  };
-  test.skip = function(...args) {
-    t.skip(...args);
-  };
-} else {
-  // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
-  test.Test.prototype.stringContains = function(actual, contents, message) {
-    this._assert(actual.indexOf(contents) > -1, {
-      message: message || 'should contain ' + contents,
-      operator: 'stringContains',
-      actual: actual,
-      expected: contents
-    });
-  };
+// https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
+tape.Test.prototype.stringContains = function(actual, contents, message) {
+  this._assert(actual.indexOf(contents) > -1, {
+    message: message || 'should contain ' + contents,
+    operator: 'stringContains',
+    actual: actual,
+    expected: contents
+  });
+};
+
+//
+// skip tests that require a real S3 bucket when in a CI environment
+// and the AWS access key is not available.
+//
+const isCI = process.env.CI && process.env.CI.toLowerCase() === 'true'
+  && !process.env.AWS_ACCESS_KEY_ID;
+
+function ciSkip(...args) {
+  if (isCI) {
+    tape.skip(...args);
+  } else {
+    tape(...args);
+  }
 }
+ciSkip.skip = function(...args) {
+  tape.skip(...args);
+};
+
+const test = tape;
 
 test('setup proxy server', (t) => {
   delete process.env.http_proxy;
@@ -281,7 +291,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' publishes ' + app.args, (t) => {
+  ciSkip(app.name + ' publishes ' + app.args, (t) => {
     run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
       t.ifError(err);
       t.notEqual(stdout, '');
@@ -289,7 +299,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' info shows it ' + app.args, (t) => {
+  ciSkip(app.name + ' info shows it ' + app.args, (t) => {
     run('node-pre-gyp', 'reveal', 'package_name', app, {}, (err, stdout) => {
       t.ifError(err);
       let package_name = stdout.trim();
@@ -304,7 +314,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' can be uninstalled ' + app.args, (t) => {
+  ciSkip(app.name + ' can be uninstalled ' + app.args, (t) => {
     run('node-pre-gyp', 'clean', '', app, {}, (err, stdout) => {
       t.ifError(err);
       t.notEqual(stdout, '');
@@ -312,7 +322,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' can be installed via remote ' + app.args, (t) => {
+  ciSkip(app.name + ' can be installed via remote ' + app.args, (t) => {
     const opts = {
       cwd: path.join(__dirname, app.name),
       npg_debug: false
@@ -324,7 +334,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
+  ciSkip(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
     const opts = {
       cwd: path.join(__dirname, app.name),
       npg_debug: false
@@ -336,7 +346,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' via remote passes tests ' + app.args, (t) => {
+  ciSkip(app.name + ' via remote passes tests ' + app.args, (t) => {
     const opts = {
       cwd: path.join(__dirname, app.name),
       npg_debug: false
@@ -348,7 +358,7 @@ apps.forEach((app) => {
     });
   });
 
-  test(app.name + ' unpublishes ' + app.args, (t) => {
+  ciSkip(app.name + ' unpublishes ' + app.args, (t) => {
     run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
       t.ifError(err);
       t.notEqual(stdout, '');

@@ -27,8 +27,8 @@ matrix:
         - npm run lint
         - npm run coverage
       after_script:
-        - [ "$TRAVIS_SECURE_ENV_VARS" = "true" ] && npm run upload-coverage
-    # Test node v12 with needle + coverage reporting
+        - npm run upload-coverage
+    # Test node v12 coverage reporting
     - os: linux
       node_js: 12
       # mock s3 on jobs that post coverage

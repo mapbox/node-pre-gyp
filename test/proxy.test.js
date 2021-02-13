@@ -1,6 +1,6 @@
 'use strict';
 
-const tape = require('tape');
+const test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
@@ -22,7 +22,7 @@ let initial_s3_host;
 let initial_mock_s3;
 
 // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
-tape.Test.prototype.stringContains = function(actual, contents, message) {
+test.Test.prototype.stringContains = function(actual, contents, message) {
   this._assert(actual.indexOf(contents) > -1, {
     message: message || 'should contain ' + contents,
     operator: 'stringContains',
@@ -40,16 +40,14 @@ const isCI = process.env.CI && process.env.CI.toLowerCase() === 'true'
 
 function ciSkip(...args) {
   if (isCI) {
-    tape.skip(...args);
+    test.skip(...args);
   } else {
-    tape(...args);
+    test(...args);
   }
 }
 ciSkip.skip = function(...args) {
-  tape.skip(...args);
+  test.skip(...args);
 };
-
-const test = tape;
 
 test('setup proxy server', (t) => {
   delete process.env.http_proxy;

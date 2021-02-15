@@ -10,9 +10,8 @@ const napi = require('../lib/util/napi.js');
 const versioning = require('../lib/util/versioning.js');
 const tar = require('tar');
 
-// this is a duplicate of build.test.js and should be kept in sync with it
-// as much as possible. the differences are that this setups up a proxy server
-// and only executes apps 1 and 7.
+// this is a derived from build.test.js and should be kept in sync with it
+// as much as possible.
 const { mockS3Http } = require('../lib/node-pre-gyp.js');
 const proxy = require('./proxy.util');
 
@@ -21,6 +20,34 @@ const proxyServer = `http://localhost:${proxyPort}`;
 
 let initial_s3_host;
 let initial_mock_s3;
+
+// https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
+test.Test.prototype.stringContains = function(actual, contents, message) {
+  this._assert(actual.indexOf(contents) > -1, {
+    message: message || 'should contain ' + contents,
+    operator: 'stringContains',
+    actual: actual,
+    expected: contents
+  });
+};
+
+//
+// skip tests that require a real S3 bucket when in a CI environment
+// and the AWS access key is not available.
+//
+const isCI = process.env.CI && process.env.CI.toLowerCase() === 'true'
+  && !process.env.AWS_ACCESS_KEY_ID;
+
+function ciSkip(...args) {
+  if (isCI) {
+    test.skip(...args);
+  } else {
+    test(...args);
+  }
+}
+ciSkip.skip = function(...args) {
+  test.skip(...args);
+};
 
 test('setup proxy server', (t) => {
   delete process.env.http_proxy;
@@ -57,17 +84,6 @@ const apps = [
     }
   }
 ];
-
-
-// https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
-test.Test.prototype.stringContains = function(actual, contents, message) {
-  this._assert(actual.indexOf(contents) > -1, {
-    message: message || 'should contain ' + contents,
-    operator: 'stringContains',
-    actual: actual,
-    expected: contents
-  });
-};
 
 // Because the below tests only ensure that flags can be correctly passed to node-gyp is it not
 // likely they will behave differently for different apps. So we save time by avoiding running these for each app.
@@ -273,87 +289,80 @@ apps.forEach((app) => {
     });
   });
 
-  const env = process.env;
-  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
+  ciSkip(app.name + ' publishes ' + app.args, (t) => {
+    run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
+    });
+  });
 
-    test(app.name + ' publishes ' + app.args, (t) => {
-      run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
+  ciSkip(app.name + ' info shows it ' + app.args, (t) => {
+    run('node-pre-gyp', 'reveal', 'package_name', app, {}, (err, stdout) => {
+      t.ifError(err);
+      let package_name = stdout.trim();
+      if (package_name.indexOf('\n') !== -1) { // take just the first line
+        package_name = package_name.substr(0, package_name.indexOf('\n'));
+      }
+      run('node-pre-gyp', 'info', '', app, {}, (err2, stdout2) => {
+        t.ifError(err2);
+        t.stringContains(stdout2, package_name);
         t.end();
       });
     });
+  });
 
-    test(app.name + ' info shows it ' + app.args, (t) => {
-      run('node-pre-gyp', 'reveal', 'package_name', app, {}, (err, stdout) => {
-        t.ifError(err);
-        let package_name = stdout.trim();
-        if (package_name.indexOf('\n') !== -1) { // take just the first line
-          package_name = package_name.substr(0, package_name.indexOf('\n'));
-        }
-        run('node-pre-gyp', 'info', '', app, {}, (err2, stdout2) => {
-          t.ifError(err2);
-          t.stringContains(stdout2, package_name);
-          t.end();
-        });
-      });
+  ciSkip(app.name + ' can be uninstalled ' + app.args, (t) => {
+    run('node-pre-gyp', 'clean', '', app, {}, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
     });
+  });
 
-    test(app.name + ' can be uninstalled ' + app.args, (t) => {
-      run('node-pre-gyp', 'clean', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
+  ciSkip(app.name + ' can be installed via remote ' + app.args, (t) => {
+    const opts = {
+      cwd: path.join(__dirname, app.name),
+      npg_debug: false
+    };
+    run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
     });
+  });
 
-    test(app.name + ' can be installed via remote ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
+  ciSkip(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
+    const opts = {
+      cwd: path.join(__dirname, app.name),
+      npg_debug: false
+    };
+    run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
     });
+  });
 
-    test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
+  ciSkip(app.name + ' via remote passes tests ' + app.args, (t) => {
+    const opts = {
+      cwd: path.join(__dirname, app.name),
+      npg_debug: false
+    };
+    run('npm', 'install', '', app, opts, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
     });
+  });
 
-    test(app.name + ' via remote passes tests ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
+  ciSkip(app.name + ' unpublishes ' + app.args, (t) => {
+    run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
+      t.ifError(err);
+      t.notEqual(stdout, '');
+      t.end();
     });
-
-    test(app.name + ' unpublishes ' + app.args, (t) => {
-      run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-  } else {
-    test.skip(app.name + ' publishes ' + app.args, () => {});
-  }
+  });
 
   // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all following tests will fail
 

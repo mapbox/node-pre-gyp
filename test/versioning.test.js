@@ -228,3 +228,24 @@ test('should verify host overrides staging and production values', (t) => {
   t.end();
 });
 
+test('should replace "-" with "_" in custom binary host', (t) => {
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'canvas-prebuilt',
+      module_path: 'build/Release',
+      host: 'https://github.com/node-gfx/node-canvas-prebuilt/releases/download/',
+      remote_path: 'v{version}',
+      package_name: '{module_name}-v{version}-{node_abi}-{platform}-{libc}-{arch}.tar.gz'
+    }
+  };
+
+  process.env.npm_config_canvas_prebuilt_binary_host_mirror = 'https://npm.taobao.org/mirrors/node-canvas-prebuilt/';
+  const opts = versioning.evaluate(mock_package_json, {});
+  t.equal(opts.host, 'https://npm.taobao.org/mirrors/node-canvas-prebuilt/');
+  delete process.env.npm_config_canvas_prebuilt_binary_host_mirror;
+  t.end();
+});
+

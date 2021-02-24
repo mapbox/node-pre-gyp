@@ -3,7 +3,7 @@
 const run = require('./run.util.js');
 const test = require('tape');
 
-const app = { 'name': 'app7', 'args': '' };
+const app = { 'name': 'app1', 'args': '' };
 const target_arch = 'ia32';
 const new_env = JSON.parse(JSON.stringify(process.env));
 new_env.npm_config_arch = target_arch;

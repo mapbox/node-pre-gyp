@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.1
+- Switched from mkdirp@1.0.4 to make-dir@3.1.0 to avoid this bug: https://github.com/isaacs/node-mkdirp/issues/31
+
 ## 1.0.0
 - Module is now name-spaced at `@mapbox/node-pre-gyp` and the original `node-pre-gyp` is deprecated.
 - New: support for staging and production s3 targets (see README.md)

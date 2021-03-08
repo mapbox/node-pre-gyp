@@ -22,7 +22,7 @@
   "dependencies": {
     "detect-libc": "^1.0.3",
     "http-proxy-agent": "^4.0.1",
-    "mkdirp": "^1.0.4",
+    "make-dir": "^3.1.0",
     "node-fetch": "^2.6.1",
     "nopt": "^5.0.0",
     "npmlog": "^4.1.2",

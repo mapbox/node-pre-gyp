@@ -1,7 +1,7 @@
 'use strict';
 
 //
-// this module implements a proxy server to that can be used to test proxy
+// this module implements a proxy server that can be used to test proxy
 // access.
 //
 

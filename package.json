@@ -33,6 +33,7 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^4.6.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
+    "@particle/unpack-file": "^2.0.2",
     "action-walk": "^2.2.0",
     "aws-sdk": "^2.840.0",
     "codecov": "^3.8.1",

@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { createUnzip } = require('zlib');
+const os = require('os');
 
 const tar = require('tar-fs');
 const Agent = require('https-proxy-agent');
@@ -25,7 +26,7 @@ let initial_s3_host;
 let initial_mock_s3;
 
 // the temporary download directory and file
-const downloadDir = 'download';
+const downloadDir = `${os.tmpdir()}/npg-download`;
 
 // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
 test.Test.prototype.stringContains = function(actual, contents, message) {

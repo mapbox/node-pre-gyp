@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const { createUnzip } = require('zlib');
 
 const tar = require('tar-fs');
@@ -101,11 +102,13 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
     return res.body;
   }
 
+  const withDir = path.join(downloadDir, 'napi-v3', 'bcrypt_lib.node');
+  const withoutDir = path.join('napi-v3', 'bcrypt_lib.node');
   let expectedCount = 0;
 
   const tarOptions = {
     ignore: (name, header) => {
-      if (name === `${downloadDir}/napi-v3/bcrypt_lib.node` && header.name === 'napi-v3/bcrypt_lib.node') {
+      if (name === withDir && header.name === withoutDir) {
         expectedCount += 1;
       }
       return false;
@@ -134,7 +137,7 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
     // is focused on proxy support.
     .then(() => {
       t.equal(expectedCount, 1, 'should find the expected file in the tar stream');
-      t.doesNotThrow(() => fs.statSync(`${downloadDir}/napi-v3/bcrypt_lib.node`));
+      t.doesNotThrow(() => fs.statSync(withDir));
       t.end();
     })
     .catch((e) => {

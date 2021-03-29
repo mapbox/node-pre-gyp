@@ -1,12 +1,12 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
+const { createUnzip } = require('zlib');
 
+const tar = require('tar-fs');
 const Agent = require('https-proxy-agent');
 const fetch = require('node-fetch');
 const rimraf = require('rimraf');
-const unpack = require('@particle/unpack-file');
 
 const test = require('tape');
 
@@ -25,7 +25,6 @@ let initial_mock_s3;
 
 // the temporary download directory and file
 const downloadDir = 'download';
-const tarfileName = 'bruce.tar.gz';
 
 // https://stackoverflow.com/questions/38599457/how-to-write-a-custom-assertion-for-testing-node-or-javascript-with-tape-or-che
 test.Test.prototype.stringContains = function(actual, contents, message) {
@@ -76,31 +75,53 @@ test('setup proxy server', (t) => {
 
   process.env.NOCK_OFF = true;
 
-  fs.mkdir('download', (e) => {
-    if (e && e.code !== 'EEXIST') {
-      t.error(e);
-      return;
-    }
-    t.end();
+  // make sure the download directory deleted then create an empty one
+  rimraf(downloadDir, () => {
+    fs.mkdir('download', (e) => {
+      if (e && e.code !== 'EEXIST') {
+        t.error(e);
+        return;
+      }
+      t.end();
+    });
   });
+
+
 });
 
 test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (t) => {
-  const url = 'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-musl.tar.gz';
+  // "{module_name}-v{version}-napi-v{napi_build_version}-{platform}-{arch}-{libc}.tar.gz"
+  const url = 'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
 
   async function getBcrypt() {
     const res = await fetch(url, options);
     if (res.status !== 200) {
-      throw new Error('fetch got', res.status);
+      throw new Error(`fetch got error ${res.status}`);
     }
     return res.body;
   }
 
-  const dest = `${downloadDir}/${tarfileName}`;
+  let expectedCount = 0;
+
+  const tarOptions = {
+    ignore: (name, header) => {
+      if (name === `${downloadDir}/napi-v3/bcrypt_lib.node` && header.name === 'napi-v3/bcrypt_lib.node') {
+        expectedCount += 1;
+      }
+      return false;
+    }
+  };
+
   getBcrypt()
     .then((stream) => {
-      stream.pipe(fs.createWriteStream(dest));
-      return stream;
+      const unzip = createUnzip();
+      stream
+        .pipe(unzip);
+
+      unzip
+        .pipe(tar.extract(`${downloadDir}`, tarOptions));
+
+      return unzip;
     })
     .then((stream) => {
       return new Promise((resolve, reject) => {
@@ -108,18 +129,19 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
         stream.on('error', reject);
       });
     })
-    // if no errors on download and it unpacks that should be good enough
-    .then(() => unpack.unpackTarGz(path.resolve(dest), path.resolve(downloadDir)))
+    // if no errors on download and the file is there that's good enough. napi version
+    // differences make it harder to select a version that is loadable, and this test
+    // is focused on proxy support.
     .then(() => {
-      t.doesNotThrow(() => fs.statSync(`${downloadDir}/napi-v3`));
+      t.equal(expectedCount, 1, 'should find the expected file in the tar stream');
       t.doesNotThrow(() => fs.statSync(`${downloadDir}/napi-v3/bcrypt_lib.node`));
       t.end();
     })
     .catch((e) => {
+      console.log(e);
       t.error(e);
     });
 });
-
 
 // this is really just onFinish() but local to the tests in this file
 test(`cleanup after ${__filename}`, (t) => {

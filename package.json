@@ -33,7 +33,6 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^4.6.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "@particle/unpack-file": "^2.0.2",
     "action-walk": "^2.2.0",
     "aws-sdk": "^2.840.0",
     "codecov": "^3.8.1",
@@ -43,7 +42,8 @@
     "nock": "^12.0.3",
     "node-addon-api": "^3.1.0",
     "nyc": "^15.1.0",
-    "tape": "^5.2.2"
+    "tape": "^5.2.2",
+    "tar-fs": "^2.1.1"
   },
   "nyc": {
     "all": true,

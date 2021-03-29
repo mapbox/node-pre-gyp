@@ -103,12 +103,12 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
   }
 
   const withDir = path.join(downloadDir, 'napi-v3', 'bcrypt_lib.node');
-  const withoutDir = path.join('napi-v3', 'bcrypt_lib.node');
+  const rawPath = 'napi-v3/bcrypt_lib.node';
   let expectedCount = 0;
 
   const tarOptions = {
     ignore: (name, header) => {
-      if (name === withDir && header.name === withoutDir) {
+      if (name === withDir && header.name === rawPath) {
         expectedCount += 1;
       }
       return false;

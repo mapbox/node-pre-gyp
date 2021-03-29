@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.2
+- Fixed regression in proxy support (https://github.com/mapbox/node-pre-gyp/issues/572)
+
 ## 1.0.1
 - Switched from mkdirp@1.0.4 to make-dir@3.1.0 to avoid this bug: https://github.com/isaacs/node-mkdirp/issues/31
 

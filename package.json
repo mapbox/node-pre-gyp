@@ -21,7 +21,7 @@
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^1.0.3",
-    "http-proxy-agent": "^4.0.1",
+    "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.1",
     "nopt": "^5.0.0",
@@ -42,7 +42,8 @@
     "nock": "^12.0.3",
     "node-addon-api": "^3.1.0",
     "nyc": "^15.1.0",
-    "tape": "^5.1.1"
+    "tape": "^5.2.2",
+    "tar-fs": "^2.1.1"
   },
   "nyc": {
     "all": true,

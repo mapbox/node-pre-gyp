@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 1.0.3
+- Improved support configuring s3 uploads (solves https://github.com/mapbox/node-pre-gyp/issues/571)
+  - New options added in https://github.com/mapbox/node-pre-gyp/pull/576: 'bucket', 'region', and `s3ForcePathStyle`
+
 ## 1.0.2
 - Fixed regression in proxy support (https://github.com/mapbox/node-pre-gyp/issues/572)
 

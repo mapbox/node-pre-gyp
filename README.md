@@ -161,13 +161,27 @@ It is highly recommended that you use Amazon S3. The reasons are:
 
 Why then not require S3? Because while some applications using node-pre-gyp need to distribute binaries as large as 20-30 MB, others might have very small binaries and might wish to store them in a GitHub repo. This is not recommended, but if an author really wants to host in a non-S3 location then it should be possible.
 
-It is also possible to use an s3-compatible storage backend, such as minio, as well as non-standard s3 endpoints. In this case, you can specify the following properties in the `binary` section:
-  - `host`: should be the root url of the storage server.
-  - `bucket`
-  - `region`
-  - `s3ForcePathStyle` [optional, default: `false`, must be set to `true` for minio servers]
-
 It should also be mentioned that there is an optional and entirely separate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-github publish```.
+
+##### The `binary` object other optional S3 properties
+
+If you are not using a standard s3 path like `bucket_name.s3(.-)region.amazonaws.com`, you might get an error on `publish` because node-pre-gyp extracts the region and bucket from the `host` url. For example, you may have an on-premises s3-compatible storage  server, or may have configured a specific dns redirecting to an s3  endpoint. In these cases, you can explicitly set the `region` and `bucket` properties to tell node-pre-gyp to use these values instead of guessing from the `host` property. The following values can be used in the `binary` section:
+
+###### host
+
+The url to the remote server root location (must be `https` not `http`).
+
+###### bucket
+
+The bucket name where your tarball binaries should be located.
+
+###### region
+
+Your S3 server region.
+
+###### s3ForcePathStyle
+
+Set `s3ForcePathStyle` to true if the endpoint url should not be prefixed with the bucket name. If false (default), the server endpoint would be  constructed as `bucket_name.your_server.com`.
 
 ##### The `binary` object has optional properties
 

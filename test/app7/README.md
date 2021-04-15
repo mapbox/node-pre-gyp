@@ -1,3 +1,3 @@
 # Test app
 
-Demonstrates using N-API to return a JavaScript string object.
+Demonstrates using Node-API to return a JavaScript string object.

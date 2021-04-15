@@ -333,17 +333,17 @@ is present and not `staging` or `production` an exception is thrown.
 This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
 `--s3_option=production` in order to publish to production making accidental publishing less likely.
 
-## N-API Considerations
+## Node-API Considerations
 
-[N-API](https://nodejs.org/api/n-api.html#n_api_n_api) is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. N-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future.
+[Node-API](https://nodejs.org/api/n-api.html#n_api_node_api), which was previously known as N-API, is an ABI-stable alternative to previous technologies such as [nan](https://github.com/nodejs/nan) which are tied to a specific Node runtime engine. Node-API is Node runtime engine agnostic and guarantees modules created today will continue to run, without changes, into the future.
 
-Using `node-pre-gyp` with N-API projects requires a handful of additional configuration values and imposes some additional requirements.
+Using `node-pre-gyp` with Node-API projects requires a handful of additional configuration values and imposes some additional requirements.
 
-The most significant difference is that an N-API module can be coded to target multiple  N-API versions. Therefore, an N-API module must declare in its `package.json` file which N-API versions the module is designed to run against. In addition, since multiple builds may be required for a single module, path and file names must be specified in way that avoids naming conflicts.
+The most significant difference is that an Node-API module can be coded to target multiple  Node-API versions. Therefore, an Node-API module must declare in its `package.json` file which Node-API versions the module is designed to run against. In addition, since multiple builds may be required for a single module, path and file names must be specified in way that avoids naming conflicts.
 
 ### The `napi_versions` array property
 
-An N-API modules must declare in its `package.json` file, the N-API versions the module is intended to support. This is accomplished by including an `napi-versions` array property in the `binary` object. For example:
+A Node-API module must declare in its `package.json` file, the Node-API versions the module is intended to support. This is accomplished by including an `napi-versions` array property in the `binary` object. For example:
 
 ```js
 "binary": {
@@ -354,17 +354,17 @@ An N-API modules must declare in its `package.json` file, the N-API versions the
   }
 ```
 
-If the `napi_versions` array property is *not* present, `node-pre-gyp` operates as it always has. Including the `napi_versions` array property instructs `node-pre-gyp` that this is a N-API module build.
+If the `napi_versions` array property is *not* present, `node-pre-gyp` operates as it always has. Including the `napi_versions` array property instructs `node-pre-gyp` that this is a Node-API module build.
 
-When the `napi_versions` array property is present, `node-pre-gyp` fires off multiple operations, one for each of the N-API versions in the array. In the example above, two operations are initiated, one for N-API version 1 and second for N-API version 3. How this version number is communicated is described next.
+When the `napi_versions` array property is present, `node-pre-gyp` fires off multiple operations, one for each of the Node-API versions in the array. In the example above, two operations are initiated, one for Node-API version 1 and second for Node-API version 3. How this version number is communicated is described next.
 
 ### The `napi_build_version` value
 
-For each of the N-API module operations `node-pre-gyp` initiates, it ensures that the `napi_build_version` is set appropriately.
+For each of the Node-API module operations `node-pre-gyp` initiates, it ensures that the `napi_build_version` is set appropriately.
 
 This value is of importance in two areas:
 
-1. The C/C++ code which needs to know against which N-API version it should compile.
+1. The C/C++ code which needs to know against which Node-API version it should compile.
 2. `node-pre-gyp` itself which must assign appropriate path and file names to avoid collisions.
 
 ### Defining `NAPI_VERSION` for the C/C++ code
@@ -379,13 +379,13 @@ The `napi_build_version` value is communicated to the C/C++ code by adding this 
 
 This ensures that `NAPI_VERSION`, an integer value, is declared appropriately to the C/C++ code for each build.
 
-> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is preferred because it used by the N-API C/C++ headers to configure the specific N-API versions being requested.
+> Note that earlier versions of this document recommended defining the symbol `NAPI_BUILD_VERSION`. `NAPI_VERSION` is preferred because it used by the Node-API C/C++ headers to configure the specific Node-API versions being requested.
 
 ### Path and file naming requirements in `package.json`
 
 Since `node-pre-gyp` fires off multiple operations for each request, it is essential that path and file names be created in such a way as to avoid collisions. This is accomplished by imposing additional path and file naming requirements.
 
-Specifically, when performing N-API builds, the `{napi_build_version}` text configuration value  *must* be present in the `module_path` property. In addition, the `{napi_build_version}` text configuration value  *must* be present in either the `remote_path` or `package_name` property. (No problem if it's in both.)
+Specifically, when performing Node-API builds, the `{napi_build_version}` text configuration value  *must* be present in the `module_path` property. In addition, the `{napi_build_version}` text configuration value  *must* be present in either the `remote_path` or `package_name` property. (No problem if it's in both.)
 
 Here's an example:
 
@@ -400,15 +400,15 @@ Here's an example:
   }
 ```
 
-## Supporting both N-API and NAN builds
+## Supporting both Node-API and NAN builds
 
-You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support N-API, as you add N-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property.
+You may have a legacy native add-on that you wish to continue supporting for those versions of Node that do not support Node-API, as you add Node-API support for later Node versions. This can be accomplished by specifying the `node_napi_label` configuration value in the package.json `binary.package_name` property.
 
-Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable N-API binaries supported by the current Node instance. If the current Node instance does not support N-API, `node-pre-gyp` will request a traditional, non-N-API build.
+Placing the configuration value `node_napi_label` in the package.json `binary.package_name` property instructs `node-pre-gyp` to build all viable Node-API binaries supported by the current Node instance. If the current Node instance does not support Node-API, `node-pre-gyp` will request a traditional, non-Node-API build.
 
-The configuration value `node_napi_label` is set by `node-pre-gyp` to the type of build created, `napi` or `node`, and the version number. For N-API builds, the string contains the N-API version nad has values like `napi-v3`. For traditional, non-N-API builds, the string contains the ABI version with values like `node-v46`.
+The configuration value `node_napi_label` is set by `node-pre-gyp` to the type of build created, `napi` or `node`, and the version number. For Node-API builds, the string contains the Node-API version nad has values like `napi-v3`. For traditional, non-Node-API builds, the string contains the ABI version with values like `node-v46`.
 
-Here's how the `binary` configuration above might be changed to support both N-API and NAN builds:
+Here's how the `binary` configuration above might be changed to support both Node-API and NAN builds:
 
 ```js
 "binary": {
@@ -421,13 +421,13 @@ Here's how the `binary` configuration above might be changed to support both N-A
   }
 ```
 
-The C/C++ symbol `NAPI_VERSION` can be used to distinguish N-API and non-N-API builds. The value of `NAPI_VERSION` is set to the integer N-API version for N-API builds and is set to `0` for non-N-API builds.
+The C/C++ symbol `NAPI_VERSION` can be used to distinguish Node-API and non-Node-API builds. The value of `NAPI_VERSION` is set to the integer Node-API version for Node-API builds and is set to `0` for non-Node-API builds.
 
 For example:
 
 ```C
 #if NAPI_VERSION
-// N-API code goes here
+// Node-API code goes here
 #else
 // NAN code goes here
 #endif
@@ -437,7 +437,7 @@ For example:
 
 The following two configuration values, which were implemented in previous versions of `node-pre-gyp`, continue to exist, but have been replaced by the `node_napi_label` configuration value described above.
 
-1. `napi_version` If N-API is supported by the currently executing Node instance, this value is the N-API version number supported by Node. If N-API is not supported, this value is an empty string.
+1. `napi_version` If Node-API is supported by the currently executing Node instance, this value is the Node-API version number supported by Node. If Node-API is not supported, this value is an empty string.
 
 2. `node_abi_napi` If the value returned for `napi_version` is non empty, this value is `'napi'`. If the value returned for `napi_version` is empty, this value is the value returned for `node_abi`.
 

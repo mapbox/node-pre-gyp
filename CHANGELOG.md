@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.4
+- Added node v16 to the internal node releases listing
+
 ## 1.0.3
 - Improved support configuring s3 uploads (solves https://github.com/mapbox/node-pre-gyp/issues/571)
   - New options added in https://github.com/mapbox/node-pre-gyp/pull/576: 'bucket', 'region', and `s3ForcePathStyle`

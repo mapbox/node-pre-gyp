@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.5
+- Fix circular reference warning with node >= v14
+
 ## 1.0.4
 - Added node v16 to the internal node releases listing
 

@@ -81,7 +81,7 @@ test('should set staging and production hosts', (t) => {
     mpj.binary.host = '';
     const opts = { argv: [cmd] };
     ({ prog } = setupTest(dir, mpj, opts));
-    mpj.binary.host = cmd === 'publish' ? mpj.binary.staging_host : mpj.binary.production_host;
+    mpj.binary.host = (cmd === 'publish' || cmd === 'unpublish') ? mpj.binary.staging_host : mpj.binary.production_host;
     t.deepEqual(prog.package_json, mpj, 'host should be correct for command: ' + cmd);
     t.equal(prog.binaryHostSet, true, 'binary host should be flagged as set');
   });

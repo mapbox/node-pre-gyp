@@ -324,14 +324,14 @@ must be true.
 
 If any of these checks fail then the operation will not perform execution time determination of the s3 target.
 
-If the command being executed is "publish" then the default is set to `binary.staging_host`. In all other cases
+If the command being executed is either "publish" or "unpublish" then the default is set to `binary.staging_host`. In all other cases
 the default is `binary.production_host`.
 
 The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
 is present and not `staging` or `production` an exception is thrown.
 
 This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
-`--s3_option=production` in order to publish to production making accidental publishing less likely.
+`--s3_option=production` in order to publish to, or unpublish from, production, making accidental errors less likely.
 
 ## Node-API Considerations
 
@@ -598,8 +598,8 @@ Make sure you run this command from within the directory of your module.
 
 Use `travis-encrypt` like:
 
-    travis encrypt node_pre_gyp_accessKeyId=${node_pre_gyp_accessKeyId}
-    travis encrypt node_pre_gyp_secretAccessKey=${node_pre_gyp_secretAccessKey}
+    travis encrypt AWS_ACCESS_KEY_ID=${node_pre_gyp_accessKeyId}
+    travis encrypt AWS_SECRET_ACCESS_KEY=${node_pre_gyp_secretAccessKey}
 
 Then put those values in your `.travis.yml` like:
 

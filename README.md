@@ -598,8 +598,8 @@ Make sure you run this command from within the directory of your module.
 
 Use `travis-encrypt` like:
 
-    travis encrypt node_pre_gyp_accessKeyId=${node_pre_gyp_accessKeyId}
-    travis encrypt node_pre_gyp_secretAccessKey=${node_pre_gyp_secretAccessKey}
+    travis encrypt AWS_ACCESS_KEY_ID=${node_pre_gyp_accessKeyId}
+    travis encrypt AWS_SECRET_ACCESS_KEY=${node_pre_gyp_secretAccessKey}
 
 Then put those values in your `.travis.yml` like:
 

@@ -3,9 +3,7 @@ language: node_js
 services:
   - xvfb
 
-addons:
-  apt:
-    packages: [ 'python' ]
+dist: bionic
 
 ##### WARNING
 # node-pre-gyp tests are not concurrency safe

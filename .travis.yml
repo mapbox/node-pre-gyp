@@ -3,6 +3,10 @@ language: node_js
 services:
   - xvfb
 
+addons:
+  apt:
+    packages: [ 'python' ]
+
 ##### WARNING
 # node-pre-gyp tests are not concurrency safe
 # such that in the below travis builds we cannot

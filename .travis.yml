@@ -68,10 +68,11 @@ install:
 
 script:
 - npm test
-- ls ./test/app4/lib/binding/node-v93-linux-x64 || true
-- ls ./test/app4/lib/binding/node-v93-linux-x64/lib.target/ || true
-- ldd ./test/app4/lib/binding/node-v93-linux-x64/app4.node || true
-- ldd ./test/app4/lib/binding/node-v93-linux-x64/lib.target/mylib.so || true
+- export MODULE_VER=$(node -e "console.log(process.versions.modules)")
+- ls ./test/app4/lib/binding/node-v${MODULE_VER}-linux-x64 || true
+- ls ./test/app4/lib/binding/node-v${MODULE_VER}-linux-x64/lib.target/ || true
+- ldd ./test/app4/lib/binding/node-v${MODULE_VER}-linux-x64/app4.node || true
+- ldd ./test/app4/lib/binding/node-v${MODULE_VER}-linux-x64/lib.target/mylib.so || true
 - python -c "import ctypes;ctypes.CDLL('/home/travis/build/mapbox/node-pre-gyp/test/app4/lib/binding/node-v93-linux-x64/lib.target/mylib.dylib')" || true
 - python -c "import ctypes;ctypes.CDLL('/home/travis/build/mapbox/node-pre-gyp/test/app4/lib/binding/node-v93-linux-x64/app4.node')" || true
 - cd ./test/app4/

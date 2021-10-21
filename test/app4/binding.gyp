@@ -40,6 +40,11 @@
                {
                 "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
                 "destination": "<(module_path)/lib.target/"
+               },
+               # gyp inside node v16 uses -rpath=$ORIGIN/ instead of -rpath=$ORIGIN/lib.target/
+               {
+                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
+                "destination": "<(module_path)/"
                }
              ]
           }

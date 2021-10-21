@@ -68,3 +68,7 @@ install:
 
 script:
 - npm test
+- ls ./test/app4/lib/binding/node-v93-linux-x64 || true
+- ls ./test/app4/lib/binding/node-v93-linux-x64/lib.target/ || true
+- cd ./test/app4/
+- ../../bin/node-pre-gyp rebuild --verbose || true

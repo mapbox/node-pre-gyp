@@ -21,6 +21,7 @@
         ]
     },
     "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build"
+        "install": "node-pre-gyp install --fallback-to-build",
+        "test": "node index.js"
     }
 }

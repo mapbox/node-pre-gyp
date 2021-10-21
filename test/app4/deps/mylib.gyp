@@ -14,7 +14,7 @@
               'include_dirs': [ 'include/' ],
             },
             'xcode_settings': {
-              'DYLIB_INSTALL_NAME_BASE': '@loader_path/lib.target/',
+              'DYLIB_INSTALL_NAME_BASE': '@loader_path',
               "MACOSX_DEPLOYMENT_TARGET":"10.9",
               "CLANG_CXX_LIBRARY": "libc++"
             }

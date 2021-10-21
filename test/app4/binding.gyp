@@ -23,32 +23,13 @@
       "dependencies": [ "<(module_name)" ],
       "copies": [
         {
-          "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
-          "destination": "<(module_path)/"
+            "files": [ "<(PRODUCT_DIR)/<(module_name).node" ],
+            "destination": "<(module_path)/"
         },
-      ],
-      'conditions': [
-          ['OS == "win"', {
-             "copies": [
-               {
-                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
-                "destination": "<(module_path)/"
-               }
-             ]
-          }, {
-             "copies": [
-               {
-                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
-                "destination": "<(module_path)/lib.target/"
-               },
-               # gyp inside node v16 uses -rpath=$ORIGIN/ instead of -rpath=$ORIGIN/lib.target/
-               {
-                "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
-                "destination": "<(module_path)/"
-               }
-             ]
-          }
-          ]
+        {
+            "files": [ "<(PRODUCT_DIR)/mylib<(SHARED_LIB_SUFFIX)" ],
+            "destination": "<(module_path)/"
+        }
       ]
     }
   ]

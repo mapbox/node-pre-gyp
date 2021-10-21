@@ -52,7 +52,7 @@ const apps = [
     'name': 'app4',
     'args': '',
     'files': {
-      'base': [[localVer, 'app4.node'].join('/'), [localVer, 'lib.target', 'mylib.' + SOEXT].join('/')]
+      'base': [[localVer, 'app4.node'].join('/'), [localVer, 'mylib.' + SOEXT].join('/')]
     }
   },
   {

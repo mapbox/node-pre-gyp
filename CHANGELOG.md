@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.7
+- Upgraded nyc and npmlog to address https://github.com/advisories/GHSA-93q8-gq69-wqmw
+
 ## 1.0.6
 - Added node v17 to the internal node releases listing
 - Upgraded various dependencies declared in package.json to latest major versions (node-fetch from 2.6.1 to 2.6.5, npmlog from 4.1.2 to 5.01, semver from 7.3.4 to 7.3.5, and tar from 6.1.0 to 6.1.11)

@@ -12,6 +12,9 @@ dist: bionic
 # otherwise they will clobber each other
 #####
 
+install:
+  - npm ci --engine-strict
+
 matrix:
   include:
     # Test node v10 with request override + coverage reporting

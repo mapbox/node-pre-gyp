@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.8
+- Downgraded npmlog to maintain node v10 and v8 support (https://github.com/mapbox/node-pre-gyp/pull/624)
+
 ## 1.0.7
 - Upgraded nyc and npmlog to address https://github.com/advisories/GHSA-93q8-gq69-wqmw
 

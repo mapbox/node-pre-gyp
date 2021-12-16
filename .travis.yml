@@ -64,9 +64,6 @@ matrix:
     #     - ./scripts/test-node-webkit.sh
 
 install:
-  # upgrade npm to be able to correctly support --engine-strict doing the right thing
-  # we don't (currently) upgrade to more recent npm in order to keep support for node v8
-  - npm i npm@7 -g
   - npm ci --engine-strict
 
 script:

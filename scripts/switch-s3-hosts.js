@@ -17,7 +17,7 @@
 //
 
 const fs = require('fs');
-const walk = require('action-walk');
+const walk = require('action-walk'); // eslint-disable-line node/no-missing-require
 
 const [maj, min] = process.versions.node.split('.');
 if (`${maj}.${min}` < 10.1) {

@@ -25,7 +25,7 @@
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.5",
     "nopt": "^5.0.0",
-    "npmlog": "^6.0.0",
+    "npmlog": "^5.0.1",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5",
     "tar": "^6.1.11"
@@ -33,7 +33,6 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^5.1.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "action-walk": "^2.2.0",
     "aws-sdk": "^2.1012.0",
     "codecov": "^3.8.3",
     "eslint": "^7.32.0",

@@ -64,7 +64,7 @@ matrix:
     #     - ./scripts/test-node-webkit.sh
 
 install:
-- npm ci
+  - npm ci --engine-strict
 
 script:
-- npm test
+  - npm test

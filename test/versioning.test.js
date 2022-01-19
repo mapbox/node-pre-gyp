@@ -125,7 +125,7 @@ test('should detect libc', (t) => {
     }
   };
   const opts = versioning.evaluate(mock_package_json, { module_root: '/root' });
-  const expected_libc_token = detect_libc.family || 'unknown';
+  const expected_libc_token = detect_libc.familySync() || 'unknown';
   t.comment('performing test with the following libc token: ' + expected_libc_token);
   t.equal(opts.module_path, path.normalize('/root/lib/binding/test-' + expected_libc_token));
   t.equal(opts.module, path.normalize('/root/lib/binding/test-' + expected_libc_token + '/test.node'));

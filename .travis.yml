@@ -45,12 +45,18 @@ matrix:
     # Test node v14
     - os: linux
       node_js: 14
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node v16
     - os: linux
       node_js: 16
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node v8
     - os: linux
       node_js: 8
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node webkit
     # broken per https://github.com/mapbox/node-pre-gyp/issues/614
     # - os: linux

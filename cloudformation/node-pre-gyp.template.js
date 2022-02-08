@@ -1,72 +1,31 @@
-'use strict';
-
 const s3Template = require('@mapbox/s3-bucket-template');
-const bucketName = 'mapbox-node-pre-gyp-public-testing-bucket';
+const cf = require('@mapbox/cloudfriend');
 
-module.exports = s3Template.build({
-  BucketName: bucketName,
-  PublicAccessBlock: false,
+const template = s3Template.build({
+  BucketName: 'mapbox-node-pre-gyp-public-testing-bucket',
+  PublicAccessBlockOptions: {
+    BlockPublicAcls: true,
+    IgnorePublicAcls: true,
+    BlockPublicPolicy: false,
+    RestrictPublicBuckets: false,
+  },
   BucketPolicy: {
-    'Type': 'AWS::S3::BucketPolicy',
-    'DependsOn': 'Bucket',
-    'Properties': {
-      'Bucket': bucketName,
-      'PolicyDocument': {
-        'Statement': [
+    Type: 'AWS::S3::BucketPolicy',
+    Properties: {
+      Bucket: cf.ref('Bucket'),
+      PolicyDocument: {
+        Statement: [
           {
-            'Sid': 'Prevent Changing Bucket ACL',
-            'Effect': 'Deny',
-            'Principal': {
-              'AWS': '*'
-            },
-            'Action': [
-              's3:PutBucketAcl'
-            ],
-            'Resource': [
-              {
-                'Fn::Join': [
-                  '',
-                  [
-                    'arn:',
-                    {
-                      'Ref': 'AWS::Partition'
-                    },
-                    ':s3:::',
-                    bucketName
-                  ]
-                ]
-              }
-            ]
+            Effect: 'Allow',
+            Action: 's3:GetObject',
+            Principal: '*',
+            Resource: 'arn:aws:s3:::mapbox-node-pre-gyp-public-testing-bucket/*',
           },
-          {
-            'Sid': 'Allow setting Objects and ACLs, deleting, getting',
-            'Effect': 'Allow',
-            'Principal': {
-              'AWS': '*'
-            },
-            'Action': [
-              's3:GetObject',
-              's3:GetObjectAcl'
-            ],
-            'Resource': [
-              {
-                'Fn::Join': [
-                  '',
-                  [
-                    'arn:',
-                    {
-                      'Ref': 'AWS::Partition'
-                    },
-                    ':s3:::',
-                    bucketName,
-                    '/*'
-                  ]
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    }
-  }
+        ],
+      },
+    },
+  },
 });
+
+delete template.Resources.Bucket.Properties.AccessControl;
+module.exports = template;

@@ -45,11 +45,8 @@ module.exports = s3Template.build({
               'AWS': '*'
             },
             'Action': [
-              's3:DeleteObject',
               's3:GetObject',
-              's3:GetObjectAcl',
-              's3:PutObject',
-              's3:PutObjectAcl'
+              's3:GetObjectAcl'
             ],
             'Resource': [
               {

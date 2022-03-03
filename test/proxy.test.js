@@ -57,19 +57,19 @@ test('setup proxy server', (t) => {
   delete process.env.ALL_PROXY;
   delete process.env.no_proxy;
   delete process.env.NO_PROXY;
-  process.env.NOCK_OFF = true;
+//   process.env.NOCK_OFF = true;
 
   initial_mock_s3 = process.env.node_pre_gyp_mock_s3;
-  delete process.env.node_pre_gyp_mock_s3;
-  mockS3Http('off');
+//   delete process.env.node_pre_gyp_mock_s3;
+//   mockS3Http('off');
 
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
   initial_s3_host = process.env.node_pre_gyp_s3_host;
   console.log('proxy.test.js => s3_host:', initial_s3_host);
-  process.env.node_pre_gyp_s3_host = 'staging';
+//   process.env.node_pre_gyp_s3_host = 'staging';
 
-  process.env.NOCK_OFF = true;
+//   process.env.NOCK_OFF = true;
   t.end();
 });
 

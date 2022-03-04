@@ -42,6 +42,10 @@ matrix:
       node_js: 16
       env:
         - node_pre_gyp_mock_s3=true
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['libavahi-compat-libdnssd-dev', 'libzmq3-dev']
     - os: linux
       node_js: 8
       env:

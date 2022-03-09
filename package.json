@@ -33,15 +33,15 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^5.1.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "aws-sdk": "^2.1012.0",
+    "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
     "mock-aws-s3": "^4.0.2",
-    "nock": "^12.0.3",
-    "node-addon-api": "^4.2.0",
+    "nock": "^13.2.4",
+    "node-addon-api": "^4.3.0",
     "nyc": "^15.1.0",
-    "tape": "^5.3.1",
+    "tape": "^5.5.2",
     "tar-fs": "^2.1.1"
   },
   "nyc": {

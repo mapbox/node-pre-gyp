@@ -42,6 +42,7 @@ matrix:
       node_js: 16
       env:
         - node_pre_gyp_mock_s3=true
+        - bypass_s3_tests=true
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']

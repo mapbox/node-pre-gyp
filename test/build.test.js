@@ -277,7 +277,10 @@ apps.forEach((app) => {
   });
 
   const env = process.env;
-  if (0 && (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3)) {
+  // the following tests weren't actually running for few months due to aws being not configured
+  // Once enabled, they fail with node 16 hence using the variable bypass_s3_tests with node 16 until
+  // the issue is investigated and resolved
+  if (!env.bypass_s3_tests && (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3)) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
       run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {

@@ -36,9 +36,12 @@ matrix:
         - npm run upload-coverage
     - os: linux
       node_js: 14
+      env:
+        - node_pre_gyp_mock_s3=true
     - os: linux
       node_js: 16
       env:
+        - node_pre_gyp_mock_s3=true
         - bypass_s3_tests=true
       addons:
         apt:
@@ -46,6 +49,8 @@ matrix:
           packages: ['libavahi-compat-libdnssd-dev', 'libzmq3-dev']
     - os: linux
       node_js: 8
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node webkit
     # broken per https://github.com/mapbox/node-pre-gyp/issues/614
     # - os: linux

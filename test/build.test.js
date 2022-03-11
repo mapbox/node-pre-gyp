@@ -277,9 +277,8 @@ apps.forEach((app) => {
   });
 
   const env = process.env;
-  // the following tests weren't actually running for few months due to aws being not configured
-  // Once enabled, they fail with node 16 hence using the variable bypass_s3_tests with node 16 until
-  // the issue is investigated and resolved
+  // bypass_s3_tests can be used to avoid these tests for node 16 temporarily to unblock travis CI.
+  // See https://github.com/mapbox/node-pre-gyp/issues/638
   if (!env.bypass_s3_tests && (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3)) {
 
     test(app.name + ' publishes ' + app.args, (t) => {

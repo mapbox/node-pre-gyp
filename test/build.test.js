@@ -277,7 +277,9 @@ apps.forEach((app) => {
   });
 
   const env = process.env;
-  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
+  // bypass_s3_tests can be used to avoid these tests for node 16 temporarily to unblock travis CI.
+  // See https://github.com/mapbox/node-pre-gyp/issues/638
+  if (!env.bypass_s3_tests && (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3)) {
 
     test(app.name + ' publishes ' + app.args, (t) => {
       run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {

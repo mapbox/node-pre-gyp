@@ -14,12 +14,8 @@ dist: bionic
 
 matrix:
   include:
-    # Test node v10 with request override + coverage reporting
     - os: linux
       node_js: 10
-      # mock s3 on jobs that post coverage
-      # to allow coverage to work consistently
-      # across PRs from external contributors
       env:
         - node_pre_gyp_mock_s3=true
       before_install:
@@ -30,38 +26,41 @@ matrix:
         - npm run coverage
       after_script:
         - npm run upload-coverage
-    # Test node v12 coverage reporting
     - os: linux
       node_js: 12
-      # mock s3 on jobs that post coverage
-      # to allow coverage to work consistently
-      # across PRs from external contributors
       env:
         - node_pre_gyp_mock_s3=true
       script:
         - npm run coverage
       after_script:
         - npm run upload-coverage
-    # Test node v14
     - os: linux
       node_js: 14
-    # Test node v16
+      env:
+        - node_pre_gyp_mock_s3=true
     - os: linux
       node_js: 16
-    # Test node v8
+      env:
+        - node_pre_gyp_mock_s3=true
+        - bypass_s3_tests=true
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['libavahi-compat-libdnssd-dev', 'libzmq3-dev']
     - os: linux
       node_js: 8
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node webkit
-    # broken per https://github.com/mapbox/node-pre-gyp/issues/614
-    # - os: linux
-    #   node_js: 10
-    #   addons:
-    #     apt:
-    #       sources: [ 'ubuntu-toolchain-r-test' ]
-    #       packages: ['xvfb','libasound2','libx11-6','libglib2.0-0','libgtk2.0-0','libatk1.0-0','libgdk-pixbuf2.0-0','libcairo2','libfreetype6','libfontconfig1','libxcomposite1','libasound2','libxdamage1','libxext6','libxfixes3','libnss3','libnspr4','libgconf-2-4','libexpat1','libdbus-1-3','libudev1']
-    #   script:
-    #     # test node-webkit usage
-    #     - ./scripts/test-node-webkit.sh
+    - os: linux
+      node_js: 10.23 # check concurrency warning message at the top
+      addons:
+        apt:
+          sources: [ 'ubuntu-toolchain-r-test' ]
+          packages: ['xvfb','libasound2','libx11-6','libglib2.0-0','libgtk2.0-0','libatk1.0-0','libgdk-pixbuf2.0-0','libcairo2','libfreetype6','libfontconfig1','libxcomposite1','libasound2','libxdamage1','libxext6','libxfixes3','libnss3','libnspr4','libgconf-2-4','libexpat1','libdbus-1-3','libudev1']
+      script:
+        # test node-webkit usage
+        - ./scripts/test-node-webkit.sh
 
 install:
   - npm ci --engine-strict

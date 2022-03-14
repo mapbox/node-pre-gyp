@@ -20,7 +20,7 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "detect-libc": "^1.0.3",
+    "detect-libc": "^2.0.0",
     "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",

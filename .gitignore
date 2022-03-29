@@ -9,3 +9,5 @@ npm-debug.log
 coverage
 test/*/package-lock.json
 test/app7/build-tmp-napi-*
+*.tgz
+*.gz

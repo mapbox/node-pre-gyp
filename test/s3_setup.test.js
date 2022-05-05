@@ -96,6 +96,37 @@ test('should properly detect compatible s3 bucket', (t) => {
   t.end();
 });
 
+test('should properly detect compatible s3 bucket with path style url', (t) => {
+  const opts = {
+    hosted_path: 'https://storage.com/bucket-name/', // set by versioning from package.json definitions with trailing slash
+    host: 'https://storage.com',
+    bucket: 'bucket-name',
+    region: 'us-east-1',
+    s3ForcePathStyle: true
+  };
+  const result = s3_setup.detect(opts);
+  t.equal(result.prefix, ''); // bucket name should be removed from prefix
+  t.equal(result.bucket, 'bucket-name');
+  t.equal(result.region, 'us-east-1');
+  t.equal(result.endpoint, 'https://storage.com');
+  t.end();
+});
+
+test('should properly detect compatible s3 bucket with path style url', (t) => {
+  const opts = {
+    hosted_path: 'https://storage.com', // set by versioning from package.json definitions
+    host: 'https://storage.com',
+    bucket: 'bucket-name',
+    region: 'us-east-1',
+    s3ForcePathStyle: false
+  };
+  const result = s3_setup.detect(opts);
+  t.equal(result.prefix, ''); // bucket name should be removed from prefix
+  t.equal(result.bucket, 'bucket-name');
+  t.equal(result.region, 'us-east-1');
+  t.equal(result.endpoint, 'https://storage.com');
+  t.end();
+});
 
 test('should error trying to parse invalid s3 url (path style)', (t) => {
   const opts = {

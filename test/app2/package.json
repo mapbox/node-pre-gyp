@@ -14,7 +14,7 @@
         "module_path": "./lib/binding/{configuration}/{name}",
         "remote_path": "./node-pre-gyp/{name}/v{version}/{configuration}/{version}/{toolset}/",
         "package_name": "{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{node_abi}-{platform}-{arch}.tar.gz",
-        "host": "https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com"
+        "host": "https://npg-mock-bucket.s3.us-east-1.amazonaws.com"
     },
     "scripts": {
         "install": "node-pre-gyp install --fallback-to-build",

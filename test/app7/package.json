@@ -14,7 +14,7 @@
         "module_path": "./lib/binding/napi-v{napi_build_version}",
         "remote_path": "./node-pre-gyp/{module_name}/v{version}/{configuration}/",
         "package_name": "{module_name}-v{version}-{platform}-{arch}-napi-v{napi_build_version}-node-{node_abi}.tar.gz",
-        "host": "https://mapbox-node-pre-gyp-public-testing-bucket.s3.us-east-1.amazonaws.com",
+        "host": "https://npg-mock-bucket.s3.us-east-1.amazonaws.com",
         "napi_versions": [
             1,
             2

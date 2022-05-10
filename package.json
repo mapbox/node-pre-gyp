@@ -58,6 +58,7 @@
     "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
-    "test": "tape test/*test.js"
+    "test": "tape test/*test.js",
+    "bucket": "node scripts/set-bucket.js"
   }
 }

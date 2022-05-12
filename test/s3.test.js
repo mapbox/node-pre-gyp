@@ -110,7 +110,6 @@ apps.forEach((app) => {
     });
   });
 
-
   test(app.name + ' package ' + app.args, (t) => {
     run('node-pre-gyp', 'package', '', app, {}, (err) => {
       t.ifError(err);

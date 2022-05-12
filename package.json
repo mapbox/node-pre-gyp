@@ -59,6 +59,7 @@
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "test": "tape test/*test.js",
+    "test:s3": "tape test/s3.test.js",
     "bucket": "node scripts/set-bucket.js"
   }
 }

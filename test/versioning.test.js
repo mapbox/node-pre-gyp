@@ -222,6 +222,107 @@ test('should verify that the binary property has required properties', (t) => {
   t.end();
 });
 
+test('should allow production_host to act as alias to host (when host not preset)', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'production_host': 's3-production-path'
+    }
+  };
+
+  const package_json = Object.assign({}, mock_package_json);
+  const opts = versioning.evaluate(package_json, { module_root: '/root' });
+  t.equal(opts.host, mock_package_json.binary.production_host + '/');
+  t.equal(opts.hosted_path, mock_package_json.binary.production_host + '/');
+  t.equal(opts.hosted_tarball, mock_package_json.binary.production_host + '/' + opts.package_name);
+
+  t.end();
+});
+
+test('should use host over production_host (when both are preset)', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'production_host': 's3-production-path',
+      'host': 'binary-path'
+    }
+  };
+
+  const package_json = Object.assign({}, mock_package_json);
+  const opts = versioning.evaluate(package_json, { module_root: '/root' });
+  t.equal(opts.host, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
+
+  t.end();
+});
+
+test('should verify that the host url protocol is https', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'host': 'http://your_module.s3-us-west-1.amazonaws.com'
+    }
+  };
+
+  const package_json = Object.assign({}, mock_package_json);
+
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const opts = versioning.evaluate(package_json, {});
+  } catch (e) {
+    // name won't be there if it's missing but both messages say 'undefined'
+    const msg = package_json.name + ' package.json is not node-pre-gyp ready:\n';
+    const expectedMessage = msg + '\'host\' protocol (http:) is invalid - only \'https:\' is accepted';
+    t.equal(e.message, expectedMessage);
+  }
+
+  t.end();
+});
+
+test('should verify that alternate hosts url protocol is https', (t) => {
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'https://your_module.s3-us-west-1.amazonaws.com'
+    }
+  };
+
+  const hosts = ['production', 'staging', 'development'];
+  hosts.forEach((host) => {
+    const package_json = Object.assign({}, mock_package_json);
+    package_json[`${host}_host`] = `https://${host}_bucket.s3-us-west-1.amazonaws.com`;
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const opts = versioning.evaluate(package_json, {});
+    } catch (e) {
+      // name won't be there if it's missing but both messages say 'undefined'
+      const msg = package_json.name + ' package.json is not node-pre-gyp ready:\n';
+      const expectedMessage = msg + `'${host}_host' protocol (http:) is invalid - only 'https:' is accepted`;
+      t.equal(e.message, expectedMessage);
+    }
+  });
+
+  t.end();
+});
+
 test('should not add bucket name to hosted_path when s3ForcePathStyle is false', (t) => {
   const mock_package_json = {
     'name': 'test',
@@ -266,7 +367,224 @@ test('should add bucket name to hosted_path when s3ForcePathStyle is true', (t) 
   t.end();
 });
 
-test('should verify host overrides staging and production values', (t) => {
+test('should use host key by default for install, info, publish and unpublish commands (when no other hosts specified)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path'
+    }
+  };
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+  cmds.forEach((cmd) => {
+    try {
+      const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+      t.equal(opts.host, mock_package_json.binary.host + '/');
+      t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+      t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
+    } catch (e) {
+      t.ifError(e, 'staging_host and production_host should be silently ignored');
+    }
+  });
+  t.end();
+});
+
+test('should use production_host as alias for host for install and info commands (when host not preset)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['install', 'info'];
+  cmds.forEach((cmd) => {
+
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.production_host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.production_host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.production_host + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use host over production_host for install and info commands (when both are preset)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      production_host: 's3-production-path',
+      host: 'binary-path'
+    }
+  };
+
+  const cmds = ['install', 'info'];
+  cmds.forEach((cmd) => {
+
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use host by default for install and info commands (overriding alternate hosts, production_host not present)', (t) => {
+  const options = {
+    argv: {
+      remain: ['install', 'info'],
+      cooked: ['install', 'info'],
+      original: ['install', 'info']
+    }
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path'
+    }
+  };
+
+
+  const opts = versioning.evaluate(mock_package_json, options);
+  t.equal(opts.host, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
+
+
+  t.end();
+});
+
+test('should use host by default for install and info commands (overriding alternate hosts, host is present)', (t) => {
+  const options = {
+    argv: {
+      remain: ['install', 'info'],
+      cooked: ['install', 'info'],
+      original: ['install', 'info']
+    }
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+
+  const opts = versioning.evaluate(mock_package_json, options);
+  t.equal(opts.host, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+  t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
+
+
+  t.end();
+});
+
+test('should use development_host key by default for publish and unpublish commands (when it is specified)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['publish', 'unpublish'];
+  cmds.forEach((cmd) => {
+
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.development_host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.development_host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.development_host + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use staging_host key by default for publish and unpublish commands (when it is specified and no development_host)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
   const mock_package_json = {
     name: 'test',
     main: 'test.js',
@@ -280,19 +598,335 @@ test('should verify host overrides staging and production values', (t) => {
     }
   };
 
-  try {
-    const opts = versioning.evaluate(mock_package_json, { module_root: '/root' });
-    t.equal(opts.host, mock_package_json.binary.host + '/');
-    t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
-    t.equal(opts.hosted_tarball, mock_package_json.binary.host + '/' + opts.package_name);
-  } catch (e) {
-    t.ifError(e, 'staging_host and production_host should be silently ignored');
-  }
+  const cmds = ['publish', 'unpublish'];
+  cmds.forEach((cmd) => {
 
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.staging_host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.staging_host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.staging_host + '/' + opts.package_name);
+
+  });
   t.end();
 });
 
-test('should replace "-" with "_" in custom binary host', (t) => {
+test('should use development_host key by default for publish and unpublish commands in a chain (when it is specified)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: ['info', cmd],
+        cooked: ['info', cmd],
+        original: ['info', cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['publish', 'unpublish'];
+  cmds.forEach((cmd) => {
+
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.development_host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.development_host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.development_host + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use host specified by the --s3_host option', (t) => {
+  const makeOoptions = (cmd, host) => {
+    return {
+      s3_host: host,
+      argv: {
+        remain: [cmd],
+        cooked: [cmd, '--s3_host', host],
+        original: [cmd, `--s3_host=${host}`]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      // host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const hosts = ['production', 'staging', 'development'];
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    hosts.forEach((host) => {
+      const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd, host));
+      t.equal(opts.host, mock_package_json.binary[`${host}_host`] + '/');
+      t.equal(opts.hosted_path, mock_package_json.binary[`${host}_host`] + '/');
+      t.equal(opts.hosted_tarball, mock_package_json.binary[`${host}_host`] + '/' + opts.package_name);
+    });
+  });
+  t.end();
+});
+
+test('should use defaults when --s3_host option is invalid', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      s3_host: 'not-valid',
+      argv: {
+        remain: [cmd],
+        cooked: [cmd, '--s3_host', 'not-valid'],
+        original: [cmd, '--s3_host=not-valid']
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    const host = cmd.indexOf('publish') === -1 ? 'host' : 'development_host';
+
+    t.equal(opts.host, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary[host] + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use host specified by the s3_host environment variable', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      // host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const hosts = ['production', 'staging', 'development'];
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    hosts.forEach((host) => {
+      process.env.node_pre_gyp_s3_host = host;
+      const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+      t.equal(opts.host, mock_package_json.binary[`${host}_host`] + '/');
+      t.equal(opts.hosted_path, mock_package_json.binary[`${host}_host`] + '/');
+      t.equal(opts.hosted_tarball, mock_package_json.binary[`${host}_host`] + '/' + opts.package_name);
+    });
+  });
+  t.end();
+});
+
+test('should use defaults when s3_host environment variable is invalid', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    process.env.node_pre_gyp_s3_host = 'not-valid';
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    const host = cmd.indexOf('publish') === -1 ? 'host' : 'development_host';
+
+    t.equal(opts.host, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary[host] + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use defaults when s3_host environment is valid but package.json does not match (production_host is default)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      // no development_host
+      staging_host: 's3-staging-path',
+      // production_host not host
+      production_host: 's3-production-path'
+    }
+  };
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    process.env.node_pre_gyp_s3_host = 'development';  // specify development_host
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    const host = cmd.indexOf('publish') === -1 ? 'production_host' : 'staging_host'; // defaults
+
+    t.equal(opts.host, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary[host] + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use defaults when s3_host environment is valid but package.json does not match (host is default)', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      argv: {
+        remain: [cmd],
+        cooked: [cmd],
+        original: [cmd]
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      // host not production_host
+      host: 'binary-path',
+      // no development_host
+      staging_host: 's3-staging-path'
+    }
+  };
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+
+  cmds.forEach((cmd) => {
+    process.env.node_pre_gyp_s3_host = 'development';  // specify development_host
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    const host = cmd.indexOf('publish') === -1 ? 'host' : 'staging_host'; // defaults
+
+    t.equal(opts.host, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary[host] + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary[host] + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should use host specified by environment variable overriding --s3_host option', (t) => {
+  const makeOoptions = (cmd) => {
+    return {
+      s3_host: 'staging', // from command line
+      argv: {
+        remain: [cmd],
+        cooked: [cmd, '--s3_host', 'staging'],
+        original: [cmd, '--s3_host=staging']
+      }
+    };
+  };
+
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
+      // host: 'binary-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path',
+      production_host: 's3-production-path'
+    }
+  };
+
+
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+  cmds.forEach((cmd) => {
+    process.env.node_pre_gyp_s3_host = 'production';
+    const opts = versioning.evaluate(mock_package_json, makeOoptions(cmd));
+    t.equal(opts.host, mock_package_json.binary.production_host + '/');
+    t.equal(opts.hosted_path, mock_package_json.binary.production_host + '/');
+    t.equal(opts.hosted_tarball, mock_package_json.binary.production_host + '/' + opts.package_name);
+
+  });
+  t.end();
+});
+
+test('should replace "-" with "_" in mirror binary host', (t) => {
   const mock_package_json = {
     name: 'test',
     main: 'test.js',

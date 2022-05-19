@@ -18,10 +18,10 @@ dirs.forEach((dir) => {
   const pkg = require(`${root}/${dir}/package.json`); // relative path
 
   // bucket specified as part of s3 virtual host format (auto detected by node-pre-gyp)
-  const keys = ['host', 'staging_host', 'production_host'];
+  const keys = ['host', 'development_host', 'staging_host', 'production_host'];
   keys.forEach((item) => {
-    if (pkg.binary[item]) {
-
+    // hosts may be specified as strings (old format)
+    if (pkg.binary[item] && typeof pkg.binary[item] === 'string') {
       // match the bucket part of the url
       const match = pkg.binary[item].match(/^https:\/\/(.+)(?:\.s3[-.].*)$/i);
       if (match) {
@@ -29,8 +29,21 @@ dirs.forEach((dir) => {
         console.log(`Success: set ${dir} ${item} to ${pkg.binary[item]}`);
       }
     }
+
+    if (pkg.binary[item] && typeof pkg.binary[item] === 'object') {
+      // match the bucket part of the url
+      const match = pkg.binary[item].endpoint.match(/^https:\/\/(.+)(?:\.s3[-.].*)$/i);
+      if (match) {
+        pkg.binary[item].endpoint = pkg.binary[item].endpoint.replace(match[1], bucket);
+        console.log(`Success: set ${dir} ${item} to ${pkg.binary[item]}`);
+      }
+      if (pkg.binary[item].bucket) {
+        pkg.binary[item].bucket = bucket;
+        console.log(`Set ${dir} bucket to ${pkg.binary[item].bucket}`);
+      }
+    }
   });
-  // bucket is specified explicitly
+  // bucket may be specified explicitly on binary ()old format
   if (pkg.binary.bucket) {
     pkg.binary.bucket = bucket;
     console.log(`Set ${dir} bucket to ${pkg.binary.bucket}`);

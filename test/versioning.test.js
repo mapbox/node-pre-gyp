@@ -766,6 +766,66 @@ test('should use host specified by the --s3_host option', (t) => {
     binary: {
       module_name: 'binary-module-name',
       module_path: 'binary-module-path',
+      host: 's3-production-path',
+      development_host: 's3-development-path',
+      staging_host: 's3-staging-path'
+    }
+  };
+
+  const hosts = ['production', 'staging', 'development'];
+  const cmds = ['install', 'info', 'publish', 'unpublish'];
+  cmds.forEach((cmd) => {
+    hosts.forEach((host) => {
+      const checkAgainst = host !== 'production' ? `${host}_host` : 'host';
+      const cloned = JSON.parse(JSON.stringify(parsed_package_json));
+      const opts = versioning.evaluate(cloned, makeOoptions(cmd, host));
+
+      t.equal(opts.host, parsed_package_json.binary[checkAgainst] + '/');
+      t.equal(opts.hosted_path, parsed_package_json.binary[checkAgainst] + '/');
+      t.equal(opts.hosted_tarball, parsed_package_json.binary[checkAgainst] + '/' + opts.package_name);
+    });
+  });
+  cmds.forEach((cmd) => {
+    hosts.forEach((host) => {
+      parsed_package_json.binary = {
+        module_name: 'binary-module-name',
+        module_path: 'binary-module-path',
+        host: { endpoint: 's3-production-path' },
+        development_host: { endpoint: 's3-development-path' },
+        staging_host: { endpoint: 's3-staging-path' }
+      };
+
+      const checkAgainst = host !== 'production' ? `${host}_host` : 'host';
+      const cloned = JSON.parse(JSON.stringify(parsed_package_json));
+      const opts = versioning.evaluate(cloned, makeOoptions(cmd, host));
+
+      t.equal(opts.host, parsed_package_json.binary[checkAgainst].endpoint + '/');
+      t.equal(opts.hosted_path, parsed_package_json.binary[checkAgainst].endpoint + '/');
+      t.equal(opts.hosted_tarball, parsed_package_json.binary[checkAgainst].endpoint + '/' + opts.package_name);
+    });
+  });
+  t.end();
+});
+
+test('should use host specified by the --s3_host option (production_host used)', (t) => {
+  const makeOoptions = (cmd, host) => {
+    return {
+      s3_host: host,
+      argv: {
+        remain: [cmd],
+        cooked: [cmd, '--s3_host', host],
+        original: [cmd, `--s3_host=${host}`]
+      }
+    };
+  };
+
+  const parsed_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'binary-module-name',
+      module_path: 'binary-module-path',
       // host: 'binary-path',
       development_host: 's3-development-path',
       staging_host: 's3-staging-path',

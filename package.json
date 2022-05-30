@@ -21,7 +21,6 @@
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
     "nopt": "^5.0.0",
     "npmlog": "^5.0.1",

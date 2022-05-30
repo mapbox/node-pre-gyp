@@ -7,7 +7,7 @@ const os = require('os');
 
 const tar = require('tar-fs');
 const Agent = require('https-proxy-agent');
-const fetch = require('node-fetch');
+const { fetch } = require('undici');
 const rimraf = require('rimraf');
 
 const test = require('tape');
@@ -42,8 +42,10 @@ test.Test.prototype.stringContains = function(actual, contents, message) {
 // skip tests that require a real S3 bucket when in a CI environment
 // and the AWS access key is not available.
 //
-const isCI = process.env.CI && process.env.CI.toLowerCase() === 'true'
-  && !process.env.AWS_ACCESS_KEY_ID;
+const isCI =
+  process.env.CI &&
+  process.env.CI.toLowerCase() === 'true' &&
+  !process.env.AWS_ACCESS_KEY_ID;
 
 function ciSkip(...args) {
   if (isCI) {
@@ -87,13 +89,12 @@ test('setup proxy server', (t) => {
       t.end();
     });
   });
-
-
 });
 
 test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (t) => {
   // "{module_name}-v{version}-napi-v{napi_build_version}-{platform}-{arch}-{libc}.tar.gz"
-  const url = 'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
+  const url =
+    'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
 
   async function getBcrypt() {
     const res = await fetch(url, options);
@@ -119,11 +120,9 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
   getBcrypt()
     .then((stream) => {
       const unzip = createUnzip();
-      stream
-        .pipe(unzip);
+      stream.pipe(unzip);
 
-      unzip
-        .pipe(tar.extract(`${downloadDir}`, tarOptions));
+      unzip.pipe(tar.extract(`${downloadDir}`, tarOptions));
 
       return unzip;
     })
@@ -137,7 +136,11 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
     // differences make it harder to select a version that is loadable, and this test
     // is focused on proxy support.
     .then(() => {
-      t.equal(expectedCount, 1, 'should find the expected file in the tar stream');
+      t.equal(
+        expectedCount,
+        1,
+        'should find the expected file in the tar stream'
+      );
       t.doesNotThrow(() => fs.statSync(withDir));
       t.end();
     })

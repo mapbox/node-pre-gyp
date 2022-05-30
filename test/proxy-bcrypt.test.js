@@ -6,8 +6,7 @@ const { createUnzip } = require('zlib');
 const os = require('os');
 
 const tar = require('tar-fs');
-const Agent = require('https-proxy-agent');
-const { fetch } = require('undici');
+const { ProxyAgent, request } = require('undici');
 const rimraf = require('rimraf');
 
 const test = require('tape');
@@ -75,7 +74,7 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new Agent(proxyServer);
+  options.dispatcher = new ProxyAgent(proxyServer);
 
   process.env.NOCK_OFF = true;
 
@@ -97,8 +96,8 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
     'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
 
   async function getBcrypt() {
-    const res = await fetch(url, options);
-    if (res.status !== 200) {
+    const res = await request(url, options);
+    if (res.statusCode !== 200) {
       throw new Error(`fetch got error ${res.status}`);
     }
     return res.body;

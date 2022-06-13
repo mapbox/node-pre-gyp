@@ -48,6 +48,8 @@ matrix:
     # Test node v16
     - os: linux
       node_js: 16
+      env:
+        - node_pre_gyp_mock_s3=true
     # Test node v8
     - os: linux
       node_js: 8

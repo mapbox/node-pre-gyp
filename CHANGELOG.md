@@ -1,5 +1,9 @@
 # node-pre-gyp changelog
 
+## 1.0.9
+- Upgraded node-fetch to 2.6.7 to address [CVE-2022-0235](https://www.cve.org/CVERecord?id=CVE-2022-0235)
+- Upgraded detect-libc to 2.0.0 to use non-blocking NodeJS(>=12) Report API
+
 ## 1.0.8
 - Downgraded npmlog to maintain node v10 and v8 support (https://github.com/mapbox/node-pre-gyp/pull/624)
 

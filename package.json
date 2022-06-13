@@ -1,7 +1,7 @@
 {
   "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "keywords": [
     "native",
     "addon",
@@ -20,10 +20,10 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "detect-libc": "^1.0.3",
+    "detect-libc": "^2.0.0",
     "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
-    "node-fetch": "^2.6.5",
+    "node-fetch": "^2.6.7",
     "nopt": "^5.0.0",
     "npmlog": "^5.0.1",
     "rimraf": "^3.0.2",
@@ -33,15 +33,15 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^5.1.0",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "aws-sdk": "^2.1012.0",
+    "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^12.0.3",
-    "node-addon-api": "^4.2.0",
+    "node-addon-api": "^4.3.0",
     "nyc": "^15.1.0",
-    "tape": "^5.3.1",
+    "tape": "^5.5.2",
     "tar-fs": "^2.1.1"
   },
   "nyc": {

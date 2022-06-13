@@ -30,16 +30,16 @@ const bucket = s3Template.build({
           // prevent deletions of any kind (human or application) on this bucket
           // even though node-pre-gyp allows for binaries to be deleted, Mapbox
           // intends to prevent them from being removed.
-          {
-            Sid: 'DenyDeletions',
-            Effect: 'Deny',
-            Principal: '*',
-            Action: 's3:Delete*',
-            Resource: [
-              'arn:aws:s3:::mapbox-node-pre-gyp-public-testing-bucket',
-              'arn:aws:s3:::mapbox-node-pre-gyp-public-testing-bucket/*'
-            ]
-          }
+          // {
+          //   Sid: 'DenyDeletions',
+          //   Effect: 'Deny',
+          //   Principal: '*',
+          //   Action: 's3:Delete*',
+          //   Resource: [
+          //     'arn:aws:s3:::mapbox-node-pre-gyp-public-testing-bucket',
+          //     'arn:aws:s3:::mapbox-node-pre-gyp-public-testing-bucket/*'
+          //   ]
+          // }
         ]
       }
     }

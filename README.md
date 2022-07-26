@@ -81,7 +81,7 @@ Options include:
  - `--runtime=node-webkit`: customize the runtime: `node`, `electron` and `node-webkit` are the valid options
  - `--fallback-to-build`: fallback to building from source if pre-built binary is not available
  - `--target=0.4.0`: Pass the target node or node-webkit version to compile against
- - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Valid values are 'ia32','x64', or `arm`.
+ - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Any value that is [supported by Node.js](https://nodejs.org/api/os.html#osarch) is valid.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.

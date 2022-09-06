@@ -1,7 +1,7 @@
 {
   "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "keywords": [
     "native",
     "addon",

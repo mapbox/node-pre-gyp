@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.10
+- Upgraded minimist to 1.2.6 to address dependabot alert [CVE-2021-44906](https://nvd.nist.gov/vuln/detail/CVE-2021-44906)
+
 ## 1.0.9
 - Upgraded node-fetch to 2.6.7 to address [CVE-2022-0235](https://www.cve.org/CVERecord?id=CVE-2022-0235)
 - Upgraded detect-libc to 2.0.0 to use non-blocking NodeJS(>=12) Report API

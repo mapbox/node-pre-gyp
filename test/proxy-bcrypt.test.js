@@ -73,22 +73,14 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new Agent(proxyServer);
+  options.agent = new Agent.HttpsProxyAgent(proxyServer);
 
   process.env.NOCK_OFF = true;
 
   // make sure the download directory deleted then create an empty one
-  rimraf(downloadDir, () => {
-    fs.mkdir('download', (e) => {
-      if (e && e.code !== 'EEXIST') {
-        t.error(e);
-        return;
-      }
-      t.end();
-    });
-  });
-
-
+  rimraf.rimrafSync(downloadDir);  
+  fs.mkdirSync(downloadDir);
+  t.end();
 });
 
 test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (t) => {
@@ -157,5 +149,6 @@ test(`cleanup after ${__filename}`, (t) => {
   process.env.node_pre_gyp_s3_host = initial_s3_host;
   process.env.node_pre_gyp_mock_s3 = initial_mock_s3;
   // ignore errors
-  rimraf(downloadDir, () => t.end());
+  //rimraf.rimrafSync(downloadDir);
+  t.end();
 });

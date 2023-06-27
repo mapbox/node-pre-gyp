@@ -64,7 +64,7 @@ test('setup', (t) => {
 
 test.onFinish(() => {
   process.chdir(orig_dir);
-  rimraf(scratch, () => undefined);
+  rimraf.rimrafSync(scratch);
 });
 
 test('should set staging and production hosts', (t) => {

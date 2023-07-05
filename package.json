@@ -22,12 +22,12 @@
   "dependencies": {
     "detect-libc": "^2.0.0",
     "https-proxy-agent": "^5.0.0",
-    "make-dir": "^3.1.0",
+    "make-dir": "^4.0.0",
     "node-fetch": "^2.6.7",
     "nopt": "^5.0.0",
     "npmlog": "^5.0.1",
     "rimraf": "^3.0.2",
-    "semver": "^7.3.5",
+    "semver": "^7.5.2",
     "tar": "^6.1.11"
   },
   "devDependencies": {

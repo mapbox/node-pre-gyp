@@ -57,9 +57,6 @@ function run(prog, command, args, app, opts, cb) {
   if (!opts.cwd) {
     opts.cwd = path.join(__dirname, app.name);
   }
-  // avoid breakage when compiling with clang++ and node v0.10.x
-  // This is harmless to add for other versions and platforms
-  final_cmd += ' --clang=1';
 
   // Test building with msvs 2015 since that is more edge case than 2013
   if (process.platform === 'win32') {

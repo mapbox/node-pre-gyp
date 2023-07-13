@@ -52,7 +52,7 @@ matrix:
         - node_pre_gyp_mock_s3=true
     # Test node webkit
     - os: linux
-      node_js: 10.23 # check concurrency warning message at the top
+      node_js: 10.22 # check concurrency warning message at the top
       addons:
         apt:
           sources: [ 'ubuntu-toolchain-r-test' ]

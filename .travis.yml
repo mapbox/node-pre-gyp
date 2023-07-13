@@ -60,7 +60,6 @@ matrix:
       script:
         # use python2.x since it breaks with python3.x which is the default installation 
         # https://github.com/nwjs/node/issues/46
-        - mkdir ~/bin
         - ln -s /usr/bin/python2 ~/bin/python
         - ln -s /usr/bin/python2-config ~/bin/python-config
         - ./scripts/test-node-webkit.sh

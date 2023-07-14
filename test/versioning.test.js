@@ -90,6 +90,26 @@ test('should detect abi for node-webkit runtime', (t) => {
   t.end();
 });
 
+test('should throw when custom node target is not found in abi_crosswalk file', (t) => {
+  try {
+    versioning.get_runtime_abi('node', '123456789.0.0');
+  } catch (e) {
+    const expectedMessage = 'Unsupported target version: 123456789.0.0';
+    t.equal(e.message, expectedMessage);
+    t.end();
+  }
+});
+
+test('should throw when custom node target is not semver', (t) => {
+  try {
+    versioning.get_runtime_abi('node', '1.2.3.4');
+  } catch (e) {
+    const expectedMessage = 'Unknown target version: 1.2.3.4';
+    t.equal(e.message, expectedMessage);
+    t.end();
+  }
+});
+
 test('should detect custom binary host from env', (t) => {
   const mock_package_json = {
     'name': 'test',

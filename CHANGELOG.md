@@ -1,5 +1,8 @@
 # node-pre-gyp changelog
 
+## 1.0.11
+- Fixes dependabot alert [CVE-2021-44906](https://nvd.nist.gov/vuln/detail/CVE-2021-44906)
+
 ## 1.0.10
 - Upgraded minimist to 1.2.6 to address dependabot alert [CVE-2021-44906](https://nvd.nist.gov/vuln/detail/CVE-2021-44906)
 

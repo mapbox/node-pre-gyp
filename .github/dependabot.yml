@@ -1,0 +1,14 @@
+# For all possible configuration options see:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      # Allow both direct and indirect updates for all packages.
+      - dependency-type: "all"
+    # Allow up to 10 open pull requests for dependencies.
+    open-pull-requests-limit: 10

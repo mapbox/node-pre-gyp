@@ -3,7 +3,7 @@
 const s3_setup = require('../lib/util/s3_setup.js');
 const test = require('tape');
 
-test('should propertly detect s3 bucket and prefix', (t) => {
+test('should properly detect s3 bucket and prefix', (t) => {
   const opts = {
     hosted_path: 'https://bucket-with-dashes.s3-us-west-1.amazonaws.com'
   };
@@ -15,7 +15,7 @@ test('should propertly detect s3 bucket and prefix', (t) => {
   t.end();
 });
 
-test('should propertly detect s3 bucket and prefix with dots', (t) => {
+test('should properly detect s3 bucket and prefix with dots', (t) => {
   const opts = {
     hosted_path: 'https://bucket.with.dots.s3.amazonaws.com/prefix'
   };
@@ -27,7 +27,7 @@ test('should propertly detect s3 bucket and prefix with dots', (t) => {
   t.end();
 });
 
-test('should propertly detect modern s3 bucket and prefix', (t) => {
+test('should properly detect modern s3 bucket and prefix', (t) => {
   const opts = {
     hosted_path: 'https://bucket-name.s3.us-east-1.amazonaws.com'
   };
@@ -39,7 +39,7 @@ test('should propertly detect modern s3 bucket and prefix', (t) => {
   t.end();
 });
 
-test('should propertly detect compatible s3 bucket and prefix', (t) => {
+test('should properly detect compatible s3 bucket and prefix', (t) => {
   const opts = {
     host: 'https://storage.com',
     hosted_path: 'https://storage.com',

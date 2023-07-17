@@ -1,5 +1,5 @@
 {
-    "name": "node-pre-gyp-test-app1",
+    "name": "node-pre-gyp-test-app1.2",
     "author": "Dane Springmeyer <springmeyer>",
     "description": "node-pre-gyp test",
     "repository": {
@@ -10,9 +10,12 @@
     "version": "0.1.0",
     "main": "./index.js",
     "binary": {
-        "module_name": "app1",
+        "module_name": "app1.2",
         "module_path": "./lib/binding/",
-        "host": "https://npg-mock-bucket.s3.us-east-1.amazonaws.com",
+        "host": "https://s3.us-east-1.amazonaws.com",
+        "bucket": "npg-mock-bucket",
+        "region": "us-east-1",
+        "s3ForcePathStyle": true,
         "remote_path": "./node-pre-gyp/{name}/v{version}/{configuration}/{toolset}/",
         "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
     },

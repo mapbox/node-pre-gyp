@@ -12,18 +12,12 @@ const rimraf = require('rimraf');
 
 const test = require('tape');
 
-// this is a derived from build.test.js and should be kept in sync with it
-// as much as possible.
-const { mockS3Http } = require('../lib/node-pre-gyp.js');
 const proxy = require('./proxy.util');
-
 const proxyPort = 8124;
 const proxyServer = `http://localhost:${proxyPort}`;
+
 // options for fetch
 const options = {};
-
-let initial_s3_host;
-let initial_mock_s3;
 
 // the temporary download directory and file
 const downloadDir = `${os.tmpdir()}/npg-download`;
@@ -64,18 +58,11 @@ test('setup proxy server', (t) => {
   delete process.env.ALL_PROXY;
   delete process.env.no_proxy;
   delete process.env.NO_PROXY;
-  process.env.NOCK_OFF = true;
-
-  initial_mock_s3 = process.env.node_pre_gyp_mock_s3;
-  delete process.env.node_pre_gyp_mock_s3;
-  mockS3Http('off');
 
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
   options.agent = new Agent(proxyServer);
-
-  process.env.NOCK_OFF = true;
 
   // make sure the download directory deleted then create an empty one
   rimraf(downloadDir, () => {
@@ -149,13 +136,10 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
 
 // this is really just onFinish() but local to the tests in this file
 test(`cleanup after ${__filename}`, (t) => {
-  mockS3Http('on');
   proxy.stopServer();
   delete process.env.NOCK_OFF;
   delete process.env.http_proxy;
   delete process.env.https_proxy;
-  process.env.node_pre_gyp_s3_host = initial_s3_host;
-  process.env.node_pre_gyp_mock_s3 = initial_mock_s3;
   // ignore errors
   rimraf(downloadDir, () => t.end());
 });

@@ -732,11 +732,11 @@ Using the `npm` config argument: `--{module_name}_binary_host_mirror` can downlo
 e.g.: Install [v8-profiler](https://www.npmjs.com/package/v8-profiler) from `npm`.
 
 ```bash
-$ npm install v8-profiler --profiler_binary_host_mirror=https://npm.taobao.org/mirrors/node-inspector/
+$ npm install v8-profiler --profiler_binary_host_mirror=https://registry.npmmirror.com/node-inspector/
 ```
 
 e.g.: Install [canvas-prebuilt](https://www.npmjs.com/package/canvas-prebuilt) from `npm`.
 
 ```bash
-$ npm install canvas-prebuilt --canvas_prebuilt_binary_host_mirror=https://npm.taobao.org/mirrors/canvas-prebuilt/
+$ npm install canvas-prebuilt --canvas_prebuilt_binary_host_mirror=https://registry.npmmirror.com/canvas-prebuilt/
 ```

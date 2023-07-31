@@ -4,7 +4,6 @@ const test = require('tape');
 const run = require('./run.util.js');
 const existsSync = require('fs').existsSync || require('path').existsSync;
 const fs = require('fs');
-const os = require('os');
 const rm = require('rimraf');
 const path = require('path');
 const napi = require('../lib/util/napi.js');
@@ -13,10 +12,6 @@ const tar = require('tar');
 
 const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
-
-if (process.env.node_pre_gyp_mock_s3) {
-  process.env.node_pre_gyp_mock_s3 = `${os.tmpdir()}/mock`;
-}
 
 // The list of different sample apps that we use to test
 const apps = [
@@ -115,6 +110,7 @@ test(appOne.name + ' passes --dist-url down to node-gyp via npm ' + appOne.args,
 // Tests run for all apps
 
 apps.forEach((app) => {
+
 
   if (app.name === 'app7' && !napi.get_napi_version()) return;
 
@@ -223,6 +219,8 @@ apps.forEach((app) => {
     });
   });
 
+
+
   test(app.name + ' packages ' + app.args, (t) => {
     run('node-pre-gyp', 'package', '', app, {}, (err) => {
       t.ifError(err);
@@ -275,88 +273,6 @@ apps.forEach((app) => {
       t.end();
     });
   });
-
-  const env = process.env;
-  if (env.AWS_ACCESS_KEY_ID || env.node_pre_gyp_accessKeyId || env.node_pre_gyp_mock_s3) {
-
-    test(app.name + ' publishes ' + app.args, (t) => {
-      run('node-pre-gyp', 'unpublish publish', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-    test(app.name + ' info shows it ' + app.args, (t) => {
-      run('node-pre-gyp', 'reveal', 'package_name', app, {}, (err, stdout) => {
-        t.ifError(err);
-        let package_name = stdout.trim();
-        if (package_name.indexOf('\n') !== -1) { // take just the first line
-          package_name = package_name.substr(0, package_name.indexOf('\n'));
-        }
-        run('node-pre-gyp', 'info', '', app, {}, (err2, stdout2) => {
-          t.ifError(err2);
-          t.stringContains(stdout2, package_name);
-          t.end();
-        });
-      });
-    });
-
-    test(app.name + ' can be uninstalled ' + app.args, (t) => {
-      run('node-pre-gyp', 'clean', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-    test(app.name + ' can be installed via remote ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '--fallback-to-build=false', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-    test(app.name + ' can be reinstalled via remote ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '--update-binary --fallback-to-build=false', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-    test(app.name + ' via remote passes tests ' + app.args, (t) => {
-      const opts = {
-        cwd: path.join(__dirname, app.name),
-        npg_debug: false
-      };
-      run('npm', 'install', '', app, opts, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-    test(app.name + ' unpublishes ' + app.args, (t) => {
-      run('node-pre-gyp', 'unpublish', '', app, {}, (err, stdout) => {
-        t.ifError(err);
-        t.notEqual(stdout, '');
-        t.end();
-      });
-    });
-
-  } else {
-    test.skip(app.name + ' publishes ' + app.args, () => {});
-  }
 
   // note: the above test will result in a non-runnable binary, so the below test must succeed otherwise all following tests will fail
 

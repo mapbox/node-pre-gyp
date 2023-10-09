@@ -27,7 +27,7 @@
     "nopt": "^5.0.0",
     "npmlog": "^5.0.1",
     "rimraf": "^3.0.2",
-    "semver": "7.5.3",
+    "semver": "^7.5.3",
     "tar": "^6.1.11"
   },
   "devDependencies": {

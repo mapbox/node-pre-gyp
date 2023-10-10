@@ -60,7 +60,7 @@ function run(prog, command, args, app, opts, cb) {
 
   // Test building with msvs 2015 since that is more edge case than 2013
   if (process.platform === 'win32') {
-    final_cmd += ' --msvs_version=2015 ';
+    final_cmd += ' --msvs_version=2022 ';
   }
 
   // finish appending all arguments

@@ -7,7 +7,7 @@ const os = require('os');
 
 const tar = require('tar-fs');
 const Agent = require('https-proxy-agent');
-const fetch = require('node-fetch');
+//const fetch = import('node-fetch');
 const rimraf = require('rimraf');
 
 const test = require('tape');
@@ -96,11 +96,18 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
   const url = 'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
 
   async function getBcrypt() {
-    const res = await fetch(url, options);
+    var body;
+    const res = await (await import('node-fetch')).default(url, options);
     if (res.status !== 200) {
       throw new Error(`fetch got error ${res.status}`);
     }
     return res.body;
+    /*await fetch(url, options).then(res => {
+      if (res.status !== 200) {
+        throw new Error(`fetch got error ${res.status}`);
+      }
+      return res.body;
+    });*/    
   }
 
   const withDir = path.join(downloadDir, 'napi-v3', 'bcrypt_lib.node');

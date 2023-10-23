@@ -20,20 +20,20 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
-    "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^5.0.0",
+    "detect-libc": "^2.0.2",
+    "https-proxy-agent": "^5.0.1",
     "make-dir": "^3.1.0",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.7.0",
     "nopt": "^5.0.0",
     "npmlog": "^5.0.1",
     "rimraf": "^3.0.2",
-    "semver": "^7.3.5",
-    "tar": "^6.1.11"
+    "semver": "^7.5.4",
+    "tar": "^6.2.0"
   },
   "devDependencies": {
-    "@mapbox/cloudfriend": "^5.1.0",
+    "@mapbox/cloudfriend": "^5.1.1",
     "@mapbox/eslint-config-mapbox": "^3.0.0",
-    "aws-sdk": "^2.1087.0",
+    "aws-sdk": "^2.1478.0",
     "codecov": "^3.8.3",
     "eslint": "^7.32.0",
     "eslint-plugin-node": "^11.1.0",
@@ -41,7 +41,7 @@
     "nock": "^12.0.3",
     "node-addon-api": "^4.3.0",
     "nyc": "^15.1.0",
-    "tape": "^5.5.2",
+    "tape": "^5.7.2",
     "tar-fs": "^2.1.1"
   },
   "nyc": {

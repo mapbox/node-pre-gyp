@@ -6,7 +6,7 @@ const { createUnzip } = require('zlib');
 const os = require('os');
 
 const tar = require('tar-fs');
-const Agent = require('https-proxy-agent');
+const { HttpsProxyAgent } = require('https-proxy-agent');
 const fetch = require('node-fetch');
 const rimraf = require('rimraf');
 
@@ -73,7 +73,7 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new Agent(proxyServer);
+  options.agent = new HttpsProxyAgent(proxyServer);
 
   process.env.NOCK_OFF = true;
 

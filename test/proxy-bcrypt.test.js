@@ -8,7 +8,7 @@ const os = require('os');
 const tar = require('tar-fs');
 const Agent = require('https-proxy-agent');
 const fetch = require('node-fetch');
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 
 const test = require('tape');
 
@@ -78,7 +78,7 @@ test('setup proxy server', (t) => {
   process.env.NOCK_OFF = true;
 
   // make sure the download directory deleted then create an empty one
-  rimraf(downloadDir, () => {
+  rimraf(downloadDir).then(() => {
     fs.mkdir('download', (e) => {
       if (e && e.code !== 'EEXIST') {
         t.error(e);
@@ -157,5 +157,5 @@ test(`cleanup after ${__filename}`, (t) => {
   process.env.node_pre_gyp_s3_host = initial_s3_host;
   process.env.node_pre_gyp_mock_s3 = initial_mock_s3;
   // ignore errors
-  rimraf(downloadDir, () => t.end());
+  rimraf(downloadDir).then(() => t.end(), () => {});
 });

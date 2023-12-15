@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 
 const npg = require('../lib/node-pre-gyp.js');
 const test = require('tape');
@@ -64,7 +64,7 @@ test('setup', (t) => {
 
 test.onFinish(() => {
   process.chdir(orig_dir);
-  rimraf(scratch, () => undefined);
+  rimraf(scratch).then(() => undefined, () => undefined);
 });
 
 test('should set staging and production hosts', (t) => {

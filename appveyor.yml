@@ -16,7 +16,7 @@ platform:
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:Platform
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - npm config get
   - node --version
@@ -24,8 +24,8 @@ install:
   - node -e "console.log(process.arch);"
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" amd64
-  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" x86
+  # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" amd64
+  # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" x86
   - npm ci
   - npm test
 

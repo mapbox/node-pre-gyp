@@ -22,19 +22,19 @@ install:
   - node --version
   - npm --version
   - node -e "console.log(process.arch);"
-  - pwd || true
-  - ls -la || true
-  - ls -la /c/ || true
-  - ls -la "/c/Program Files (x86)" || true
-  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/" || true
-  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/" || true
-  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/" || true
-  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/" || true
-  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/vcvarsall.bat" || true
+  # - pwd || true
+  # - ls -la || true
+  # - ls -la /c/ || true
+  # - ls -la "/c/Program Files (x86)" || true
+  - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/Installer" || true
+  # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/" || true
+  # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/" || true
+  # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/" || true
+  # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/vcvarsall.bat" || true
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\vcvarsall.bat" amd64
-  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\vcvarsall.bat" x86
+  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer" amd64
+  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer" x86
   - npm ci
   - npm test
 

@@ -1,10 +1,13 @@
-os: Visual Studio 2015
+# http://www.appveyor.com/docs/appveyor-yml
+
+image: 
+  - Visual Studio 2022
 
 environment:
   matrix:
-    - nodejs_version: 10
-    - nodejs_version: 12
-    - nodejs_version: 14
+    - nodejs_version: 16
+    - nodejs_version: 18
+    - nodejs_version: 20
 
 platform:
   - x64
@@ -21,8 +24,8 @@ install:
   - node -e "console.log(process.arch);"
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" amd64
+  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" x86
   - npm ci
   - npm test
 

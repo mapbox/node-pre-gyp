@@ -22,10 +22,11 @@ install:
   - node --version
   - npm --version
   - node -e "console.log(process.arch);"
+  - ls -laR /Program*
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" amd64
-  # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 22.0\VC\vcvarsall.bat" x86
+  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\vcvarsall.bat" amd64
+  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\vcvarsall.bat" x86
   - npm ci
   - npm test
 

@@ -1,10 +1,16 @@
-os: Visual Studio 2015
+# http://www.appveyor.com/docs/appveyor-yml
+
+image: 
+  - Visual Studio 2022
 
 environment:
   matrix:
-    - nodejs_version: 10
-    - nodejs_version: 12
-    - nodejs_version: 14
+    - nodejs_version: 16
+    - nodejs_version: 18
+    - nodejs_version: 20
+    allow_failures:  # TODO: Fix these tests and remove these three lines.
+      - nodejs_version: 18
+      - nodejs_version: 20
 
 platform:
   - x64
@@ -13,17 +19,20 @@ platform:
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:Platform
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - npm config get
   - node --version
   - npm --version
   - node -e "console.log(process.arch);"
-  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
-  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  # Python >= v3.12 requires node-gyp >= v10
+  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python311-x64;%PATH%
+  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
+  # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+  # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - npm config list
   - npm ci
+  # - npm audit  # TODO: Fix mapbox/node-pre-gyp#705 and enable this line
   - npm test
 
 build: off

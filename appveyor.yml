@@ -7,7 +7,7 @@ environment:
     - nodejs_version: 18
     - nodejs_version: 20
 
-matrix:  # TODO: Fix these tests and remove this allow_failures matrix.
+matrix:  # TODO: Fix mapbox/node-pre-gyp#710 and remove this allow_failures matrix.
   allow_failures:
     - nodejs_version: 18  # Error: Unsupported target version: 18.x.x
     - nodejs_version: 20  # Error: Unsupported target version: 20.x.x

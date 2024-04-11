@@ -6,9 +6,9 @@ image:
 environment:
   matrix:
     - nodejs_version: 16
-    # - nodejs_version: 18
-    # - nodejs_version: 20
-    allow_failures:  # TODO: Fix these tests and remove this line.
+    - nodejs_version: 18
+    - nodejs_version: 20
+    allow_failures:  # TODO: Fix these tests and remove these three lines.
       - nodejs_version: 18
       - nodejs_version: 20
 

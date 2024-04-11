@@ -26,8 +26,10 @@ install:
   # - ls -la || true
   # - ls -la /c/ || true
   # - ls -la "/c/Program Files (x86)" || true
-  - export VCINSTALLDIR="/c/Program Files (x86)/Microsoft Visual Studio/Installer"
-  - ls -laR $VCINSTALLDIR
+  # - export VCINSTALLDIR="/c/Program Files (x86)/Microsoft Visual Studio/Installer"
+  - npm config set VCINSTALLDIR "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
+  - ls -laR $VCINSTALLDIR || true
+  - ls -laR "%VCINSTALLDIR%" || true
   # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/vcvarsall.bat" || true
   # - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
   # - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%

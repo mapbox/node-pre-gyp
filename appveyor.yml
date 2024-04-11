@@ -29,6 +29,8 @@ install:
   # - export VCINSTALLDIR="/c/Program Files (x86)/Microsoft Visual Studio/Installer"
   - npm config set VCINSTALLDIR "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
   - npm config set msvs_version 2022
+  - IF /I "%PLATFORM%" == "x64" npm config set npm_config_python C:\Python311-x64\python.exe
+  - IF /I "%PLATFORM%" == "x86" npm config set npm_config_python C:\Python311\python.exe
   - npm config list || true
   - py --list-paths
   # - ls -laR $VCINSTALLDIR || true

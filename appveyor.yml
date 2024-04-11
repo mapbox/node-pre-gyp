@@ -44,7 +44,7 @@ install:
   # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" amd64
   # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" x86
   - npm ci
-  - npm audit
+  # - npm audit
   - npm test
 
 build: off

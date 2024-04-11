@@ -27,7 +27,7 @@ install:
   - node -e "console.log(process.arch);"  # 'x64' or 'ia32'
   # Python >= v3.12 requires node-gyp >= v10
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python311-x64;%PATH%
-  - IF /I "%PLATFORM%" != "x64" SET PATH=C:\python311;%PATH%
+  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
   - npm config list
   - npm ci
   # - npm audit  # TODO: Fix mapbox/node-pre-gyp#705 and enable this line

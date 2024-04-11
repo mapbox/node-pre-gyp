@@ -1,18 +1,16 @@
-# http://www.appveyor.com/docs/appveyor-yml
-
-image: 
+image:  # http://www.appveyor.com/docs/appveyor-yml
   - Visual Studio 2022
 
 environment:
-  matrix:
+  matrix:  # https://github.com/nodejs/release#release-schedule
     - nodejs_version: 16
     - nodejs_version: 18
     - nodejs_version: 20
 
-matrix:  # TODO: Fix these tests and remove these four lines.
+matrix:  # TODO: Fix these tests and remove this allow_failures matrix.
   allow_failures:
-    - nodejs_version: 18
-    - nodejs_version: 20
+    - nodejs_version: 18  # Error: Unsupported target version: 18.x.x
+    - nodejs_version: 20  # Error: Unsupported target version: 20.x.x
 
 platform:
   - x64
@@ -26,12 +24,10 @@ install:
   - npm config get
   - node --version
   - npm --version
-  - node -e "console.log(process.arch);"
+  - node -e "console.log(process.arch);"  # 'x64' or 'ia32'
   # Python >= v3.12 requires node-gyp >= v10
   - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python311-x64;%PATH%
-  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
-  # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - IF /I "%PLATFORM%" != "x64" SET PATH=C:\python311;%PATH%
   - npm config list
   - npm ci
   # - npm audit  # TODO: Fix mapbox/node-pre-gyp#705 and enable this line

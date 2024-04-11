@@ -88,6 +88,7 @@ function run(prog, command, args, app, opts, cb) {
 
   // Finally, execute the command
   cp.exec(final_cmd, opts, (err, stdout, stderr) => {
+    console.log("Command '" + final_cmd + "'");
     if (err) {
       const error = new Error("Command failed '" + final_cmd + "'");
       error.stack = stderr;

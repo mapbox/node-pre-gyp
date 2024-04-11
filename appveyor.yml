@@ -29,15 +29,15 @@ install:
   # - export VCINSTALLDIR="/c/Program Files (x86)/Microsoft Visual Studio/Installer"
   - npm config set VCINSTALLDIR "C:\Program Files (x86)\Microsoft Visual Studio\Installer"
   - npm config set msvs_version 2022
-  - IF /I "%PLATFORM%" == "x64" npm config set npm_config_python C:\Python311-x64\python.exe
-  - IF /I "%PLATFORM%" == "x86" npm config set npm_config_python C:\Python311\python.exe
+  #- IF /I "%PLATFORM%" == "x64" npm config set npm_config_python C:\Python311-x64\python.exe
+  #- IF /I "%PLATFORM%" == "x86" npm config set npm_config_python C:\Python311\python.exe
   - npm config list || true
   - py --list-paths
   # - ls -laR $VCINSTALLDIR || true
   # - ls -laR "%VCINSTALLDIR%" || true
   # - ls -la "/c/Program Files (x86)/Microsoft Visual Studio/2022/Community/VC/vcvarsall.bat" || true
-  # - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
-  # - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
+  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python311-x64;%PATH%
+  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
   # - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer\setup.exe" amd64
   # - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" x86
   - npm ci

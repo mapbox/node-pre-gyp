@@ -1,10 +1,16 @@
-os: Visual Studio 2015
+image:  # http://www.appveyor.com/docs/appveyor-yml
+  - Visual Studio 2022
 
 environment:
-  matrix:
-    - nodejs_version: 10
-    - nodejs_version: 12
-    - nodejs_version: 14
+  matrix:  # https://github.com/nodejs/release#release-schedule
+    - nodejs_version: 16
+    - nodejs_version: 18
+    - nodejs_version: 20
+
+matrix:  # TODO: Fix mapbox/node-pre-gyp#710 and remove this allow_failures matrix.
+  allow_failures:
+    - nodejs_version: 18  # Error: Unsupported target version: 18.x.x
+    - nodejs_version: 20  # Error: Unsupported target version: 20.x.x
 
 platform:
   - x64
@@ -13,17 +19,18 @@ platform:
 shallow_clone: true
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:Platform
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - npm config get
   - node --version
   - npm --version
-  - node -e "console.log(process.arch);"
-  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python27-x64;%PATH%
-  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python27;%PATH%
-  - IF /I "%PLATFORM%" == "x64" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - IF /I "%PLATFORM%" == "x86" CALL "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - node -e "console.log(process.arch);"  # 'x64' or 'ia32'
+  # Python >= v3.12 requires node-gyp >= v10
+  - IF /I "%PLATFORM%" == "x64" set PATH=C:\Python311-x64;%PATH%
+  - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
+  - npm config list
   - npm ci
+  # - npm audit  # TODO: Fix mapbox/node-pre-gyp#705 and enable this line
   - npm test
 
 build: off

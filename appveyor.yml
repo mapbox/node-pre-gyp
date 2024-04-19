@@ -31,6 +31,7 @@ install:
   - IF /I "%PLATFORM%" == "x86" SET PATH=C:\python311;%PATH%
   - npm config list
   - npm ci
+  - npm run update-crosswalk  # To support newer versions of Node.js
   # - npm audit  # TODO: Fix mapbox/node-pre-gyp#705 and enable this line
   - npm test
 

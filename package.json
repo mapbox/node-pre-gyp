@@ -42,7 +42,7 @@
     "node-addon-api": "^4.3.0",
     "nyc": "^15.1.0",
     "tape": "^5.5.2",
-    "tar-fs": "^2.1.1"
+    "tar-fs": "^3.0.6"
   },
   "nyc": {
     "all": true,

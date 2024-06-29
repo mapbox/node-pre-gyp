@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-2019] # due to node-gyp & node compatibility issues, windows 2022 won't work for all node versions
-        node: [10, 12, 14, 16, 18]
+        node: [18, 20, 22]
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-18.04 # at current config the nw test requires python 2 as default. hence use older linux version
     strategy:
       matrix:
-        node: [10, 12, 14, 16] # node 18 requires glibc GLIBC_2.28 not available on older version of linux
+        node: [18, 20, 22]
         nw: [0.64.0, 0.50.2] # current version as of may 2022 and the one tested before introduction of this action.
     name: NW.js ${{ matrix.nw }} on Node ${{ matrix.node }}
 

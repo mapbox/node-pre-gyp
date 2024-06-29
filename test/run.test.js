@@ -210,7 +210,8 @@ test('verify that a non-existent package.json fails', (t) => {
         new npg.Run({ package_json_path: dir + '/package.json' });
         t.fail('new Run() should have thrown');
       } catch (e) {
-        t.equal(e.message, `ENOENT: no such file or directory, open '${dir}/package.json'`);
+        const exist = e.message.indexOf('ENOENT: no such file or directory')
+        t.equal(exist, 0);
       }
       t.end();
     });

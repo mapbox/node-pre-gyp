@@ -10,4 +10,4 @@ npm version <update_type> --preid pre --no-git-tag-version
 ## 1.0.11
 ```
 
-3. Commit and push the changes. On push the 'node-release' workflow will automaticlly check if the release has been published on npm. If the release has not yet been published, the workflow will build the node binaries and upload them to a new github release, then publish a new npm release.
+3. Commit and push the changes. On push the release workflow will automaticlly check if the release has been published on npm. If the release has not yet been published, the workflow will update the abi crosswalk file and publish a new npm release.

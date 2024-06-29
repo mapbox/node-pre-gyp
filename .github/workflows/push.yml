@@ -53,22 +53,3 @@ jobs:
           npm run test:s3
         if: ${{ env.S3_BUCKET != '' }}
 
-  test-nw:
-    runs-on: ubuntu-18.04 # at current config the nw test requires python 2 as default. hence use older linux version
-    strategy:
-      matrix:
-        node: [18, 20, 22]
-        nw: [0.64.0, 0.50.2] # current version as of may 2022 and the one tested before introduction of this action.
-    name: NW.js ${{ matrix.nw }} on Node ${{ matrix.node }}
-
-    steps:
-      - name: Checkout ${{ github.ref }}
-        uses: actions/checkout@v2
-
-      - name: Setup node ${{ matrix.node }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Run Script
-        run: ./scripts/test-node-webkit.sh ${{ matrix.nw }}

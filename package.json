@@ -21,10 +21,10 @@
   "main": "./lib/node-pre-gyp.js",
   "dependencies": {
     "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^5.0.0",
+    "https-proxy-agent": "^7.0.5",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",
-    "nopt": "^5.0.0",
+    "nopt": "^7.2.0",
     "npmlog": "^7.0.1",
     "rimraf": "^5.0.5",
     "semver": "^7.3.5",

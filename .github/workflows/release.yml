@@ -96,7 +96,7 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
           npm publish --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_ORG_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to NPM (prerelease)
         if: ${{ steps.prepare_release.outputs.prerelease == 'true' }}
@@ -104,4 +104,4 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken "${NPM_TOKEN}"
           npm publish --tag next --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_ORG_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

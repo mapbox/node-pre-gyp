@@ -20,7 +20,7 @@
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
   "engines": {
-    "node": "^14.17.0 || ^16.13.0 || >=18.0.0"
+    "node": ">=18"
   },
   "dependencies": {
     "detect-libc": "^2.0.0",

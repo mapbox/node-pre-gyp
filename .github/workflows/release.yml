@@ -14,11 +14,8 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Use Node.js from nvmrc
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
 
@@ -45,25 +42,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Use Node.js from nvmrc
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
 
+      - run: npm ci
+
+      - run: npm audit
+
+      - run: npm run lint
+
+      - run: npm run update-crosswalk  # To support newer versions of Node.js
+
+      - run: npm run build --if-present
+      
+      - run: npm test
+ 
       - name: Get version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
 
-      - name: npm ci
-        run: npm ci
-
-      - name: Update abi crosswalk file
-        run: npm run update-crosswalk
-
-      - name: Prepare release
+      - name: Prepare release changelog
         id: prepare_release
         run: |
           RELEASE_TYPE="$(node -e "console.log(require('semver').prerelease('${{ steps.package-version.outputs.current-version }}') ? 'prerelease' : 'regular')")"

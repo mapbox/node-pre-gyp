@@ -1,5 +1,7 @@
 #!/bin/bash
 
+nw_version=${1:-"0.50.2"}
+
 set -eu
 set -o pipefail
 
@@ -9,7 +11,7 @@ export PATH=`pwd`/bin:$PATH
 
 BASE=$(pwd)
 
-export NODE_WEBKIT_VERSION="0.50.2"
+export NODE_WEBKIT_VERSION="${nw_version}"
 export NW_INSTALL_URL="https://dl.nwjs.io"
 
 if [[ `uname -s` == 'Darwin' ]]; then

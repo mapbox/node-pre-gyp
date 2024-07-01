@@ -24,9 +24,9 @@
   },
   "dependencies": {
     "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^7.0.5",
-    "make-dir": "^5.0.0",
-    "node-fetch": "^3.3.2",
+    "https-proxy-agent": "^5.0.0",
+    "make-dir": "^3.1.0",
+    "node-fetch": "^2.6.7",
     "nopt": "^7.2.1",
     "npmlog": "^7.0.1",
     "rimraf": "^5.0.5",
@@ -34,17 +34,18 @@
     "tar": "^7.4.0"
   },
   "devDependencies": {
-    "@mapbox/cloudfriend": "^8.1.0",
+    "@mapbox/cloudfriend": "^5.1.0",
+    "@mapbox/eslint-config-mapbox": "^5.0.0",
     "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
-    "eslint": "^9.6.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-node": "^11.1.0",
     "mock-aws-s3": "^4.0.2",
-    "nock": "^13.5.4",
-    "node-addon-api": "^8.0.0",
-    "nyc": "^17.0.0",
+    "nock": "^12.0.3",
+    "node-addon-api": "^4.3.0",
+    "nyc": "^15.1.0",
     "tape": "^5.5.2",
-    "tar-fs": "^3.0.6"
+    "tar-fs": "^2.1.1"
   },
   "nyc": {
     "all": true,

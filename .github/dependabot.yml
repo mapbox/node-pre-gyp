@@ -3,14 +3,15 @@
 
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: /
-    groups:
-      npm:
-        patterns:
-          - "*"  # Group all npm updates into a single larger pull request
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: weekly
+      interval: "daily"
+    allow:
+      # Allow both direct and indirect updates for all packages.
+      - dependency-type: "all"
+    # Allow up to 10 open pull requests for dependencies.
+    open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: /
     groups:

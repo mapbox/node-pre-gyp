@@ -23,12 +23,12 @@
     "node": ">=18"
   },
   "dependencies": {
+    "consola": "^3.2.3",
     "detect-libc": "^2.0.0",
     "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",
     "nopt": "^7.2.1",
-    "npmlog": "^7.0.1",
     "rimraf": "^5.0.5",
     "semver": "^7.3.5",
     "tar": "^7.4.0"

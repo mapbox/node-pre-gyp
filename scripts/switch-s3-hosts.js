@@ -17,7 +17,7 @@
 //
 
 const fs = require('fs');
-const walk = require('action-walk'); // eslint-disable-line node/no-missing-require
+const walk = require('action-walk'); // eslint-disable-line n/no-missing-require
 
 const [maj, min] = process.versions.node.split('.');
 if (`${maj}.${min}` < 10.1) {
@@ -60,7 +60,7 @@ function fileAction(path) {
     const changed = file.replace(repl.source, repl.target);
     if (file !== changed) {
       console.log('replacing in:', path);
-      // eslint-disable-next-line node/no-unsupported-features/node-builtins
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       return fs.promises.writeFile(path, changed);
     } else {
       console.log('target not found in:', path);

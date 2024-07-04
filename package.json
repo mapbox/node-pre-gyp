@@ -41,7 +41,7 @@
     "eslint-plugin-n": "^17.9.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^12.0.3",
-    "node-addon-api": "^4.3.0",
+    "node-addon-api": "^8.0.0",
     "nyc": "^15.1.0",
     "tape": "^5.5.2",
     "tar-fs": "^2.1.1"

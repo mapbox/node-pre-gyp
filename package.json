@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^5.0.0",
+    "https-proxy-agent": "^7.0.5",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",
     "nopt": "^7.2.1",

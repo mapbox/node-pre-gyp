@@ -5,6 +5,10 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
+    groups:
+      npm:
+        patterns:
+          - "*"  # Group all Actions updates into a single larger pull request
     schedule:
       interval: "daily"
     allow:

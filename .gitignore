@@ -9,6 +9,5 @@ node-webkit.app
 node-webkit*.zip
 npm-debug.log
 nwsnapshot
-package-lock.json
 test/*/package-lock.json
 test/app7/build-tmp-napi-*

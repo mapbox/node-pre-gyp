@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - run: npm install
       - run: npm audit
       - run: npm run lint
       # - run: npm run update-crosswalk  # To support newer versions of Node.js

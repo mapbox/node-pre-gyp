@@ -5,13 +5,12 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
+    groups:
+      github-actions:
+        patterns:
+          - "*"  # Group all Actions updates into a single larger pull request
     schedule:
       interval: "daily"
-    allow:
-      # Allow both direct and indirect updates for all packages.
-      - dependency-type: "all"
-    # Allow up to 10 open pull requests for dependencies.
-    open-pull-requests-limit: 100  # TODO: Revert to 10
   - package-ecosystem: github-actions
     directory: /
     groups:

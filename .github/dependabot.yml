@@ -7,11 +7,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    allow:
-      # Allow both direct and indirect updates for all packages.
-      - dependency-type: "all"
     # Allow up to 10 open pull requests for dependencies.
-    open-pull-requests-limit: 100  # TODO: Revert to 10
+    open-pull-requests-limit: 5
   - package-ecosystem: github-actions
     directory: /
     groups:

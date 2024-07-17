@@ -3,15 +3,9 @@ image:  # http://www.appveyor.com/docs/appveyor-yml
 
 environment:
   matrix:  # https://github.com/nodejs/release#release-schedule
-    - nodejs_version: 16
     - nodejs_version: 18
     - nodejs_version: 20
-    - nodejs_version: 21
-
-matrix:  # TODO: Fix the `configures with unparsed options` tests and remove this allow_failures matrix.
-  allow_failures:
-    - nodejs_version: 20
-    - nodejs_version: 21
+    - nodejs_version: 22
 
 platform:
   - x64

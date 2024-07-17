@@ -19,24 +19,26 @@
   },
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "detect-libc": "^2.0.0",
     "https-proxy-agent": "^5.0.0",
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",
-    "nopt": "^5.0.0",
-    "npmlog": "^5.0.1",
-    "rimraf": "^5.0.5",
+    "nopt": "^7.2.1",
+    "npmlog": "^7.0.1",
     "semver": "^7.5.3",
-    "tar": "^6.1.11"
+    "tar": "^7.4.0"
   },
   "devDependencies": {
     "@mapbox/cloudfriend": "^5.1.0",
-    "@mapbox/eslint-config-mapbox": "^3.0.0",
+    "@mapbox/eslint-config-mapbox": "^5.0.1",
     "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
-    "eslint": "^7.32.0",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n": "^17.9.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^12.0.3",
     "node-addon-api": "^4.3.0",

@@ -222,6 +222,50 @@ test('should verify that the binary property has required properties', (t) => {
   t.end();
 });
 
+test('should not add bucket name to hosted_path when s3ForcePathStyle is false', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'host': 'binary-path',
+      'bucket': 'bucket-name',
+      'region': 'us-west-1',
+      's3ForcePathStyle': false
+    }
+  };
+
+  const package_json = Object.assign({}, mock_package_json);
+  const opts = versioning.evaluate(package_json, { module_root: '/root' });
+  t.equal(opts.hosted_path, mock_package_json.binary.host + '/');
+
+  t.end();
+});
+
+test('should add bucket name to hosted_path when s3ForcePathStyle is true', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'binary-module-name',
+      'module_path': 'binary-module-path',
+      'host': 'binary-path',
+      'bucket': 'bucket-name',
+      'region': 'us-west-1',
+      's3ForcePathStyle': true
+    }
+  };
+
+  const package_json = Object.assign({}, mock_package_json);
+  const opts = versioning.evaluate(package_json, { module_root: '/root' });
+  t.equal(opts.hosted_path, mock_package_json.binary.host + '/' + mock_package_json.binary.bucket + '/');
+
+  t.end();
+});
+
 test('should verify host overrides staging and production values', (t) => {
   const mock_package_json = {
     name: 'test',

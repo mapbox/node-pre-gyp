@@ -366,7 +366,7 @@
 
 ## 0.5.24
 
- - Updated ABI crosswalk to incldue node v0.10.30 and v0.10.31
+ - Updated ABI crosswalk to include node v0.10.30 and v0.10.31
 
 ## 0.5.23
 

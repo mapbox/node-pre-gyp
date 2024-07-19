@@ -6,7 +6,7 @@ const { createUnzip } = require('zlib');
 const os = require('os');
 
 const tar = require('tar-fs');
-const Agent = require('https-proxy-agent');
+const { ProxyAgent } = require('undici');
 const fetch = require('node-fetch');
 const { rimraf } = require('rimraf');
 
@@ -44,7 +44,7 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new Agent(proxyServer);
+  options.dispatcher = new ProxyAgent(proxyServer);
 
   // make sure the download directory deleted then create an empty one
   rimraf(downloadDir).then(() => {

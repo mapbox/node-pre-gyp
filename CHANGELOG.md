@@ -1,5 +1,11 @@
 # node-pre-gyp changelog
 
+## Unreleased - 2.0.0
+- Supported Node versions are now Node 18-22. We will attempt to track the [Node.js release schedule](https://github.com/nodejs/release#release-schedule) and will regularly retire support for versions that have reached EOL.
+- Fixed use of `s3ForcePathStyle` for installation [#650](https://github.com/mapbox/node-pre-gyp/pull/650)
+- Upgraded nopt to 7.2.1, npmlog to 7.0.1, and tar to 7.4.0
+- Removed rimraf as a dependency
+
 ## 1.0.11
 - Fixes dependabot alert [CVE-2021-44906](https://nvd.nist.gov/vuln/detail/CVE-2021-44906)
 
@@ -409,7 +415,7 @@
 
  - Finished support for cross building using `--target_platform` option (#82)
  - Now skipping binary validation on install if target arch/platform do not match the host.
- - Removed multi-arch validing for OS X since it required a FAT node.js binary
+ - Removed multi-arch validating for OS X since it required a FAT node.js binary
 
 ## 0.5.13
 
@@ -500,7 +506,7 @@
 
  - Added `unpublish` command.
  - Fixed module path construction in tests.
- - Added ability to disable falling back to build behavior via `npm install --fallback-to-build=false` which overrides setting in a depedencies package.json `install` target.
+ - Added ability to disable falling back to build behavior via `npm install --fallback-to-build=false` which overrides setting in a dependencies package.json `install` target.
 
 ## 0.3.0
 

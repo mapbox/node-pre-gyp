@@ -29,7 +29,7 @@
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.7",
     "nopt": "^7.2.1",
-    "semver": "^7.3.5",
+    "semver": "^7.5.3",
     "tar": "^7.4.0"
   },
   "devDependencies": {

@@ -35,7 +35,10 @@ See the [Frequently Ask Questions](https://github.com/mapbox/node-pre-gyp/wiki/F
 
 ## Depends
 
- - Node.js >= node v8.x
+We will attempt to track the [Node.js release schedule](https://github.com/nodejs/release#release-schedule) and will regularly retire support for versions that have reached EOL.
+
+ - v2: Node.js >= 18.x (unreleased)
+ - v1: Node.js >= 8.x
 
 ## Install
 

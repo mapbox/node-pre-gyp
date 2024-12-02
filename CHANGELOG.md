@@ -416,7 +416,7 @@
 
  - Finished support for cross building using `--target_platform` option (#82)
  - Now skipping binary validation on install if target arch/platform do not match the host.
- - Removed multi-arch validating for OS X since it required a FAT node.js binary
+ - Removed multi-arch validating for macOS since it required a FAT node.js binary
 
 ## 0.5.13
 

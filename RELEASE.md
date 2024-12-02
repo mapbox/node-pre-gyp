@@ -1,6 +1,6 @@
 # Instructions for making a release
 
-1. Change the version number in package.json. on the command line, in the package root directory, run the following command, replacing <update_type> with one of the semantic versioning release types (prerelease, prepatch, preminor, premajor, patch, minor, major):
+1. Change the version number in `package.json`. Run the following command in the package root directory, replacing <update_type> with one of the semantic versioning release types (prerelease, prepatch, preminor, premajor, patch, minor, major):
 
 npm version <update_type> --preid pre --no-git-tag-version
 

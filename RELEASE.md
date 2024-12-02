@@ -2,7 +2,9 @@
 
 1. Change the version number in `package.json`. Run the following command in the package root directory, replacing <update_type> with one of the semantic versioning release types (prerelease, prepatch, preminor, premajor, patch, minor, major):
 
+```
 npm version <update_type> --preid pre --no-git-tag-version
+```
 
 2. Update the changelog, which can be found in `CHANGELOG.md`. The heading must match `## <VERSION>` exactly, or it will not be picked up. For example, for version 1.0.11:
 

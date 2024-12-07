@@ -1,7 +1,5 @@
 # node-pre-gyp changelog
 
-## Unreleased
-
 ## 2.0.0-rc.0
 - Supported Node versions are now stable versions of Node 18+. We will attempt to track the [Node.js release schedule](https://github.com/nodejs/release#release-schedule) and will regularly retire support for versions that have reached EOL.
 - Fixed use of `s3ForcePathStyle` for installation [#650](https://github.com/mapbox/node-pre-gyp/pull/650)

@@ -11,10 +11,9 @@ jobs:
   ci:
     strategy:
       fail-fast: false
-      max-parallel: 9
       matrix:
-        node-version: ['18.x', '20.x', '22.x']
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        node-version: ['18.x', '20.x', 'lts/*']
+        os: [macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

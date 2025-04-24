@@ -124,9 +124,9 @@ test('should detect custom binary host from env', (t) => {
     }
   };
   // mock npm_config_test_binary_host_mirror env
-  process.env.npm_config_test_binary_host_mirror = 'https://npm.taobao.org/mirrors/node-inspector/';
+  process.env.npm_config_test_binary_host_mirror = 'https://registry.npmmirror.com/node-inspector/';
   const opts = versioning.evaluate(mock_package_json, {});
-  t.equal(opts.host, 'https://npm.taobao.org/mirrors/node-inspector/');
+  t.equal(opts.host, 'https://registry.npmmirror.com/node-inspector/');
   delete process.env.npm_config_test_binary_host_mirror;
   t.end();
 });
@@ -306,9 +306,9 @@ test('should replace "-" with "_" in custom binary host', (t) => {
     }
   };
 
-  process.env.npm_config_canvas_prebuilt_binary_host_mirror = 'https://npm.taobao.org/mirrors/node-canvas-prebuilt/';
+  process.env.npm_config_canvas_prebuilt_binary_host_mirror = 'https://registry.npmmirror.com/node-canvas-prebuilt/';
   const opts = versioning.evaluate(mock_package_json, {});
-  t.equal(opts.host, 'https://npm.taobao.org/mirrors/node-canvas-prebuilt/');
+  t.equal(opts.host, 'https://registry.npmmirror.com/node-canvas-prebuilt/');
   delete process.env.npm_config_canvas_prebuilt_binary_host_mirror;
   t.end();
 });

@@ -7,6 +7,7 @@ const os = require('os');
 
 const tar = require('tar-fs');
 const { HttpsProxyAgent } = require('https-proxy-agent');
+const fetch = require("node-fetch-native");
 const { rimraf } = require('rimraf');
 
 const test = require('tape');

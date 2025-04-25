@@ -111,7 +111,7 @@ test('should detect custom binary host from env', (t) => {
   const cloned = JSON.parse(JSON.stringify(parsed_package_json));
   const opts = versioning.evaluate(cloned, {});
 
-  t.equal(opts.host, 'https://npm.taobao.org/mirrors/node-inspector/');
+  t.equal(opts.host, 'https://registry.npmmirror.com/node-inspector/');
 
   delete process.env.npm_config_test_binary_host_mirror;
   t.end();
@@ -1325,7 +1325,8 @@ test('should replace "-" with "_" in mirror binary host', (t) => {
   };
 
   process.env.npm_config_canvas_prebuilt_binary_host_mirror = 'https://registry.npmmirror.com/node-canvas-prebuilt/';
-  const opts = versioning.evaluate(mock_package_json, {});
+  const cloned = JSON.parse(JSON.stringify(parsed_package_json));
+  const opts = versioning.evaluate(cloned, {});
   t.equal(opts.host, 'https://registry.npmmirror.com/node-canvas-prebuilt/');
   delete process.env.npm_config_canvas_prebuilt_binary_host_mirror;
   t.end();

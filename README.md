@@ -103,25 +103,29 @@ This is a guide to configuring your module to use node-pre-gyp.
  - Add `@mapbox/node-pre-gyp` to `dependencies`
  - Add `aws-sdk` as a `devDependency`
  - Add a custom `install` script
- - Declare a `binary` object
+ - Declare a `binary` and spcify `host` object
 
 This looks like:
 
 ```js
-    "dependencies"  : {
-      "@mapbox/node-pre-gyp": "1.x"
-    },
-    "devDependencies": {
-      "aws-sdk": "2.x"
+{
+  "dependencies":{
+    "@mapbox/node-pre-gyp":"1.x"
+  },
+  "devDependencies":{
+    "aws-sdk":"2.x"
+  },
+  "scripts":{
+    "install":"node-pre-gyp install --fallback-to-build"
+  },
+  "binary":{
+    "module_name":"your_module",
+    "module_path":"./lib/binding/",
+    "host":{
+      "endpoint":"https://your_module.s3-us-west-1.amazonaws.com"
     }
-    "scripts": {
-        "install": "node-pre-gyp install --fallback-to-build"
-    },
-    "binary": {
-        "module_name": "your_module",
-        "module_path": "./lib/binding/",
-        "host": "https://your_module.s3-us-west-1.amazonaws.com"
-    }
+  }
+}
 ```
 
 For a full example see [node-addon-examples's package.json](https://github.com/springmeyer/node-addon-example/blob/master/package.json).
@@ -151,9 +155,9 @@ The location your native module is placed after a build. This should be an empty
 
 Note: This property supports variables based on [Versioning](#versioning).
 
-###### host
+###### host (and host.endpoint)
 
-A url to the remote location where you've published tarball binaries (must be `https` not `http`).
+An object with atleast a single key `endpoint` defining the remote location where you've published tarball binaries (must be `https` not `http`).
 
 It is highly recommended that you use Amazon S3. The reasons are:
 
@@ -165,13 +169,21 @@ Why then not require S3? Because while some applications using node-pre-gyp need
 
 It should also be mentioned that there is an optional and entirely separate npm module called [node-pre-gyp-github](https://github.com/bchr02/node-pre-gyp-github) which is intended to complement node-pre-gyp and be installed along with it. It provides the ability to store and publish your binaries within your repositories GitHub Releases if you would rather not use S3 directly. Installation and usage instructions can be found [here](https://github.com/bchr02/node-pre-gyp-github), but the basic premise is that instead of using the ```node-pre-gyp publish``` command you would use ```node-pre-gyp-github publish```.
 
-##### The `binary` object other optional S3 properties
+This looks like:
+
+```js
+{
+  "binary": {
+    "host": {
+      "endpoint": "https://some-bucket.s3.us-east-1.amazonaws.com",
+    }
+  }
+}
+```
+
+##### The `host` object other optional S3 properties
 
 If you are not using a standard s3 path like `bucket_name.s3(.-)region.amazonaws.com`, you might get an error on `publish` because node-pre-gyp extracts the region and bucket from the `host` url. For example, you may have an on-premises s3-compatible storage  server, or may have configured a specific dns redirecting to an s3  endpoint. In these cases, you can explicitly set the `region` and `bucket` properties to tell node-pre-gyp to use these values instead of guessing from the `host` property. The following values can be used in the `binary` section:
-
-###### host
-
-The url to the remote server root location (must be `https` not `http`).
 
 ###### bucket
 
@@ -184,6 +196,21 @@ Your S3 server region.
 ###### s3ForcePathStyle
 
 Set `s3ForcePathStyle` to true if the endpoint url should not be prefixed with the bucket name. If false (default), the server endpoint would be  constructed as `bucket_name.your_server.com`.
+
+For example using an alternate S3 compatible host:
+
+```js
+{
+  "binary": {
+    "host": {
+      "endpoint": "https://play.min.io",
+      "bucket": "node-pre-gyp-production",
+      "region": "us-east-1",
+      "s3ForcePathStyle": true
+    }
+  }
+}
+```
 
 ##### The `binary` object has optional properties
 
@@ -312,28 +339,38 @@ If a a binary was not available for a given platform and `--fallback-to-build` w
 
 #### 9) One more option
 
-It may be that you want to work with two s3 buckets, one for staging and one for production; this
-arrangement makes it less likely to accidentally overwrite a production binary. It also allows the production
-environment to have more restrictive permissions than staging while still enabling publishing when
-developing and testing.
+It may be that you want to work with multiple s3 buckets, one for development, on for staging and one for production; such arrangement makes it less likely to accidentally overwrite a production binary. It also allows the production environment to have more restrictive permissions than development or staging while still enabling publishing when developing and testing.
 
-The binary.host property can be set at execution time. In order to do so all of the following conditions
-must be true.
 
-- binary.host is falsey or not present
-- binary.staging_host is not empty
-- binary.production_host is not empty
+To use that option set `staging_host` and/or `development_host` using settings similar to those used for `host`.
 
-If any of these checks fail then the operation will not perform execution time determination of the s3 target.
+```
+{
+  "binary": {
+    "host": {
+      "endpoint": "https://dns.pointed.example.com",
+      "bucket": "obscured-production-bucket",
+      "region": "us-east-1",
+      "s3ForcePathStyle": true
+    }
+    "staging_host": {
+      "endpoint": "https://my-staging-bucket.s3.us-east-1.amazonaws.com",
+    },
+    "development_host": {
+      "endpoint": "https://play.min.io",
+      "bucket": "node-pre-gyp-development",
+      "region": "us-east-1",
+      "s3ForcePathStyle": true
+    }
+  }
+}
+```
 
-If the command being executed is either "publish" or "unpublish" then the default is set to `binary.staging_host`. In all other cases
-the default is `binary.production_host`.
+Once a development and/or staging host is defined, if the command being executed is either "publish" or "unpublish" then it will default to the lower of the alternate hosts (development and if not present, staging). if the command being executed is either "install" or "info" it will default to the production host (specified by `host`).
 
-The command-line options `--s3_host=staging` or `--s3_host=production` override the default. If `s3_host`
-is present and not `staging` or `production` an exception is thrown.
+To explicitly choose a host use command-line options `--s3_host=development`, `--s3_host=staging` or `--s3_host=production`, or set environment variable `node_pre_gyp_s3_host` to either `development`, `staging` or `production`. Note that the environment variable has priority over the the command line.
 
-This allows installing from staging by specifying `--s3_host=staging`. And it requires specifying
-`--s3_option=production` in order to publish to, or unpublish from, production, making accidental errors less likely.
+This setup allows installing from development or staging by specifying `--s3_host=staging`. And it requires specifying `--s3_option=production` in order to publish to, or unpublish from, production, making accidental errors less likely.
 
 ## Node-API Considerations
 

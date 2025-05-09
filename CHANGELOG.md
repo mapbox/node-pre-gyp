@@ -1,6 +1,8 @@
 # node-pre-gyp changelog
 
 ## master
+
+## 2.0.1
 - Update abi_crosswalk.json for abi 137 / node 24 (https://github.com/mapbox/node-pre-gyp/pull/904)
 
 ## 2.0.0

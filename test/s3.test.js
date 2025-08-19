@@ -37,6 +37,13 @@ const apps = [
     }
   },
   {
+    'name': 'app1.3',
+    'args': '',
+    'files': {
+      'base': ['binding/app1.3.node']
+    }
+  },
+  {
     'name': 'app2',
     'args': '--custom_include_path=../include --debug',
     'files': {

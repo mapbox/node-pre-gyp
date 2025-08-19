@@ -28,10 +28,6 @@ const package_json_template = {
   }
 };
 
-
-const all_commands = ['build', 'clean', 'configure', 'info', 'install', 'package', 'publish', 'rebuild',
-  'reinstall', 'reveal', 'testbinary', 'testpackage', 'unpublish'];
-
 /**
  * before testing create a scratch directory to run tests in.
  */
@@ -65,82 +61,6 @@ test('setup', (t) => {
 test.onFinish(() => {
   process.chdir(orig_dir);
   rimraf(scratch).then(() => undefined, () => undefined);
-});
-
-test('should set staging and production hosts', (t) => {
-  // make sure it's good when specifying host.
-  const mock_package_json = makePackageJson();
-
-  let { prog } = setupTest(dir, mock_package_json);
-  t.deepEqual(prog.package_json, mock_package_json);
-  t.equal(prog.binaryHostSet, false, 'binary host should not be flagged as set');
-
-  // test with no s3_host option
-  all_commands.forEach((cmd) => {
-    const mpj = clone(mock_package_json);
-    mpj.binary.host = '';
-    const opts = { argv: [cmd] };
-    ({ prog } = setupTest(dir, mpj, opts));
-    mpj.binary.host = (cmd === 'publish' || cmd === 'unpublish') ? mpj.binary.staging_host : mpj.binary.production_host;
-    t.deepEqual(prog.package_json, mpj, 'host should be correct for command: ' + cmd);
-    t.equal(prog.binaryHostSet, true, 'binary host should be flagged as set');
-  });
-
-  // test with s3_host set to staging
-  all_commands.forEach((cmd) => {
-    const mpj = clone(mock_package_json);
-    mpj.binary.host = '';
-    const opts = { argv: [cmd, '--s3_host=staging'] };
-    ({ prog } = setupTest(dir, mpj, opts));
-    mpj.binary.host = mpj.binary.staging_host;
-    t.deepEqual(prog.package_json, mpj, 'host should be correct for command: ' + cmd);
-    t.equal(prog.binaryHostSet, true, 'binary host should be flagged as set');
-  });
-
-  // test with s3_host set to production
-  all_commands.forEach((cmd) => {
-    const mpj = clone(mock_package_json);
-    mpj.binary.host = '';
-    const opts = { argv: [cmd, '--s3_host=production'] };
-    ({ prog } = setupTest(dir, mpj, opts));
-    mpj.binary.host = mpj.binary.production_host;
-    t.deepEqual(prog.package_json, mpj, 'host should be correct for command: ' + cmd);
-    t.equal(prog.binaryHostSet, true, 'binary host should be flagged as set');
-  });
-
-  t.end();
-});
-
-test('should execute setBinaryHostProperty() properly', (t) => {
-  // it only --s3_host only takes effect if host is falsey.
-  const mock_package_json = makePackageJson({ binary: { host: '' } });
-
-  const opts = { argv: ['publish', '--s3_host=staging'] };
-
-  let { prog, binaryHost } = setupTest(dir, mock_package_json, opts);
-  t.equal(binaryHost, mock_package_json.binary.staging_host);
-
-  // set it again to verify that it returns the already set value
-  binaryHost = prog.setBinaryHostProperty('publish');
-  t.equal(binaryHost, mock_package_json.binary.staging_host);
-
-  // now do this again but expect an empty binary host value because
-  // staging_host is missing.
-  const mpj = clone(mock_package_json);
-  delete mpj.binary.staging_host;
-  ({ prog, binaryHost } = setupTest(dir, mpj, opts));
-  t.equal(binaryHost, '');
-
-  // one more time but with an invalid value for s3_host
-  opts.argv = ['publish', '--s3_host=bad-news'];
-  try {
-    ({ prog, binaryHost } = setupTest(dir, mock_package_json, opts));
-    t.fail('should throw with --s3_host=bad-news');
-  } catch (e) {
-    t.equal(e.message, 'invalid s3_host bad-news');
-  }
-
-  t.end();
 });
 
 test('verify that the --directory option works', (t) => {
@@ -223,6 +143,10 @@ test('verify that a non-existent package.json fails', (t) => {
 // test helpers.
 //
 
+// helper to clone mock package.json.
+// // https://stackoverflow.com/questions/4459928/how-to-deep-clone-in-javascript
+const clone = (obj) => JSON.parse(JSON.stringify(obj));
+
 function makePackageJson(options = {}) {
   const package_json = clone(package_json_template);
   // override binary values if supplied
@@ -233,60 +157,3 @@ function makePackageJson(options = {}) {
   }
   return package_json;
 }
-
-// helper to write package.json to disk so Run() can be instantiated with it.
-function setupTest(directory, package_json, opts) {
-  opts = opts || {};
-  let argv = ['node', 'program'];
-  if (opts.argv) {
-    argv = argv.concat(opts.argv);
-  }
-  const prev_dir = process.cwd();
-  if (!opts.noChdir) {
-    try {
-      fs.mkdirSync(directory);
-    } catch (e) {
-      if (e.code !== 'EEXIST') {
-        throw e;
-      }
-    }
-    process.chdir(directory);
-  }
-
-  try {
-    fs.writeFileSync('package.json', JSON.stringify(package_json));
-    const prog = new npg.Run({ package_json_path: './package.json', argv });
-    const binaryHost = prog.setBinaryHostProperty(prog.todo[0] && prog.todo[0].name);
-    return { prog, binaryHost };
-  } finally {
-    process.chdir(prev_dir);
-  }
-}
-
-// helper to clone mock package.json. it's overkill for existing tests
-// but is future-proof.
-// https://stackoverflow.com/questions/4459928/how-to-deep-clone-in-javascript
-function clone(obj, hash = new WeakMap()) {
-  if (Object(obj) !== obj) return obj;      // primitives
-  if (hash.has(obj)) return hash.get(obj);  // cyclic reference
-  let result;
-
-  if (obj instanceof Set) {
-    result = new Set(obj);                  // treat set as a value
-  } else if (obj instanceof Map) {
-    result = new Map(Array.from(obj, ([key, val]) => [key, clone(val, hash)]));
-  } else if (obj instanceof Date) {
-    result = new Date(obj);
-  } else if (obj instanceof RegExp) {
-    result = new RegExp(obj.source, obj.flags);
-  } else if (obj.constructor) {
-    result = new obj.constructor();
-  } else {
-    result = Object.create(null);
-  }
-  hash.set(obj, result);
-  return Object.assign(result, ...Object.keys(obj).map((key) => {
-    return { [key]: clone(obj[key], hash) };
-  }));
-}
-

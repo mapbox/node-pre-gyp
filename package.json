@@ -32,7 +32,7 @@
     "tar": "^7.4.0"
   },
   "devDependencies": {
-    "@mapbox/cloudfriend": "^8.1.0",
+    "@mapbox/cloudfriend": "^9.0.0",
     "@mapbox/eslint-config-mapbox": "^5.0.1",
     "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",

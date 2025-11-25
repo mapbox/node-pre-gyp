@@ -1,7 +1,7 @@
 {
   "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "2.0.2-dev",
+  "version": "2.0.2-dev.1",
   "keywords": [
     "native",
     "addon",
@@ -23,6 +23,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "aws-sdk": "^2.1087.0",
     "consola": "^3.2.3",
     "detect-libc": "^2.0.0",
     "https-proxy-agent": "^7.0.5",
@@ -34,7 +35,6 @@
   "devDependencies": {
     "@mapbox/cloudfriend": "^9.0.0",
     "@mapbox/eslint-config-mapbox": "^5.0.1",
-    "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
     "eslint": "^8.57.0",
     "eslint-plugin-n": "^17.9.0",

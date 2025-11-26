@@ -2,6 +2,9 @@
 
 ## master
 
+## 2.0.2
+- Support private ACL for S3 buckets [#923](https://github.com/mapbox/node-pre-gyp/pull/923)
+
 ## 2.0.1
 - Update abi_crosswalk.json for abi 137 / node 24 (https://github.com/mapbox/node-pre-gyp/pull/904)
 

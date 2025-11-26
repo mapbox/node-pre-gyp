@@ -85,6 +85,7 @@ Options include:
  - `--target=0.4.0`: Pass the target node or node-webkit version to compile against
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Any value that is [supported by Node.js](https://nodejs.org/api/os.html#osarch) is valid.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
+ - `--acl=<acl>`: Set the S3 ACL when publishing binaries (e.g., `public-read`, `private`). Overrides the `binary.acl` setting in package.json.
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 
@@ -184,6 +185,33 @@ Your S3 server region.
 ###### s3ForcePathStyle
 
 Set `s3ForcePathStyle` to true if the endpoint url should not be prefixed with the bucket name. If false (default), the server endpoint would be  constructed as `bucket_name.your_server.com`.
+
+###### acl
+
+The S3 Access Control List (ACL) to apply when publishing binaries. Defaults to `'public-read'` for backward compatibility. Common values include:
+
+- `public-read` - (default) Binary is publicly accessible by anyone
+- `private` - Binary requires AWS credentials to download
+- `authenticated-read` - Any authenticated AWS user can download
+- `bucket-owner-read` - Bucket owner gets READ access
+- `bucket-owner-full-control` - Bucket owner gets FULL_CONTROL access
+
+**For private binaries:**
+- Users installing your package will need AWS credentials configured (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables)
+- The `aws-sdk` package must be available at install time
+- If authentication fails, node-pre-gyp will fall back to building from source (if `--fallback-to-build` is specified)
+
+You can also specify the ACL via command-line flag: `node-pre-gyp publish --acl=private`
+
+Example for private binaries:
+```json
+"binary": {
+  "module_name": "your_module",
+  "module_path": "./lib/binding/",
+  "host": "https://your-bucket.s3.us-east-1.amazonaws.com",
+  "acl": "private"
+}
+```
 
 ##### The `binary` object has optional properties
 

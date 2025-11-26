@@ -100,6 +100,56 @@ test('should throw when custom node target is not found in abi_crosswalk file', 
   }
 });
 
+test('should default ACL to public-read when not specified', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'test',
+      'module_path': './lib/binding/',
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com'
+    }
+  };
+  const opts = versioning.evaluate(mock_package_json, {});
+  t.equal(opts.acl, 'public-read', 'ACL should default to public-read');
+  t.end();
+});
+
+test('should use ACL from package.json binary.acl', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'test',
+      'module_path': './lib/binding/',
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com',
+      'acl': 'private'
+    }
+  };
+  const opts = versioning.evaluate(mock_package_json, {});
+  t.equal(opts.acl, 'private', 'ACL should be read from package.json binary.acl');
+  t.end();
+});
+
+test('should allow CLI flag to override package.json ACL', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'test',
+      'module_path': './lib/binding/',
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com',
+      'acl': 'private'
+    }
+  };
+  const opts = versioning.evaluate(mock_package_json, { acl: 'authenticated-read' });
+  t.equal(opts.acl, 'authenticated-read', 'CLI flag should override package.json ACL');
+  t.end();
+});
+
 test('should throw when custom node target is not semver', (t) => {
   try {
     versioning.get_runtime_abi('node', '1.2.3.4');

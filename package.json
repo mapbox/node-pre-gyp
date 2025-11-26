@@ -1,7 +1,7 @@
 {
   "name": "@mapbox/node-pre-gyp",
   "description": "Node.js native addon binary install tool",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "keywords": [
     "native",
     "addon",
@@ -61,5 +61,8 @@
     "test": "tape test/*test.js",
     "test:s3": "tape test/s3.test.js",
     "bucket": "node scripts/set-bucket.js"
+  },
+  "overrides": {
+    "js-yaml": "^3.14.2"
   }
 }

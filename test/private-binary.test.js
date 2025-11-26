@@ -44,12 +44,7 @@ test('should fallback to authenticated download on 403 Forbidden', (t) => {
     delete process.env.AWS_SECRET_ACCESS_KEY;
 
     t.ok(publicScope.isDone(), 'Public HTTPS request was attempted');
-    if (err) {
-      t.ok(err.message.includes('does not exist') || err.message.includes('NotFound'),
-        'Error should be about missing file in S3, not credentials');
-    } else {
-      t.pass('Authenticated download succeeded');
-    }
+    t.notOk(err, 'Authenticated download succeeded');
 
     nock.cleanAll();
     t.end();

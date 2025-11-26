@@ -1,12 +1,16 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const test = require('tape');
 const nock = require('nock');
 const install = require('../lib/install.js');
 
 // Dummy tar.gz data - contains a blank directory
 const targz = 'H4sICPr8u1oCA3gudGFyANPTZ6A5MDAwMDc1VQDTZhAaCGA0hGNobGRqZm5uZmxupGBgaGhiZsKgYMpAB1BaXJJYBHRKYk5pcioedeUZqak5+D2J5CkFhlEwCkbBKBjkAAAyG1ofAAYAAA==';
+
+// Determine the project root (where package.json with @mapbox/node-pre-gyp exists)
+const projectRoot = path.join(__dirname, '..');
 
 test('should fallback to authenticated download on 403 Forbidden', (t) => {
   process.env.node_pre_gyp_mock_s3 = 'true';
@@ -28,7 +32,9 @@ test('should fallback to authenticated download on 403 Forbidden', (t) => {
     }
   };
 
-  process.chdir('test/app1');
+  // cd into app directory from project root
+  const appDir = path.join(projectRoot, 'test', 'app1');
+  process.chdir(appDir);
   opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
   opts.package_json.binary.host = origin;
 
@@ -51,12 +57,6 @@ test('should fallback to authenticated download on 403 Forbidden', (t) => {
 });
 
 test('should fail gracefully when 403 and no AWS credentials', (t) => {
-  try {
-    process.chdir('test/app1');
-  } catch (e) {
-    // Already in test/app1 from previous test
-  }
-
   // Ensure no AWS credentials
   delete process.env.AWS_ACCESS_KEY_ID;
   delete process.env.AWS_SECRET_ACCESS_KEY;
@@ -76,6 +76,9 @@ test('should fail gracefully when 403 and no AWS credentials', (t) => {
     }
   };
 
+  // cd into app directory from project root
+  const appDir = path.join(projectRoot, 'test', 'app1');
+  process.chdir(appDir);
   opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
   opts.package_json.binary.host = origin;
 
@@ -91,12 +94,6 @@ test('should fail gracefully when 403 and no AWS credentials', (t) => {
 });
 
 test('should succeed with public binary (no 403)', (t) => {
-  try {
-    process.chdir('test/app1');
-  } catch (e) {
-    // Already in test/app1
-  }
-
   const origin = 'https://npg-mock-bucket.s3.us-east-1.amazonaws.com';
   nock.cleanAll();
   const scope = nock(origin)
@@ -110,6 +107,9 @@ test('should succeed with public binary (no 403)', (t) => {
     }
   };
 
+  // cd into app directory from project root
+  const appDir = path.join(projectRoot, 'test', 'app1');
+  process.chdir(appDir);
   opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
   opts.package_json.binary.host = origin;
 
@@ -123,12 +123,6 @@ test('should succeed with public binary (no 403)', (t) => {
 });
 
 test('should handle 404 without triggering authenticated fallback', (t) => {
-  try {
-    process.chdir('test/app1');
-  } catch (e) {
-    // Already in test/app1
-  }
-
   const origin = 'https://npg-mock-bucket.s3.us-east-1.amazonaws.com';
 
   nock.cleanAll();
@@ -143,6 +137,9 @@ test('should handle 404 without triggering authenticated fallback', (t) => {
     }
   };
 
+  // cd into app directory from project root
+  const appDir = path.join(projectRoot, 'test', 'app1');
+  process.chdir(appDir);
   opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
   opts.package_json.binary.host = origin;
 

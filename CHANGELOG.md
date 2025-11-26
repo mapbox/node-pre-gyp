@@ -2,6 +2,9 @@
 
 ## master
 
+## 2.0.3
+- Revert "Bump nopt from 8.0.0 to 9.0.0 (#919)" (#925)[https://github.com/mapbox/node-pre-gyp/pull/925]
+
 ## 2.0.2
 - Support private ACL for S3 buckets [#923](https://github.com/mapbox/node-pre-gyp/pull/923)
 

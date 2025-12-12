@@ -42,7 +42,7 @@ jobs:
     if: ${{ needs.release-check.outputs.published == 'false' }}
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # allow github publish action
       id-token: write # Enables OIDC token generation
     defaults:
       run:

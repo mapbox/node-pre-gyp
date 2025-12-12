@@ -26,8 +26,9 @@ jobs:
       - name: Check if version is published
         id: check
         run: |
+          packageName="$( node -e "console.log(require('./package.json').name)" )"
           currentVersion="$( node -e "console.log(require('./package.json').version)" )"
-          isPublished="$( npm view @mapbox/node-pre-gyp versions --json | jq -c --arg cv "$currentVersion" 'any(. == $cv)' )"
+          isPublished="$( npm view $packageName versions --json | jq -c --arg cv "$currentVersion" 'any(. == $cv)' )"
           echo "version=$currentVersion" >> "$GITHUB_OUTPUT"
           echo "published=$isPublished" >> "$GITHUB_OUTPUT"
           echo "currentVersion: $currentVersion"
@@ -40,6 +41,9 @@ jobs:
     needs: release-check
     if: ${{ needs.release-check.outputs.published == 'false' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Enables OIDC token generation
     defaults:
       run:
         shell: bash
@@ -49,7 +53,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
@@ -63,7 +67,7 @@ jobs:
       - run: npm run build --if-present
       
       - run: npm test
-
+ 
       - name: Prepare release changelog
         id: prepare_release
         run: |
@@ -98,3 +102,4 @@ jobs:
       - name: Publish to NPM (prerelease)
         if: ${{ steps.prepare_release.outputs.prerelease == 'true' }}
         run: npm publish --tag next --access public
+

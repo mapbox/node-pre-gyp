@@ -25,8 +25,7 @@
   "dependencies": {
     "consola": "^3.2.3",
     "detect-libc": "^2.0.0",
-    "https-proxy-agent": "^7.0.5",
-    "node-fetch": "^2.6.7",
+    "node-fetch-native": "^1.6.4",
     "nopt": "^8.0.0",
     "semver": "^7.5.3",
     "tar": "^7.4.0"
@@ -39,7 +38,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-n": "^17.9.0",
     "mock-aws-s3": "^4.0.2",
-    "nock": "^13.5.4",
+    "nock": "^14.0.0-beta.19",
     "node-addon-api": "^8.1.0",
     "nyc": "^17.0.0",
     "tape": "^5.5.2",

@@ -6,8 +6,8 @@ const { createUnzip } = require('zlib');
 const os = require('os');
 
 const tar = require('tar-fs');
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const fetch = require('node-fetch');
+const { fetch } = require('node-fetch-native');
+const { createProxy } = require('node-fetch-native/proxy');
 const { rimraf } = require('rimraf');
 
 const test = require('tape');
@@ -17,7 +17,7 @@ const proxyPort = 8124;
 const proxyServer = `http://localhost:${proxyPort}`;
 
 // options for fetch
-const options = {};
+let options = {};
 
 // the temporary download directory and file
 const downloadDir = `${os.tmpdir()}/npg-download`;
@@ -44,7 +44,7 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new HttpsProxyAgent(proxyServer);
+  options = createProxy({ url: proxyServer });
 
   // make sure the download directory deleted then create an empty one
   rimraf(downloadDir).then(() => {

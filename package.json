@@ -29,7 +29,7 @@
     "node-fetch": "^2.6.7",
     "nopt": "^8.0.0",
     "semver": "^7.5.3",
-    "tar": "^7.4.0"
+    "tar": "^7.5.7"
   },
   "devDependencies": {
     "@mapbox/cloudfriend": "^9.0.0",

@@ -29,15 +29,15 @@
     "node-fetch": "^2.6.7",
     "nopt": "^8.0.0",
     "semver": "^7.5.3",
-    "tar": "^7.4.0"
+    "tar": "^7.5.7"
   },
   "devDependencies": {
+      "@aws-sdk/client-s3": "^3.967.0",
     "@mapbox/cloudfriend": "^9.0.0",
-    "@mapbox/eslint-config-mapbox": "^5.0.1",
-    "aws-sdk": "^2.1087.0",
+    "@mapbox/eslint-config-mapbox": "^3.0.0",
     "codecov": "^3.8.3",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n": "^17.9.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-n": "17.9.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.5.4",
     "node-addon-api": "^8.1.0",
@@ -63,6 +63,11 @@
     "bucket": "node scripts/set-bucket.js"
   },
   "overrides": {
-    "js-yaml": "^3.14.2"
+    "js-yaml": "^3.14.2",
+    "@aws-sdk/core": "^3.894.0",
+    "@aws-sdk/xml-builder": "^3.894.0",
+    "fast-xml-parser": "^5.3.4",
+    "@aws-sdk/middleware-flexible-checksums": "^3.894.0",
+    "@aws-sdk/middleware-sdk-s3": "^3.894.0"
   }
 }

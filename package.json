@@ -36,7 +36,7 @@
     "@mapbox/eslint-config-mapbox": "^5.0.1",
     "aws-sdk": "^2.1087.0",
     "codecov": "^3.8.3",
-    "eslint": "^8.57.0",
+    "eslint": "^10.0.0",
     "eslint-plugin-n": "^17.9.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.5.4",

@@ -34,7 +34,7 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.714.0",
     "@mapbox/cloudfriend": "^9.0.0",
-    "@mapbox/eslint-config-mapbox": "^5.0.1",
+    "@mapbox/eslint-config-mapbox": "5.0.1",
     "codecov": "^3.8.3",
     "eslint": "^8.57.0",
     "eslint-plugin-n": "^17.9.0",

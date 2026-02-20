@@ -32,9 +32,9 @@
     "tar": "^7.5.7"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.714.0",
     "@mapbox/cloudfriend": "^9.0.0",
-    "@mapbox/eslint-config-mapbox": "^5.0.1",
-    "aws-sdk": "^2.1087.0",
+    "@mapbox/eslint-config-mapbox": "5.0.1",
     "codecov": "^3.8.3",
     "eslint": "^8.57.0",
     "eslint-plugin-n": "^17.9.0",
@@ -42,6 +42,7 @@
     "nock": "^13.5.4",
     "node-addon-api": "^8.1.0",
     "nyc": "^17.0.0",
+    "rimraf": "^6.1.2",
     "tape": "^5.5.2",
     "tar-fs": "^3.1.1"
   },

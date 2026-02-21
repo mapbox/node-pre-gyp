@@ -2,7 +2,7 @@
 
 #### @mapbox/node-pre-gyp makes it easy to publish and install Node.js C++ addons from binaries
 
-[![Build status](https://ci.appveyor.com/api/projects/status/3nxewb425y83c0gv)](https://ci.appveyor.com/project/Mapbox/node-pre-gyp)
+[![ci](https://github.com/mapbox/node-pre-gyp/actions/workflows/ci.yml/badge.svg)](https://github.com/mapbox/node-pre-gyp/actions/workflows/ci.yml)  [![S3 Bucket Test](https://github.com/mapbox/node-pre-gyp/actions/workflows/s3-bucket.yml/badge.svg)](https://github.com/mapbox/node-pre-gyp/actions/workflows/s3-bucket.yml)
 
 `@mapbox/node-pre-gyp` stands between [npm](https://github.com/npm/npm) and [node-gyp](https://github.com/Tootallnate/node-gyp) and offers a cross-platform method of binary deployment.
 

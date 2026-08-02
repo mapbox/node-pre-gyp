@@ -7,17 +7,14 @@ const os = require('os');
 
 const tar = require('tar-fs');
 const { HttpsProxyAgent } = require('https-proxy-agent');
-const fetch = require('node-fetch');
 const { rimraf } = require('rimraf');
 
 const test = require('tape');
 
 const proxy = require('./proxy.util');
+const { fetch_with_redirects } = require('../lib/install.js');
 const proxyPort = 8124;
 const proxyServer = `http://localhost:${proxyPort}`;
-
-// options for fetch
-const options = {};
 
 // the temporary download directory and file
 const downloadDir = `${os.tmpdir()}/npg-download`;
@@ -44,8 +41,6 @@ test('setup proxy server', (t) => {
   proxy.startServer({ port: proxyPort });
   process.env.https_proxy = process.env.http_proxy = proxyServer;
 
-  options.agent = new HttpsProxyAgent(proxyServer);
-
   // make sure the download directory deleted then create an empty one
   rimraf(downloadDir).then(() => {
     fs.mkdir('download', (e) => {
@@ -56,21 +51,13 @@ test('setup proxy server', (t) => {
       t.end();
     });
   });
-
-
 });
 
-test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (t) => {
+test('verify download with a proxy successfully downloads bcrypt pre-built', (t) => {
   // "{module_name}-v{version}-napi-v{napi_build_version}-{platform}-{arch}-{libc}.tar.gz"
   const url = 'https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.0.1/bcrypt_lib-v5.0.1-napi-v3-linux-x64-glibc.tar.gz';
 
-  async function getBcrypt() {
-    const res = await fetch(url, options);
-    if (res.status !== 200) {
-      throw new Error(`fetch got error ${res.status}`);
-    }
-    return res.body;
-  }
+  const agent = new HttpsProxyAgent(proxyServer);
 
   const withDir = path.join(downloadDir, 'napi-v3', 'bcrypt_lib.node');
   const rawPath = 'napi-v3/bcrypt_lib.node';
@@ -85,21 +72,19 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
     }
   };
 
-  getBcrypt()
+  new Promise((resolve, reject) => {
+    fetch_with_redirects(url, { agent }, 10, (err, res) => {
+      if (err) return reject(err);
+      if (res.statusCode !== 200) return reject(new Error(`fetch got error ${res.statusCode}`));
+      resolve(res);
+    });
+  })
     .then((stream) => {
       const unzip = createUnzip();
-      stream
-        .pipe(unzip);
-
-      unzip
-        .pipe(tar.extract(`${downloadDir}`, tarOptions));
-
-      return unzip;
-    })
-    .then((stream) => {
+      stream.pipe(unzip).pipe(tar.extract(`${downloadDir}`, tarOptions));
       return new Promise((resolve, reject) => {
-        stream.on('end', resolve);
-        stream.on('error', reject);
+        unzip.on('end', resolve);
+        unzip.on('error', reject);
       });
     })
     // if no errors on download and the file is there that's good enough. napi version

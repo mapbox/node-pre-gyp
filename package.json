@@ -35,7 +35,6 @@
     "@aws-sdk/client-s3": "^3.714.0",
     "@mapbox/cloudfriend": "^9.0.0",
     "@mapbox/eslint-config-mapbox": "5.0.1",
-    "codecov": "^3.8.3",
     "eslint": "^8.57.0",
     "eslint-plugin-n": "^17.9.0",
     "mock-aws-s3": "^4.0.2",
@@ -55,7 +54,6 @@
   },
   "scripts": {
     "coverage": "nyc --all --include index.js --include lib/ npm test",
-    "upload-coverage": "nyc report --reporter json && codecov --clear --flags=unit --file=./coverage/coverage-final.json",
     "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",

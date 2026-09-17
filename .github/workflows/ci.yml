@@ -28,4 +28,10 @@ jobs:
       - run: npm run lint
       # - run: npm run update-crosswalk  # To support newer versions of Node.js
       - run: npm run build --if-present
+      - name: DEBUG which node-gyp the tests will use
+        if: runner.os == 'Windows'
+        run: |
+          node -p "'npm_config_node_gyp=' + process.env.npm_config_node_gyp"
+          node -p "require('fs').existsSync(process.env.npm_config_node_gyp || '')"
+          node -p "require('./lib/util/compile.js').which_node_gyp()"
       - run: npm test

@@ -30,6 +30,9 @@ console.log(`node-gyp@${version} predates v${MINIMUM_MAJOR}; installing node-gyp
 cp.execFileSync('npm', ['install', '--no-save', `node-gyp@${INSTALL_VERSION}`], { stdio: 'inherit', shell: true });
 
 const upgraded = path.join(__dirname, '../node_modules/node-gyp/bin/node-gyp.js');
+if (!fs.existsSync(upgraded)) {
+  throw new Error(`expected the upgraded node-gyp at ${upgraded}, but it is not there`);
+}
 console.log(`using node-gyp at ${upgraded}`);
 
 // export for later GitHub workflow steps, which npm would otherwise point back at its own bundled copy

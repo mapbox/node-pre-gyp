@@ -58,11 +58,6 @@ function run(prog, command, args, app, opts, cb) {
     opts.cwd = path.join(__dirname, app.name);
   }
 
-  // Test building with msvs 2022
-  if (process.platform === 'win32') {
-    final_cmd += ' --msvs_version=2022 ';
-  }
-
   // finish appending all arguments
   final_cmd += ' ' + app.args;
   final_cmd += ' ' + args;

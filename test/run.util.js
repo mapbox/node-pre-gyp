@@ -28,9 +28,9 @@ function run(prog, command, args, app, opts, cb) {
   // here we add the program and the command
   let final_cmd = prog + ' ' + command;
 
-  // if we are calling out to `node-pre-gyp` let's ensure we directly
-  // call the local version at a relative path (to avoid the change) we might
-  // use some external version on PATH
+  // if we are calling out to `node-pre-gyp`, let's ensure we directly
+  // call the local version at a relative path (to avoid the change)
+  // we might use some external version on PATH
   if (final_cmd.indexOf('node-pre-gyp') > -1) {
     final_cmd = cmd_path + final_cmd;
     if (opts.npg_debug) {
@@ -53,23 +53,17 @@ function run(prog, command, args, app, opts, cb) {
     }
   }
 
-  // unless explicitly provided, lets execute the command inside the app specific directory
+  // unless explicitly provided, let's execute the command inside the app-specific directory
   if (!opts.cwd) {
     opts.cwd = path.join(__dirname, app.name);
   }
-
-  // npm v12 dropped support for the `--msvs_version` option.
-  // Test building with msvs 2022
-  // if (process.platform === 'win32') {
-  //  final_cmd += ' --msvs_version=2022 ';
-  // }
 
   // finish appending all arguments
   final_cmd += ' ' + app.args;
   final_cmd += ' ' + args;
 
 
-  // On unix we want to display compile args (rather than have them hidden)
+  // On Unix we want to display compile args (rather than have them hidden)
   // for easier debugging of unexpected compile failures.
   // We do this by pre-pending the magic variable that make responds to.
   if (process.platform !== 'win32') {

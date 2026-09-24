@@ -13,6 +13,8 @@ const tar = require('tar');
 
 const localVer = [versioning.get_runtime_abi('node'), process.platform, process.arch].join('-');
 const SOEXT = { 'darwin': 'dylib', 'linux': 'so', 'win32': 'dll' }[process.platform];
+// oldest node-gyp that detects the Visual Studio on current Windows runners (2026, major version 18)
+const MIN_WINDOWS_NODE_GYP_MAJOR = 12;
 
 // The list of different sample apps that we use to test
 const apps = [
@@ -68,6 +70,20 @@ test.Test.prototype.stringContains = function(actual, contents, message) {
   });
 };
 
+/**
+ * Whether npm bundles a node-gyp too old to detect the Visual Studio installed on Windows. npm runs
+ * install hooks against its own copy, so a newer node-gyp elsewhere does not help.
+ *
+ * @returns {boolean} True on Windows when npm's node-gyp predates MIN_WINDOWS_NODE_GYP_MAJOR.
+ */
+function windows_npm_node_gyp_too_old() {
+  if (process.platform !== 'win32') return false;
+  // on Windows npm sits beside node.exe rather than under lib/
+  const pkg = path.join(path.dirname(process.execPath), 'node_modules/npm/node_modules/node-gyp/package.json');
+  if (!existsSync(pkg)) return false;
+  return parseInt(require(pkg).version, 10) < MIN_WINDOWS_NODE_GYP_MAJOR;
+}
+
 // Because the below tests only ensure that flags can be correctly passed to node-gyp is it not
 // likely they will behave differently for different apps. So we save time by avoiding running these for each app.
 const appOne = apps[0];
@@ -82,8 +98,10 @@ test(appOne.name + ' passes --nodedir down to node-gyp via node-pre-gyp ' + appO
   });
 });
 
-// NOTE: currently fails with npm v3.x on windows (hence downgrade in appveyor.yml)
-test(appOne.name + ' passes --nodedir down to node-gyp via npm' + appOne.args, (t) => {
+test({
+  name: appOne.name + ' passes --nodedir down to node-gyp via npm' + appOne.args,
+  skip: windows_npm_node_gyp_too_old() && 'npm bundles a node-gyp that cannot detect the installed Visual Studio'
+}, (t) => {
   run('npm', 'install', '--build-from-source --nodedir=invalid-value', appOne, {}, (err, stdout, stderr) => {
     t.ok(err, 'Expected command to fail');
     t.stringContains(stderr, 'common.gypi not found');

@@ -86,6 +86,13 @@ Options include:
  - `--target_arch=ia32`: Pass the target arch and override the host `arch`. Any value that is [supported by Node.js](https://nodejs.org/api/os.html#osarch) is valid.
  - `--target_platform=win32`: Pass the target platform and override the host `platform`. Valid values are `linux`, `darwin`, `win32`, `sunos`, `freebsd`, `openbsd`, and `aix`.
  - `--acl=<acl>`: Set the S3 ACL when publishing binaries (e.g., `public-read`, `private`). Overrides the `binary.acl` setting in package.json.
+ - `--retries=<n>`: Number of times to retry a failed binary download, after the first attempt (default: `2`). Pass `--retries=0` to disable retrying and fall back to a source build immediately.
+ - `--retry_delay=<ms>`: Base delay in milliseconds for the exponential backoff between download retries (default: `1000`).
+ - `--timeout=<ms>`: Per-attempt timeout in milliseconds for a binary download request (default: `30000`). This applies to the response headers, not the body transfer, so a large binary downloading slowly is not interrupted. Pass `--timeout=0` to disable it.
+
+Downloads are retried on transient failures only: HTTP `429` and `5xx` responses, and connection-level errors such as `ECONNRESET` or a socket hang up. A `404` (no pre-built binary for this platform and ABI) and a `403` (private binary, handled by the authenticated download path) are never retried, so they still fall back to a source build immediately. Backoff uses full jitter, which spreads out retries when many packages are installed in parallel.
+
+These three options can also be set as npm config, in which case they take the `node_pre_gyp_` prefix — for example `npm config set node_pre_gyp_retries 5`, or `node_pre_gyp_retries=5 npm install`.
 
 Both `--build-from-source` and `--fallback-to-build` can be passed alone or they can provide values. You can pass `--fallback-to-build=false` to override the option as declared in package.json. In addition to being able to pass `--build-from-source` you can also pass `--build-from-source=myapp` where `myapp` is the name of your module.
 

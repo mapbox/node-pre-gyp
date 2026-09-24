@@ -79,13 +79,15 @@ function run(prog, command, args, app, opts, cb) {
   }
 
   if (opts.npg_debug) {
-    if (opts.npg_debug === 'env') {
-      console.log('executing:', final_cmd, opts);
-    } else {
-      const someOpts = Object.assign({}, opts);
-      delete someOpts.env;
-      console.log('executing:', final_cmd, someOpts);
+    const someOpts = { cwd: opts.cwd };
+    if (opts.npg_debug === 'env' && opts.env) {
+      someOpts.env = {
+        PATH: opts.env.PATH,
+        NODE_PATH: opts.env.NODE_PATH,
+        npm_config_node_gyp: opts.env.npm_config_node_gyp
+      };
     }
+    console.log('executing:', final_cmd, someOpts);
     delete opts.npg_debug;
   }
 

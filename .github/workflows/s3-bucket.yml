@@ -12,26 +12,30 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest, windows-2022]
         node-version: ['lts/-1', 'lts/*', 'latest']
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
-    name: Test S3 Bucket - Node ${{ matrix.node }} on ${{ matrix.os }}
+    name: Test S3 Bucket - Node ${{ matrix.node-version }} on ${{ matrix.os }}
 
     steps:
       - name: Checkout ${{ github.ref }}
         uses: actions/checkout@v7
 
-      - name: Setup node ${{ matrix.node }}
+      - name: Setup node ${{ matrix.node-version }}
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
 
       - name: NPM Install
         run: npm install
+
+      - name: Upgrade node-gyp if it cannot detect the installed Visual Studio
+        if: runner.os == 'Windows'
+        run: npm run upgrade-node-gyp
 
       - name: Show Environment Info
         run: |

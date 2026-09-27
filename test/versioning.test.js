@@ -363,3 +363,22 @@ test('should replace "-" with "_" in custom binary host', (t) => {
   t.end();
 });
 
+test('should replace every "-" with "_" in custom binary host', (t) => {
+  const mock_package_json = {
+    name: 'test',
+    main: 'test.js',
+    version: '0.1.0',
+    binary: {
+      module_name: 'confluent-kafka-javascript',
+      module_path: 'build/Release',
+      host: 'https://example.com/official/'
+    }
+  };
+
+  process.env.npm_config_confluent_kafka_javascript_binary_host_mirror = 'https://registry.example.com/mirror/';
+  const opts = versioning.evaluate(mock_package_json, {});
+  t.equal(opts.host, 'https://registry.example.com/mirror/');
+  delete process.env.npm_config_confluent_kafka_javascript_binary_host_mirror;
+  t.end();
+});
+

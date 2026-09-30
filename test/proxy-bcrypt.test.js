@@ -48,7 +48,7 @@ test('setup proxy server', (t) => {
 
   // make sure the download directory deleted then create an empty one
   rimraf(downloadDir).then(() => {
-    fs.mkdir('download', (e) => {
+    fs.mkdir(downloadDir, (e) => {
       if (e && e.code !== 'EEXIST') {
         t.error(e);
         return;
@@ -88,18 +88,14 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
   getBcrypt()
     .then((stream) => {
       const unzip = createUnzip();
-      stream
-        .pipe(unzip);
+      const extract = tar.extract(downloadDir, tarOptions);
+      stream.pipe(unzip).pipe(extract);
 
-      unzip
-        .pipe(tar.extract(`${downloadDir}`, tarOptions));
-
-      return unzip;
-    })
-    .then((stream) => {
+      // wait for tar-fs to finish (it sets file times after writing), not just for gunzip to end
       return new Promise((resolve, reject) => {
-        stream.on('end', resolve);
-        stream.on('error', reject);
+        unzip.on('error', reject);
+        extract.on('error', reject);
+        extract.on('finish', resolve);
       });
     })
     // if no errors on download and the file is there that's good enough. napi version
@@ -117,15 +113,10 @@ test('verify node fetch with a proxy successfully downloads bcrypt pre-built', (
 });
 
 // this is really just onFinish() but local to the tests in this file
-test(`cleanup after ${__filename}`, (t) => {
+test(`cleanup after ${__filename}`, async () => {
   proxy.stopServer();
   delete process.env.NOCK_OFF;
   delete process.env.http_proxy;
   delete process.env.https_proxy;
-  try {
-    rimraf(downloadDir);
-  } catch (err) {
-    // ignore errors
-  }
-  t.end();
+  await rimraf(downloadDir).catch(() => {});
 });

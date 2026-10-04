@@ -33,10 +33,12 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.714.0",
+    "@eslint/js": "^10.0.1",
     "@mapbox/cloudfriend": "^9.0.0",
-    "@mapbox/eslint-config-mapbox": "5.0.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n": "^17.9.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.12.0",
+    "eslint-plugin-n": "^18.4.1",
+    "globals": "^17.13.0",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.5.4",
     "node-addon-api": "^8.1.0",
@@ -54,17 +56,12 @@
   },
   "scripts": {
     "coverage": "nyc --all --include index.js --include lib/ npm test",
-    "lint": "eslint bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
+    "lint": "eslint eslint.config.js bin/node-pre-gyp lib/*js lib/util/*js test/*js scripts/*js",
     "fix": "npm run lint -- --fix",
     "update-crosswalk": "node scripts/abi_crosswalk.js",
     "upgrade-node-gyp": "node scripts/upgrade-node-gyp.js",
     "test": "tape test/*test.js",
     "test:s3": "tape test/s3.test.js",
     "bucket": "node scripts/set-bucket.js"
-  },
-  "overrides": {
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint-plugin-unused-imports": "^4.0.0"
   }
 }

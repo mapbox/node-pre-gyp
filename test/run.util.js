@@ -53,14 +53,17 @@ function run(prog, command, args, app, opts, cb) {
     }
   }
 
+  // npm resets npm_config_node_gyp to the copy it bundles, so CI passes any upgraded node-gyp
+  // under a name npm leaves alone and we hand it to the child as the config it reads
+  if (process.env.NPG_TEST_NODE_GYP) {
+    opts.env = Object.assign({}, opts.env || process.env, {
+      npm_config_node_gyp: process.env.NPG_TEST_NODE_GYP
+    });
+  }
+
   // unless explicitly provided, lets execute the command inside the app specific directory
   if (!opts.cwd) {
     opts.cwd = path.join(__dirname, app.name);
-  }
-
-  // Test building with msvs 2022
-  if (process.platform === 'win32') {
-    final_cmd += ' --msvs_version=2022 ';
   }
 
   // finish appending all arguments
@@ -76,13 +79,15 @@ function run(prog, command, args, app, opts, cb) {
   }
 
   if (opts.npg_debug) {
-    if (opts.npg_debug === 'env') {
-      console.log('executing:', final_cmd, opts);
-    } else {
-      const someOpts = Object.assign({}, opts);
-      delete someOpts.env;
-      console.log('executing:', final_cmd, someOpts);
+    const someOpts = { cwd: opts.cwd };
+    if (opts.npg_debug === 'env' && opts.env) {
+      someOpts.env = {
+        PATH: opts.env.PATH,
+        NODE_PATH: opts.env.NODE_PATH,
+        npm_config_node_gyp: opts.env.npm_config_node_gyp
+      };
     }
+    console.log('executing:', final_cmd, someOpts);
     delete opts.npg_debug;
   }
 

@@ -128,7 +128,7 @@ test('should execute setBinaryHostProperty() properly', (t) => {
   // staging_host is missing.
   const mpj = clone(mock_package_json);
   delete mpj.binary.staging_host;
-  ({ prog, binaryHost } = setupTest(dir, mpj, opts));
+  ({ binaryHost } = setupTest(dir, mpj, opts));
   t.equal(binaryHost, '');
 
   // one more time but with an invalid value for s3_host

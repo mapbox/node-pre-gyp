@@ -181,6 +181,26 @@ test('should detect custom binary host from env', (t) => {
   t.end();
 });
 
+test('should detect custom binary host from uppercase env', (t) => {
+  const mock_package_json = {
+    'name': 'test',
+    'main': 'test.js',
+    'version': '0.1.0',
+    'binary': {
+      'module_name': 'test',
+      'module_path': './lib/binding/{configuration}/{toolset}/{name}',
+      'remote_path': './{name}/v{version}/{configuration}/{version}/{toolset}/',
+      'package_name': '{module_name}-v{major}.{minor}.{patch}-{prerelease}+{build}-{toolset}-{node_abi}-{platform}-{arch}.tar.gz',
+      'host': 'https://some-bucket.s3.us-east-1.amazonaws.com'
+    }
+  };
+  process.env.TEST_BINARY_HOST_MIRROR = 'https://registry.npmmirror.com/node-inspector/';
+  const opts = versioning.evaluate(mock_package_json, {});
+  t.equal(opts.host, 'https://registry.npmmirror.com/node-inspector/');
+  delete process.env.TEST_BINARY_HOST_MIRROR;
+  t.end();
+});
+
 test('should detect libc', (t) => {
   const mock_package_json = {
     'name': 'test',

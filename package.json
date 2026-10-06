@@ -65,6 +65,9 @@
     "bucket": "node scripts/set-bucket.js"
   },
   "overrides": {
-    "underscore": "^1.13.8"
+    "underscore": "^1.13.8",
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "^5.4.2"
+    }
   }
 }

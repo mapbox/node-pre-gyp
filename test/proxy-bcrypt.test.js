@@ -124,7 +124,7 @@ test(`cleanup after ${__filename}`, (t) => {
   delete process.env.https_proxy;
   try {
     rimraf(downloadDir);
-  } catch (err) {
+  } catch {
     // ignore errors
   }
   t.end();

@@ -1,6 +1,8 @@
 # node-pre-gyp changelog
 
 ## master
+- Retry binary downloads on transient failures (HTTP 429/5xx and connection-level errors) with exponential backoff and full jitter. Configurable via `--retries` (default 2), `--retry_delay` (default 1000ms) and `--timeout` (default 30000ms).
+- HTTP download errors now carry `statusCode`, which restores the intended `Tried to download(<status>)` diagnostic in the fallback message. Previously every HTTP failure reported the generic "Pre-built binaries not installable" / "Hit error" text.
 
 ## 2.0.4-pre.0
 - Test the release workflow

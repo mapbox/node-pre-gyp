@@ -19,5 +19,5 @@ TODO.md
 *.tgz
 .nyc_output
 coverage
-.eslintrc
+eslint.config.js
 cloudformation

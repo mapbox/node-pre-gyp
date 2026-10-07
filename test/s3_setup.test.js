@@ -134,7 +134,6 @@ test('should error trying to parse invalid s3 url (path style)', (t) => {
   };
   let result = {};
   try {
-    // eslint-disable-next-line no-unused-vars
     result = s3_setup.detect(opts);
   } catch (e) {
     const expectedMessage = 'Could not parse s3 bucket name from virtual host url.';
@@ -153,7 +152,6 @@ test('should error trying to parse invalid s3 url (not s3)', (t) => {
   };
   let result = {};
   try {
-    // eslint-disable-next-line no-unused-vars
     result = s3_setup.detect(opts);
   } catch (e) {
     const expectedMessage = 'Could not parse s3 bucket name from virtual host url.';
@@ -174,7 +172,6 @@ test('should error trying to parse invalid s3 when using miss-configured compati
   };
   let result = {};
   try {
-    // eslint-disable-next-line no-unused-vars
     result = s3_setup.detect(opts);
   } catch (e) {
     const expectedMessage = 'Could not parse s3 bucket name from virtual host url.';
@@ -195,7 +192,6 @@ test('should error trying to parse invalid s3 when using miss-configured compati
   };
   let result = {};
   try {
-    // eslint-disable-next-line no-unused-vars
     result = s3_setup.detect(opts);
   } catch (e) {
     const expectedMessage = 'Could not parse s3 bucket name from virtual host url.';

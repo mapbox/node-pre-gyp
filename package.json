@@ -40,7 +40,7 @@
     "eslint-plugin-n": "^18.4.1",
     "globals": "^17.13.0",
     "mock-aws-s3": "^4.0.2",
-    "nock": "^13.5.4",
+    "nock": "^15.0.3",
     "node-addon-api": "^8.1.0",
     "nyc": "^17.0.0",
     "rimraf": "^6.1.2",

@@ -15,7 +15,7 @@
   "author": "Dane Springmeyer <dane@mapbox.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mapbox/node-pre-gyp.git"
+    "url": "https://github.com/mapbox/node-pre-gyp"
   },
   "bin": "./bin/node-pre-gyp",
   "main": "./lib/node-pre-gyp.js",

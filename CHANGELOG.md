@@ -1,6 +1,7 @@
 # node-pre-gyp changelog
 
 ## master
+- Escape every `+` in the download URL, not only the first one
 
 ## 2.0.4-pre.0
 - Test the release workflow

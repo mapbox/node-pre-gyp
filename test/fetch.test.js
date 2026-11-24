@@ -50,3 +50,37 @@ test('should follow redirects', (t) => {
     t.end();
   });
 });
+
+test('should escape every plus in the url', (t) => {
+  // always use mock host for this test
+  const origin = 'https://npg-mock-bucket.s3.us-east-1.amazonaws.com';
+
+  nock.cleanAll();
+  const requested = [];
+  nock(origin)
+    .get(() => true)
+    .reply((uri) => {
+      requested.push(uri);
+      return [404];
+    });
+
+  const opts = {
+    opts: {
+      'build-from-source': false,
+      'update-binary': true
+    }
+  };
+
+  opts.package_json = JSON.parse(fs.readFileSync('./package.json'));
+  opts.package_json.version = '0.1.0+build.1';
+  opts.package_json.binary.host = origin;
+  opts.package_json.binary.remote_path = './{version}+{build}';
+  opts.package_json.binary.package_name = '{module_name}-{version}+{build}.tar.gz';
+
+  install(opts, [], (err) => {
+    t.ok(err, 'the mock has no binary');
+    t.deepEqual(requested, ['/0.1.0%2Bbuild.1/app1-0.1.0%2Bbuild.1.tar.gz']);
+    nock.cleanAll(); // clean this mock
+    t.end();
+  });
+});
